@@ -1,135 +1,131 @@
 #include "SE_Screen.h"
-#include <QColorDialog>
+#include <QTimer>
 
-//////////////////////////////////////////
-//////////////////////////////////////////
-SE_Screen::SE_Screen(QWidget * inpParent):QGLWidget(inpParent)
+///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+SE_Screen::SE_Screen(QWidget * inpParent):
+    QGLWidget(inpParent),
+    m_rotation_factor(0.f)
 {
     setFormat(QGLFormat(QGL::DoubleBuffer | QGL::DepthBuffer));
-    rotationX = -21.0;
-    rotationY = -57.0;
-    rotationZ = 0.0;
-    faceColors[0] = Qt::red;
-    faceColors[1] = Qt::green;
-    faceColors[2] = Qt::blue;
-    faceColors[3] = Qt::yellow;
+
+    QTimer *timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(timeOut()));
+    timer->start(20);
 }
 
 
+///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
 void SE_Screen::initializeGL()
 {
     qglClearColor(Qt::black);
+
+    // will color all with one color instead of gradient
     glShadeModel(GL_FLAT);
+
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 }
 
-void SE_Screen::resizeGL(int width, int height)
+
+///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+void SE_Screen::resizeGL(int inWidth, int inHeight)
 {
-    glViewport(0, 0, width, height);
+    glViewport(0, 0, inWidth, inHeight);
+
     glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    GLfloat x = GLfloat(width) / height;
-    glFrustum(-x, x, -1.0, 1.0, 4.0, 15.0);
+        glLoadIdentity();
+        gluLookAt(0.5,0.5,0.5, 0,0,0, 0,0,1);
+
     glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
 }
 
+
+///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
 void SE_Screen::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    draw_axis();
     draw();
 }
 
 
-void SE_Screen::draw()
+///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+void SE_Screen::draw_axis()
 {
-
-    static const GLfloat P1[3] = { 0.0, -1.0, +2.0 };
-    static const GLfloat P2[3] = { +1.73205081, -1.0, -1.0 };
-    static const GLfloat P3[3] = { -1.73205081, -1.0, -1.0 };
-    static const GLfloat P4[3] = { 0.0, +2.0, 0.0 };
-
-    static const GLfloat *const coords[4][3] = {
-    {P1, P2, P3}, {P1, P3, P4}, {P1, P4, P2}, {P2, P4, P3}
-    };
+    static const GLint vl_orig[3] = { 0, 0, 0};
+    static const GLint vl_x   [3] = { 1, 0, 0};
+    static const GLint vl_y   [3] = { 0, 1, 0};
+    static const GLint vl_z   [3] = { 0, 0, 1};
 
     glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glTranslatef(0.0, 0.0, -10.0);
-    glRotatef(rotationX, 1.0, 0.0, 0.0);
-    glRotatef(rotationY, 0.0, 1.0, 0.0);
-    glRotatef(rotationZ, 0.0, 0.0, 1.0);
+        glBegin(GL_LINES);
+            qglColor(Qt::red);
+            glVertex3i(vl_orig[0], vl_orig[1], vl_orig[2]);
+            glVertex3i(vl_x   [0], vl_x   [1], vl_x[2]);
 
-    for (int i = 0; i < 4; ++i) {
-    glLoadName(i);
-    glBegin(GL_TRIANGLES);
-    qglColor(faceColors[i]);
-    for (int j = 0; j < 3; ++j) {
-        glVertex3f(coords[i][j][0], coords[i][j][1], coords[i][j][2]);
-    }
-    glEnd();
-    }
+            qglColor(Qt::green);
+            glVertex3i(vl_orig[0], vl_orig[1], vl_orig[2]);
+            glVertex3i(vl_y   [0], vl_y   [1], vl_y[2]);
+
+            qglColor(Qt::white);
+            glVertex3i(vl_orig[0], vl_orig[1], vl_orig[2]);
+            glVertex3i(vl_z   [0], vl_z   [1], vl_z[2]);
+        glEnd();
 }
 
 
+///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+void SE_Screen::draw()
+{
+    glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        glRotatef(m_rotation_factor*180/3.14159265, 0.f, 0.f, 1.f);
+}
+
+
+///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
 void SE_Screen::mousePressEvent(QMouseEvent * event)
 {
-    lastPos = event->pos();
 }
 
 
-
+///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
 void SE_Screen::mouseMoveEvent(QMouseEvent * event)
 {
-    GLfloat dx = GLfloat(event->x() - lastPos.x()) / width();
-    GLfloat dy = GLfloat(event->y() - lastPos.y()) / height();
-    if (event->buttons() & Qt::LeftButton) {
-    rotationX += 180 * dy;
-    rotationY += 180 * dx;
-    updateGL();
-    } else if (event->buttons() & Qt::RightButton) {
-    rotationX += 180 * dy;
-    rotationZ += 180 * dx;
-    updateGL();
-    }
-    lastPos = event->pos();
-}
-
-
-void SE_Screen::mouseDoubleClickEvent(QMouseEvent * event)
-{
-    int face = faceAtPosition(event->pos());
-    if (face != -1) {
-    QColor color = QColorDialog::getColor(faceColors[face], this);
-    if (color.isValid()) {
-        faceColors[face] = color;
+//     GLfloat dx = GLfloat(event->x() - lastPos.x()) / width();
+//     GLfloat dy = GLfloat(event->y() - lastPos.y()) / height();
+    if (event->buttons() & Qt::LeftButton)
+    {
         updateGL();
     }
+    else if (event->buttons() & Qt::RightButton)
+    {
+        updateGL();
     }
+//     lastPos = event->pos();
 }
 
 
-int SE_Screen::faceAtPosition(const QPoint & pos)
+///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+void SE_Screen::mouseDoubleClickEvent(QMouseEvent * event)
 {
-    const int MaxSize = 512;
-    GLuint buffer[MaxSize];
-    GLint viewport[4];
-    glGetIntegerv(GL_VIEWPORT, viewport);
-    glSelectBuffer(MaxSize, buffer);
-    glRenderMode(GL_SELECT);
-    glInitNames();
-    glPushName(0);
-    glMatrixMode(GL_PROJECTION);
-    glPushMatrix();
-    glLoadIdentity();
-    gluPickMatrix(GLdouble(pos.x()), GLdouble(viewport[3] - pos.y()),
-          5.0, 5.0, viewport);
-    GLfloat x = GLfloat(width()) / height();
-    glFrustum(-x, x, -1.0, 1.0, 4.0, 15.0);
-    draw();
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
-    if (!glRenderMode(GL_RENDER))
-    return -1;
-    return buffer[3];
+}
+
+
+///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+void SE_Screen::timeOut()
+{
+    m_rotation_factor += 0.1f;
+    updateGL();
 }
