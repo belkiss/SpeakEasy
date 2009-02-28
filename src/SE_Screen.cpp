@@ -1,17 +1,34 @@
 #include "SE_Screen.h"
 #include <QTimer>
+#include <GL/glx.h>
+
+// VBO Extension Function Pointers
+PFNGLGENBUFFERSARBPROC    glGenBuffersARB    = 0; // VBO Name Generation Procedure
+PFNGLBINDBUFFERARBPROC    glBindBufferARB    = 0; // VBO Bind Procedure
+PFNGLBUFFERDATAARBPROC    glBufferDataARB    = 0; // VBO Data Loading Procedure
+PFNGLDELETEBUFFERSARBPROC glDeleteBuffersARB = 0; // VBO Deletion Procedure
+
 
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
 SE_Screen::SE_Screen(QWidget * inpParent):
     QGLWidget(inpParent),
-    m_rotation_factor(0.f)
+    m_rotation_factor(0.f),
+    m_position_x(0.5f),
+    m_position_y(0.5f),
+    m_position_z(0.5f)
 {
     setFormat(QGLFormat(QGL::DoubleBuffer | QGL::DepthBuffer));
 
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(timeOut()));
     timer->start(20);
+
+    // avoid inclusion of GLee
+    glGenBuffersARB = (PFNGLGENBUFFERSARBPROC) glXGetProcAddressARB((const unsigned char*)"glGenBuffersARB");
+    glBindBufferARB = (PFNGLBINDBUFFERARBPROC) glXGetProcAddressARB((const unsigned char*)"glBindBufferARB");
+    glDeleteBuffersARB = (PFNGLDELETEBUFFERSARBPROC) glXGetProcAddressARB((const unsigned char*)"glDeleteBuffersARB");
+
 }
 
 
@@ -19,13 +36,16 @@ SE_Screen::SE_Screen(QWidget * inpParent):
 ///////////////////////////////////////////////////////////////////////
 void SE_Screen::initializeGL()
 {
-    qglClearColor(Qt::black);
+    qglClearColor(Qt::gray);
 
     // will color all with one color instead of gradient
     glShadeModel(GL_FLAT);
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
+
+    m_generator.generateGround();
+
 }
 
 
@@ -37,7 +57,10 @@ void SE_Screen::resizeGL(int inWidth, int inHeight)
 
     glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        gluLookAt(0.5,0.5,0.5, 0,0,0, 0,0,1);
+        gluPerspective( 45.0f, (GLfloat) inWidth / inHeight, 0.001f, 10000.f);
+        gluLookAt(  m_position_x,m_position_y,m_position_z,
+                    0,0,0,
+                    0,0,1);
 
     glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
@@ -87,6 +110,60 @@ void SE_Screen::draw()
     glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         glRotatef(m_rotation_factor*180/3.14159265, 0.f, 0.f, 1.f);
+
+        qglColor(Qt::yellow);
+        glEnableClientState( GL_VERTEX_ARRAY );                // Disable Vertex Arrays
+        glBindBufferARB( GL_ARRAY_BUFFER_ARB, m_generator.getVBOVerticesIndex() ); // Bind The Buffer
+        glVertexPointer( 3, GL_FLOAT, 0, (char *) 0 );       // Set The Vertex Pointer To The Vertex Buffer
+
+        glBindBufferARB( GL_ARRAY_BUFFER_ARB, m_generator.getVBOIndicesIndex() ); // Bind The Buffer
+
+        glDrawElements( GL_QUADS, 24, GL_UNSIGNED_BYTE, (char*) 0 );       // Draw All Of The Triangles At Once
+
+        glDisableClientState( GL_VERTEX_ARRAY );                // Disable Vertex Arrays
+        glBindBufferARB ( GL_ARRAY_BUFFER_ARB, 0 );
+}
+
+
+///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+void SE_Screen::keyPressEvent(QKeyEvent * inpEvent)
+{
+    switch(inpEvent->key())
+    {
+        case Qt::Key_Up :
+            {
+                m_position_y += 0.1f;
+            }
+            break;
+        case Qt::Key_Down :
+            {
+                m_position_y -= 0.1f;
+            }
+            break;
+        case Qt::Key_Left :
+            {
+                m_position_x -= 0.1f;
+            }
+            break;
+        case Qt::Key_Right :
+            {
+                m_position_x += 0.1f;
+            }
+            break;
+        default :
+            {
+            }
+    }
+
+    glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluPerspective( 45.0f, (GLfloat) 640 / 480, 0.001f, 10000.f);
+        gluLookAt(  m_position_x,m_position_y,m_position_z,
+                    0,0,0,
+                    0,0,1);
+    glMatrixMode(GL_MODELVIEW);
+    updateGL();
 }
 
 

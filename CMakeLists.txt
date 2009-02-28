@@ -41,5 +41,6 @@ TARGET_LINK_LIBRARIES(
     speakeasy
     GL
     GLU
+    GLee
     ${QT_LIBRARIES}
 )
