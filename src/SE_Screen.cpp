@@ -57,6 +57,7 @@ void SE_Screen::resizeGL(int inWidth, int inHeight)
 
     glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
+//         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         gluPerspective( 45.0f, (GLfloat) inWidth / inHeight, 0.001f, 10000.f);
         gluLookAt(  m_position_x,m_position_y,m_position_z,
                     0,0,0,
@@ -112,16 +113,16 @@ void SE_Screen::draw()
         glRotatef(m_rotation_factor*180/3.14159265, 0.f, 0.f, 1.f);
 
         qglColor(Qt::yellow);
-        glEnableClientState( GL_VERTEX_ARRAY );                // Disable Vertex Arrays
+        glEnableClientState( GL_VERTEX_ARRAY ); // Enable Vertex Arrays
         glBindBufferARB( GL_ARRAY_BUFFER_ARB, m_generator.getVBOVerticesIndex() ); // Bind The Buffer
-        glVertexPointer( 3, GL_FLOAT, 0, (char *) 0 );       // Set The Vertex Pointer To The Vertex Buffer
+        glVertexPointer( 3, GL_FLOAT, 0, (char *) 0 ); // Set The Vertex Pointer To The Vertex Buffer
 
         glBindBufferARB( GL_ARRAY_BUFFER_ARB, m_generator.getVBOIndicesIndex() ); // Bind The Buffer
 
-        glDrawElements( GL_QUADS, 24, GL_UNSIGNED_BYTE, (char*) 0 );       // Draw All Of The Triangles At Once
+        glDrawElements( GL_QUADS, m_generator.getGroundIndicesNb(), GL_UNSIGNED_BYTE, (char*) 0 );
 
-        glDisableClientState( GL_VERTEX_ARRAY );                // Disable Vertex Arrays
-        glBindBufferARB ( GL_ARRAY_BUFFER_ARB, 0 );
+        glDisableClientState( GL_VERTEX_ARRAY ); // Disable Vertex Arrays
+        glBindBufferARB ( GL_ARRAY_BUFFER_ARB, 0 ); // disable vbos
 }
 
 
@@ -203,6 +204,6 @@ void SE_Screen::mouseDoubleClickEvent(QMouseEvent * event)
 ///////////////////////////////////////////////////////////////////////
 void SE_Screen::timeOut()
 {
-    m_rotation_factor += 0.1f;
+    m_rotation_factor += 0.01f;
     updateGL();
 }
