@@ -32,6 +32,12 @@ class SE_Screen: public QGLWidget
                 m_position_y,
                 m_position_z;
 
+        GLdouble m_direction_x,
+                 m_direction_y,
+                 m_direction_z;
+
+        int     m_angle_lookedat;
+
         SE_Generator m_generator;
 
     private: // methods
