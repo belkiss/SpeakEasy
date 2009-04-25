@@ -1,5 +1,6 @@
 #pragma once
 #include <GL/gl.h>
+#include "uSE_GLMatrix.h"
 
 class uSE_GLVector
 {
@@ -20,10 +21,16 @@ class uSE_GLVector
 
         void set(GLfloat inX, GLfloat inY, GLfloat inZ);
 
-        void getLength( GLfloat &outLength );
+        void getNorm( GLfloat &outNorm );
+        void getNormSquared( GLfloat &outNorm );
 
         void normalize();
 
+        uSE_GLVector getOpposite() const;
+
+        uSE_GLVector operator+  ( const uSE_GLVector &inVector );
+        uSE_GLVector operator-  ( const uSE_GLVector &inVector );
+        uSE_GLVector operator*  ( const float &inValue ); 
         GLfloat      operator*  ( const uSE_GLVector &inVector ); // scalar product (dot product)
         uSE_GLVector operator^  ( const uSE_GLVector &inVector ); // vector product (cross product)
         bool         operator== ( const uSE_GLVector &inVector );

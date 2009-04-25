@@ -3,6 +3,11 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
 PROJECT(SpeakEasy)
 
+# to see command line of gcc
+SET(CMAKE_VERBOSE_MAKEFILE 0)
+# to add Color on CMake Process
+SET(CMAKE_COLOR_MAKEFILE ON)
+
 # set the destination of the executable, the CMAKE_BUILD_TYPE is set at launch of cmake executable
 # set(EXECUTABLE_OUTPUT_PATH build/${CMAKE_BUILD_TYPE})
 # set(EXECUTABLE_OUTPUT_PATH build)
@@ -21,10 +26,11 @@ FILE(
     src/*
 )
 
+# Files to moc : do not forget to add them !
 FILE(
     GLOB_RECURSE
     SPEAKEASY_MOC_HDRS
-    src/*.h
+    src/SE_Screen.h
 )
 
 QT4_WRAP_CPP(SPEAKEASY_MOC_SRCS ${SPEAKEASY_MOC_HDRS})
