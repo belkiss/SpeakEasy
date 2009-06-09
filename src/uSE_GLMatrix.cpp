@@ -1,52 +1,55 @@
 #include "uSE_GLMatrix.h"
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 uSE_GLMatrix::uSE_GLMatrix()
 {
     identity();
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-uSE_GLMatrix::uSE_GLMatrix( GLfloat inOne,      GLfloat inTwo,      GLfloat inThree,    GLfloat inFour,
-                            GLfloat inFive,     GLfloat inSix,      GLfloat inSeven,    GLfloat inEight,
-                            GLfloat inNine,     GLfloat inTen,      GLfloat inEleven,   GLfloat inTwelve,
-                            GLfloat inThirteen, GLfloat inFourteen, GLfloat inFifteen,  GLfloat inSixteen):
-    m_One(inOne),
-    m_Two(inTwo),
-    m_Three(inThree),
-    m_Four(inFour),
-    m_Five(inFive),
-    m_Six(inSix),
-    m_Seven(inSeven),
-    m_Eight(inEight),
-    m_Nine(inNine),
-    m_Ten(inTen),
-    m_Eleven(inEleven),
-    m_Twelve(inTwelve),
-    m_Thirteen(inThirteen),
-    m_Fourteen(inFourteen),
-    m_Fifteen(inFifteen),
-    m_Sixteen(inSixteen)
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+uSE_GLMatrix::uSE_GLMatrix(
+    GLfloat inOne,
+    GLfloat inTwo,
+    GLfloat inThree,
+    GLfloat inFour,
+    GLfloat inFive,
+    GLfloat inSix,
+    GLfloat inSeven,
+    GLfloat inEight,
+    GLfloat inNine,
+    GLfloat inTen,
+    GLfloat inEleven,
+    GLfloat inTwelve,
+    GLfloat inThirteen,
+    GLfloat inFourteen,
+    GLfloat inFifteen,
+    GLfloat inSixteen
+    )
 {
+    m_array[0] = inOne;   m_array[4] = inFive;  m_array[8] = inNine;    m_array[12] = inThirteen;
+    m_array[1] = inTwo;   m_array[5] = inSix;   m_array[9] = inTen;     m_array[13] = inFourteen;
+    m_array[2] = inThree; m_array[6] = inSeven; m_array[10] = inEleven; m_array[14] = inFifteen;
+    m_array[3] = inFour;  m_array[7] = inEight; m_array[11] = inTwelve; m_array[15] = inSixteen;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 uSE_GLMatrix::~uSE_GLMatrix()
 {
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 void uSE_GLMatrix::identity()
 {
-    m_One      = 1; m_Two      = 0; m_Three   = 0; m_Four    = 0;
-    m_Five     = 0; m_Six      = 1; m_Seven   = 0; m_Eight   = 0;
-    m_Nine     = 0; m_Ten      = 0; m_Eleven  = 1; m_Twelve  = 0;
-    m_Thirteen = 0; m_Fourteen = 0; m_Fifteen = 0; m_Sixteen = 1;
+    m_array[0] = 1; m_array[4] = 0; m_array[8] =  0; m_array[12] = 0;
+    m_array[1] = 0; m_array[5] = 1; m_array[9] =  0; m_array[13] = 0;
+    m_array[2] = 0; m_array[6] = 0; m_array[10] = 1; m_array[14] = 0;
+    m_array[3] = 0; m_array[7] = 0; m_array[11] = 0; m_array[15] = 1;
 }
 

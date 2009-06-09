@@ -7,9 +7,9 @@ class SE_Generator
         virtual ~SE_Generator();
 
     public: //methods
-        const unsigned int getVBOVerticesIndex() { return m_VBOVerticesIndex; }
-        const unsigned int getVBOIndicesIndex () { return m_VBOIndicesIndex; }
-        const unsigned int getGroundIndicesNb () { return m_groundIndicesNb; }
+        unsigned int getVBOVerticesIndex() { return m_VBOVerticesIndex; }
+        unsigned int getVBOIndicesIndex () { return m_VBOIndicesIndex; }
+        unsigned int getGroundIndicesNb () { return m_groundIndicesNb; }
 
         void generateGround();
 

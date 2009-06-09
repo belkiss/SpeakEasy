@@ -1,9 +1,10 @@
 #pragma once
-
+#define GL_GLEXT_PROTOTYPES
 #include <QGLWidget>
 #include <QMouseEvent>
 #include <QKeyEvent>
 
+#include "uSE_Quaternion.h"
 #include "SE_Generator.h"
 
 class SE_Screen: public QGLWidget
@@ -28,17 +29,22 @@ class SE_Screen: public QGLWidget
     private: // members
         GLfloat m_rotation_factor;
 
-        GLfloat m_position_x,
-                m_position_y,
-                m_position_z;
+        QPoint m_oldMousePosition;
 
-        GLdouble m_direction_x,
-                 m_direction_y,
-                 m_direction_z;
+        GLfloat m_angle;
 
-        int     m_angle_lookedat;
+        uSE_GLVector m_camera_position;
+        uSE_Quaternion m_view_quaternion;
 
         SE_Generator m_generator;
+
+        GLuint m_vbovix;
+        GLuint m_vboiix;
+
+        // shader members
+        GLuint m_programID;
+        GLuint m_vertexShaderID;
+        GLuint m_pixelShaderID;
 
     private: // methods
         void    draw();

@@ -12,7 +12,7 @@ SET(CMAKE_COLOR_MAKEFILE ON)
 # set(EXECUTABLE_OUTPUT_PATH build/${CMAKE_BUILD_TYPE})
 # set(EXECUTABLE_OUTPUT_PATH build)
 
-ADD_DEFINITIONS( -Wall )
+ADD_DEFINITIONS( -Wall -Wextra )
 # ADD_DEFINITIONS(-DQT_NO_DEBUG)
 
 FIND_PACKAGE( Qt4 REQUIRED )
@@ -42,11 +42,17 @@ ADD_EXECUTABLE(
     ${SPEAKEASY_MOC_SRCS}
 )
 
+# create symlink for shaders directory
+EXECUTE_PROCESS(
+    COMMAND ${CMAKE_COMMAND} -E create_symlink
+    ${CMAKE_SOURCE_DIR}/src/shaders
+    ${CMAKE_BINARY_DIR}/shaders
+)
+
 # linker setup
 TARGET_LINK_LIBRARIES(
     speakeasy
     GL
     GLU
-    GLee
     ${QT_LIBRARIES}
 )

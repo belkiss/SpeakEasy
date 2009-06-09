@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     }
 
     SE_Screen vl_screen;
-    vl_screen.setWindowTitle(QObject::tr("SpeakEasy, v0.1"));
+    vl_screen.setWindowTitle(QObject::tr("SpeakEasy, v0.2"));
     vl_screen.resize(640, 480);
     vl_screen.show();
 

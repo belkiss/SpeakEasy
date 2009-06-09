@@ -14,13 +14,12 @@ class uSE_GLMatrix
         virtual ~uSE_GLMatrix();
 
     private: // members
-        GLfloat m_One,      m_Two,      m_Three,   m_Four,
-                m_Five,     m_Six,      m_Seven,   m_Eight,
-                m_Nine,     m_Ten,      m_Eleven,  m_Twelve,
-                m_Thirteen, m_Fourteen, m_Fifteen, m_Sixteen;
+        GLfloat m_array[16];
 
     public: // methods
         void identity();
+
+        const GLfloat* get_array() {return m_array;}
 
         uSE_GLMatrix operator*  ( const uSE_GLMatrix &inMatrix );
 };

@@ -15,9 +15,9 @@ class uSE_GLVector
                 m_z;
 
     public: //methods
-        const GLfloat getX(){return m_x;}
-        const GLfloat getY(){return m_y;}
-        const GLfloat getZ(){return m_z;}
+        GLfloat getX() const {return m_x;}
+        GLfloat getY() const {return m_y;}
+        GLfloat getZ() const {return m_z;}
 
         void set(GLfloat inX, GLfloat inY, GLfloat inZ);
 
