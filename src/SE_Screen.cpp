@@ -10,29 +10,14 @@ SE_Screen::SE_Screen(QWidget * inpParent):
     QGLWidget(inpParent),
     m_oldMousePosition(),  // X and Y init in constructor
     m_angle(0),
-    m_camera_position(-5,10,-10),// relative to world position
+    m_camera_position(-5,-1,0),// relative to world position
     m_view_quaternion(1,uSE_GLVector(-0.5,0,0)),
     m_programID(0),
     m_vertexShaderID(0),
     m_pixelShaderID(0)
 {
 
-// generates from yaw pitch roll angles
-// float roll= M_PI*90/180;
-// float pitch = M_PI*90/180;
-// float yaw = M_PI*0/180;
-//     float cr, cp, cy, sr, sp, sy, cpcy, spsy;
-//     // calculate trig identities
-//     cr = cos(roll/2);
-//     cp = cos(pitch/2);
-//     cy = cos(yaw/2);
-//     sr = sin(roll/2);
-//     sp = sin(pitch/2);
-//     sy = sin(yaw/2);
-//     cpcy = cp * cy;
-//     spsy = sp * sy;
-//     m_view_quaternion = uSE_Quaternion(cr * cpcy + sr * spsy, uSE_GLVector(sr * cpcy - cr * spsy, cr * sp * cy + sr * cp * sy, cr * cp * sy - sr * sp * cy));
-
+    m_view_quaternion.from_axis(uSE_GLVector(1,0,0),-90);
 
     ///////////////////////////////////////
     // QT Widget specific settings start //
@@ -80,17 +65,17 @@ void SE_Screen::initializeGL()
     vl_vertices.push_back( 0 );// y
     vl_vertices.push_back( 0 );// z
 
-    vl_vertices.push_back( 1 );// x
+    vl_vertices.push_back( 0.25f );// x
     vl_vertices.push_back( 0 );// y
     vl_vertices.push_back( 0 );// z
 
     vl_vertices.push_back( 0 );// x
-    vl_vertices.push_back( 1 );// y
+    vl_vertices.push_back( 0.25f );// y
     vl_vertices.push_back( 0 );// z
 
     vl_vertices.push_back( 0 );// x
     vl_vertices.push_back( 0 );// y
-    vl_vertices.push_back( 1 );// z
+    vl_vertices.push_back( 0.25f );// z
 
     // note : the order is very important !!!!
     vl_indices.push_back(0);
@@ -218,8 +203,9 @@ void SE_Screen::paintGL()
     glTranslatef(0,0,-1);
     draw_axis();
 
-    glLoadMatrixf(m_view_quaternion.get_matrix().get_array());
+    glLoadIdentity();
     glTranslatef(m_camera_position.getX(),m_camera_position.getY(),m_camera_position.getZ());
+    glMultMatrixf(m_view_quaternion.get_matrix().get_array());
     draw();
 
 }
@@ -322,25 +308,37 @@ void SE_Screen::keyPressEvent(QKeyEvent * inpEvent)
         case Qt::Key_Right :
             {
                 uSE_Quaternion glq_rotvec;
-                GLfloat angle_rad = M_PI*10/180;
-                glq_rotvec = uSE_Quaternion ( cos(angle_rad/2), uSE_GLVector(0,0,1) * sin(angle_rad/2));
-                m_view_quaternion = glq_rotvec * m_view_quaternion * glq_rotvec.conjugation();
+                glq_rotvec.from_axis(uSE_GLVector(0,1,0),-10);
+                m_view_quaternion = glq_rotvec * m_view_quaternion;
             }
             break;
         case Qt::Key_Left :
             {
                 uSE_Quaternion glq_rotvec;
-                GLfloat angle_rad = M_PI*-10/180;
-                glq_rotvec = uSE_Quaternion ( cos(angle_rad/2), uSE_GLVector(0,0,1) * sin(angle_rad/2));
-                m_view_quaternion = glq_rotvec * m_view_quaternion * glq_rotvec.conjugation();
+                glq_rotvec.from_axis(uSE_GLVector(0,1,0),10);
+                m_view_quaternion = glq_rotvec * m_view_quaternion;
             }
             break;
-        case Qt::Key_Z :
+        case Qt::Key_Up :
+            {
+                uSE_Quaternion glq_rotvec;
+                glq_rotvec.from_axis(uSE_GLVector(1,0,0),10);
+                m_view_quaternion = glq_rotvec * m_view_quaternion;
+            }
+            break;
+        case Qt::Key_Down :
+            {
+                uSE_Quaternion glq_rotvec;
+                glq_rotvec.from_axis(uSE_GLVector(1,0,0),-10);
+                m_view_quaternion = glq_rotvec * m_view_quaternion;
+            }
+            break;
+        case Qt::Key_Plus :
                 {
                     m_camera_position = uSE_GLVector(m_camera_position.getX(),m_camera_position.getY()-1,m_camera_position.getZ());
                 }
                 break;
-        case Qt::Key_S :
+        case Qt::Key_Minus :
                 {
                     m_camera_position = uSE_GLVector(m_camera_position.getX(),m_camera_position.getY()+1,m_camera_position.getZ());
                 }
@@ -355,12 +353,12 @@ void SE_Screen::keyPressEvent(QKeyEvent * inpEvent)
                     m_camera_position = uSE_GLVector(m_camera_position.getX()-1,m_camera_position.getY(),m_camera_position.getZ());
                 }
                 break;
-        case Qt::Key_Minus:
+        case Qt::Key_Z :
                 {
                     m_camera_position = uSE_GLVector(m_camera_position.getX(),m_camera_position.getY(),m_camera_position.getZ()+1);
                 }
                 break;
-        case Qt::Key_Plus  :
+        case Qt::Key_S :
                 {
                     m_camera_position = uSE_GLVector(m_camera_position.getX(),m_camera_position.getY(),m_camera_position.getZ()-1);
                 }
@@ -410,5 +408,6 @@ void SE_Screen::mouseDoubleClickEvent(QMouseEvent * /*event*/)
 void SE_Screen::timeOut()
 {
     // do some stuff each 20ms
+//     m_angle < 360 ? m_angle++ : m_angle = 0;
     updateGL();
 }
