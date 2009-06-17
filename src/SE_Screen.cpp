@@ -199,14 +199,13 @@ void SE_Screen::paintGL()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glMatrixMode(GL_MODELVIEW);
+    glLoadMatrixf(m_view_quaternion.get_matrix().get_array());
+    glTranslatef(m_camera_position.getX(),m_camera_position.getY(),m_camera_position.getZ());
+    draw();
+
     glLoadIdentity();
     glTranslatef(0,0,-1);
     draw_axis();
-
-    glLoadIdentity();
-    glTranslatef(m_camera_position.getX(),m_camera_position.getY(),m_camera_position.getZ());
-    glMultMatrixf(m_view_quaternion.get_matrix().get_array());
-    draw();
 
 }
 
@@ -291,6 +290,13 @@ void SE_Screen::draw()
 ///////////////////////////////////////////////////////////////////////////////
 void SE_Screen::keyPressEvent(QKeyEvent * inpEvent)
 {
+
+    if ( inpEvent->isAutoRepeat() )
+    {
+        inpEvent->ignore();
+        return;
+    }
+
     switch(inpEvent->key())
     {
         case Qt::Key_W :
@@ -305,14 +311,14 @@ void SE_Screen::keyPressEvent(QKeyEvent * inpEvent)
                 glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // GL_FILL to fully paint the triangles, GL_LINE to draw only borders
             }
             break;
-        case Qt::Key_Right :
+        case Qt::Key_Left :
             {
                 uSE_Quaternion glq_rotvec;
                 glq_rotvec.from_axis(uSE_GLVector(0,1,0),-10);
                 m_view_quaternion = glq_rotvec * m_view_quaternion;
             }
             break;
-        case Qt::Key_Left :
+        case Qt::Key_Right :
             {
                 uSE_Quaternion glq_rotvec;
                 glq_rotvec.from_axis(uSE_GLVector(0,1,0),10);
@@ -333,39 +339,40 @@ void SE_Screen::keyPressEvent(QKeyEvent * inpEvent)
                 m_view_quaternion = glq_rotvec * m_view_quaternion;
             }
             break;
-        case Qt::Key_Plus :
-                {
-                    m_camera_position = uSE_GLVector(m_camera_position.getX(),m_camera_position.getY()-1,m_camera_position.getZ());
-                }
-                break;
-        case Qt::Key_Minus :
-                {
-                    m_camera_position = uSE_GLVector(m_camera_position.getX(),m_camera_position.getY()+1,m_camera_position.getZ());
-                }
-                break;
-        case Qt::Key_Q :
-                {
-                    m_camera_position = uSE_GLVector(m_camera_position.getX()+1,m_camera_position.getY(),m_camera_position.getZ());
-                }
-                break;
-        case Qt::Key_D :
-                {
-                    m_camera_position = uSE_GLVector(m_camera_position.getX()-1,m_camera_position.getY(),m_camera_position.getZ());
-                }
-                break;
         case Qt::Key_Z :
                 {
-                    m_camera_position = uSE_GLVector(m_camera_position.getX(),m_camera_position.getY(),m_camera_position.getZ()+1);
+                    m_camera_position = uSE_GLVector(m_camera_position.getX(),m_camera_position.getY()-0.1,m_camera_position.getZ());
                 }
                 break;
         case Qt::Key_S :
                 {
-                    m_camera_position = uSE_GLVector(m_camera_position.getX(),m_camera_position.getY(),m_camera_position.getZ()-1);
+                    m_camera_position = uSE_GLVector(m_camera_position.getX(),m_camera_position.getY()+0.1,m_camera_position.getZ());
+                }
+                break;
+        case Qt::Key_Q :
+                {
+                    m_camera_position = uSE_GLVector(m_camera_position.getX()+0.1,m_camera_position.getY(),m_camera_position.getZ());
+                }
+                break;
+        case Qt::Key_D :
+                {
+                    m_camera_position = uSE_GLVector(m_camera_position.getX()-0.1,m_camera_position.getY(),m_camera_position.getZ());
+                }
+                break;
+        case Qt::Key_Minus :
+                {
+                    m_camera_position = uSE_GLVector(m_camera_position.getX(),m_camera_position.getY(),m_camera_position.getZ()+0.1);
+                }
+                break;
+        case Qt::Key_Plus :
+                {
+                    m_camera_position = uSE_GLVector(m_camera_position.getX(),m_camera_position.getY(),m_camera_position.getZ()-0.1);
                 }
                 break;
         default :
             break;
     }
+    inpEvent->accept();
     updateGL();
 }
 
