@@ -199,13 +199,13 @@ void SE_Screen::paintGL()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glMatrixMode(GL_MODELVIEW);
-    glLoadMatrixf(m_view_quaternion.get_matrix().get_array());
-    glTranslatef(m_camera_position.getX(),m_camera_position.getY(),m_camera_position.getZ());
-    draw();
-
     glLoadIdentity();
     glTranslatef(0,0,-1);
     draw_axis();
+
+    glLoadMatrixf(m_view_quaternion.get_matrix().get_array());
+    glTranslatef(m_camera_position.getX(),m_camera_position.getY(),m_camera_position.getZ());
+    draw();
 
 }
 
