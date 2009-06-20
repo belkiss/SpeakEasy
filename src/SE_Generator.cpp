@@ -1,9 +1,9 @@
 #include "SE_Generator.h"
 #include <vector>
-#include <iostream>
+#include <cstdlib>
 
 #define GL_GLEXT_PROTOTYPES
-#include <QGLWidget>
+#include <GL/gl.h>
 
 const unsigned int LAND_SQUARE_SIZE = 15;
 

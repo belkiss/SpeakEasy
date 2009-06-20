@@ -1,40 +1,21 @@
 #include "SE_Screen.h"
-#include <QTimer>
-#include <cmath>
+
 #include <cassert>
+#include <vector>
 #include <fstream>
+#include <GL/glu.h>
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-SE_Screen::SE_Screen(QWidget * inpParent):
-    QGLWidget(inpParent),
-    m_oldMousePosition(),  // X and Y init in constructor
+SE_Screen::SE_Screen():
     m_angle(0),
-    m_camera_position(-5,-1,0),// relative to world position
+    m_camera_position(-5,-1,-2),// relative to world position
     m_view_quaternion(1,uSE_GLVector(-0.5,0,0)),
     m_programID(0),
     m_vertexShaderID(0),
     m_pixelShaderID(0)
 {
-
     m_view_quaternion.from_axis(uSE_GLVector(1,0,0),-90);
-
-    ///////////////////////////////////////
-    // QT Widget specific settings start //
-    ///////////////////////////////////////
-
-    // enable mouse tracking to send mouseMoveEvent at each movement instead of only at click
-    setMouseTracking(true);
-
-    ///////////////////////////////////////
-    // QT Widget specific settings end   //
-    ///////////////////////////////////////
-
-    setFormat(QGLFormat(QGL::DoubleBuffer | QGL::DepthBuffer));
-
-    QTimer *timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), this, SLOT(timeOut()));
-    timer->start(20);
 }
 
 
@@ -42,7 +23,7 @@ SE_Screen::SE_Screen(QWidget * inpParent):
 ///////////////////////////////////////////////////////////////////////////////
 void SE_Screen::initializeGL()
 {
-    qglClearColor(Qt::gray);
+    glClearColor(160/255.f, 160/255.f, 164/255.f, 0.f);
 
     // will color all with one color instead of gradient
     // DEPRECATED with shaders...
@@ -51,6 +32,8 @@ void SE_Screen::initializeGL()
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);  // enable backface culling
 //     glCullFace(GL_BACK); // choose wich face to cull
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     m_generator.generateGround();
 
@@ -288,83 +271,76 @@ void SE_Screen::draw()
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-void SE_Screen::keyPressEvent(QKeyEvent * inpEvent)
+void SE_Screen::keyPressEvent (const sf::Key::Code &inEvent)
 {
-
-    if ( inpEvent->isAutoRepeat() )
+    switch(inEvent)
     {
-        inpEvent->ignore();
-        return;
-    }
-
-    switch(inpEvent->key())
-    {
-        case Qt::Key_W :
+        case sf::Key::W :
             {
                 glMatrixMode(GL_MODELVIEW);
                 glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // GL_FILL to fully paint the triangles, GL_LINE to draw only borders
             }
             break;
-        case Qt::Key_X :
+        case sf::Key::X :
             {
                 glMatrixMode(GL_MODELVIEW);
                 glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // GL_FILL to fully paint the triangles, GL_LINE to draw only borders
             }
             break;
-        case Qt::Key_Left :
+        case sf::Key::Left :
             {
                 uSE_Quaternion glq_rotvec;
                 glq_rotvec.from_axis(uSE_GLVector(0,1,0),-10);
                 m_view_quaternion = glq_rotvec * m_view_quaternion;
             }
             break;
-        case Qt::Key_Right :
+        case sf::Key::Right :
             {
                 uSE_Quaternion glq_rotvec;
                 glq_rotvec.from_axis(uSE_GLVector(0,1,0),10);
                 m_view_quaternion = glq_rotvec * m_view_quaternion;
             }
             break;
-        case Qt::Key_Up :
+        case sf::Key::Up :
             {
                 uSE_Quaternion glq_rotvec;
                 glq_rotvec.from_axis(uSE_GLVector(1,0,0),10);
                 m_view_quaternion = glq_rotvec * m_view_quaternion;
             }
             break;
-        case Qt::Key_Down :
+        case sf::Key::Down :
             {
                 uSE_Quaternion glq_rotvec;
                 glq_rotvec.from_axis(uSE_GLVector(1,0,0),-10);
                 m_view_quaternion = glq_rotvec * m_view_quaternion;
             }
             break;
-        case Qt::Key_Z :
+        case sf::Key::Z :
                 {
                     m_camera_position = uSE_GLVector(m_camera_position.getX(),m_camera_position.getY()-0.1,m_camera_position.getZ());
                 }
                 break;
-        case Qt::Key_S :
+        case sf::Key::S :
                 {
                     m_camera_position = uSE_GLVector(m_camera_position.getX(),m_camera_position.getY()+0.1,m_camera_position.getZ());
                 }
                 break;
-        case Qt::Key_Q :
+        case sf::Key::Q :
                 {
                     m_camera_position = uSE_GLVector(m_camera_position.getX()+0.1,m_camera_position.getY(),m_camera_position.getZ());
                 }
                 break;
-        case Qt::Key_D :
+        case sf::Key::D :
                 {
                     m_camera_position = uSE_GLVector(m_camera_position.getX()-0.1,m_camera_position.getY(),m_camera_position.getZ());
                 }
                 break;
-        case Qt::Key_Minus :
+        case sf::Key::Subtract :
                 {
                     m_camera_position = uSE_GLVector(m_camera_position.getX(),m_camera_position.getY(),m_camera_position.getZ()+0.1);
                 }
                 break;
-        case Qt::Key_Plus :
+        case sf::Key::Add :
                 {
                     m_camera_position = uSE_GLVector(m_camera_position.getX(),m_camera_position.getY(),m_camera_position.getZ()-0.1);
                 }
@@ -372,49 +348,6 @@ void SE_Screen::keyPressEvent(QKeyEvent * inpEvent)
         default :
             break;
     }
-    inpEvent->accept();
-    updateGL();
+
 }
 
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-void SE_Screen::mousePressEvent(QMouseEvent * /*event*/)
-{
-}
-
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-void SE_Screen::mouseMoveEvent(QMouseEvent * /*event*/)
-{
-//     if (event->button() & Qt::NoButton)
-//     {
-//         printf("x: %d y: %d\n",event->x(),event->y());
-//         updateGL();
-//     }
-
-// //     GLfloat dx = GLfloat(event->x() - m_oldMousePosition.x()) / width();
-// //     GLfloat dy = GLfloat(event->y() - m_oldMousePosition.y()) / height();
-
-// event->pos()
-
-//     m_oldMousePosition = event->pos();
-}
-
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-void SE_Screen::mouseDoubleClickEvent(QMouseEvent * /*event*/)
-{
-}
-
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-void SE_Screen::timeOut()
-{
-    // do some stuff each 20ms
-//     m_angle < 360 ? m_angle++ : m_angle = 0;
-    updateGL();
-}
