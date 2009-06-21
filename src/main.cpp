@@ -32,6 +32,10 @@ int main(int argc, char *argv[])
             else if ((event.Type == sf::Event::KeyPressed))
                 vl_screen.keyPressEvent(event.Key.Code);
 
+            if (event.Type == sf::Event::KeyReleased)
+                vl_screen.keyReleaseEvent(event.Key.Code);
+
+
             // Adjust the viewport when the window is resized
             if (event.Type == sf::Event::Resized)
                 vl_screen.resizeGL(event.Size.Width, event.Size.Height);

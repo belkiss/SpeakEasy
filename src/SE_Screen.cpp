@@ -235,6 +235,7 @@ void SE_Screen::draw_axis()
 ///////////////////////////////////////////////////////////////////////////////
 void SE_Screen::draw()
 {
+    process_keyboard();
     float modelviewMatrix[16];
     float projectionMatrix[16];
 
@@ -288,66 +289,124 @@ void SE_Screen::keyPressEvent (const sf::Key::Code &inEvent)
             }
             break;
         case sf::Key::Left :
-            {
-                uSE_Quaternion glq_rotvec;
-                glq_rotvec.from_axis(uSE_GLVector(0,1,0),-10);
-                m_view_quaternion = glq_rotvec * m_view_quaternion;
-            }
-            break;
         case sf::Key::Right :
-            {
-                uSE_Quaternion glq_rotvec;
-                glq_rotvec.from_axis(uSE_GLVector(0,1,0),10);
-                m_view_quaternion = glq_rotvec * m_view_quaternion;
-            }
-            break;
         case sf::Key::Up :
-            {
-                uSE_Quaternion glq_rotvec;
-                glq_rotvec.from_axis(uSE_GLVector(1,0,0),10);
-                m_view_quaternion = glq_rotvec * m_view_quaternion;
-            }
-            break;
         case sf::Key::Down :
+        case sf::Key::Z :
+        case sf::Key::S :
+        case sf::Key::Q :
+        case sf::Key::D :
+        case sf::Key::Subtract :
+        case sf::Key::Add :
             {
-                uSE_Quaternion glq_rotvec;
-                glq_rotvec.from_axis(uSE_GLVector(1,0,0),-10);
-                m_view_quaternion = glq_rotvec * m_view_quaternion;
+                m_pressed_keys[inEvent] = true;
             }
             break;
-        case sf::Key::Z :
-                {
-                    m_camera_position = uSE_GLVector(m_camera_position.getX(),m_camera_position.getY()-0.1,m_camera_position.getZ());
-                }
-                break;
-        case sf::Key::S :
-                {
-                    m_camera_position = uSE_GLVector(m_camera_position.getX(),m_camera_position.getY()+0.1,m_camera_position.getZ());
-                }
-                break;
-        case sf::Key::Q :
-                {
-                    m_camera_position = uSE_GLVector(m_camera_position.getX()+0.1,m_camera_position.getY(),m_camera_position.getZ());
-                }
-                break;
-        case sf::Key::D :
-                {
-                    m_camera_position = uSE_GLVector(m_camera_position.getX()-0.1,m_camera_position.getY(),m_camera_position.getZ());
-                }
-                break;
-        case sf::Key::Subtract :
-                {
-                    m_camera_position = uSE_GLVector(m_camera_position.getX(),m_camera_position.getY(),m_camera_position.getZ()+0.1);
-                }
-                break;
-        case sf::Key::Add :
-                {
-                    m_camera_position = uSE_GLVector(m_camera_position.getX(),m_camera_position.getY(),m_camera_position.getZ()-0.1);
-                }
-                break;
+
         default :
             break;
     }
 
 }
 
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+void SE_Screen::keyReleaseEvent(const sf::Key::Code &inEvent)
+{
+    switch(inEvent)
+    {
+        case sf::Key::Left :
+        case sf::Key::Right :
+        case sf::Key::Up :
+        case sf::Key::Down :
+        case sf::Key::Z :
+        case sf::Key::S :
+        case sf::Key::Q :
+        case sf::Key::D :
+        case sf::Key::Subtract :
+        case sf::Key::Add :
+            {
+                m_pressed_keys[inEvent] = false;
+            }
+            break;
+        default :
+            break;
+    }
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+void SE_Screen::process_keyboard()
+{
+    for( std::map<sf::Key::Code, bool>::iterator it = m_pressed_keys.begin(); it != m_pressed_keys.end(); ++it)
+    {
+        if(it->second)
+        {
+            switch(it->first)
+            {
+                case sf::Key::Left :
+                    {
+                        uSE_Quaternion glq_rotvec;
+                        glq_rotvec.from_axis(uSE_GLVector(0,1,0),-0.1);
+                        m_view_quaternion = glq_rotvec * m_view_quaternion;
+                    }
+                    break;
+                case sf::Key::Right :
+                    {
+                        uSE_Quaternion glq_rotvec;
+                        glq_rotvec.from_axis(uSE_GLVector(0,1,0),0.1);
+                        m_view_quaternion = glq_rotvec * m_view_quaternion;
+                    }
+                    break;
+                case sf::Key::Up :
+                    {
+                        uSE_Quaternion glq_rotvec;
+                        glq_rotvec.from_axis(uSE_GLVector(1,0,0),0.1);
+                        m_view_quaternion = glq_rotvec * m_view_quaternion;
+                    }
+                    break;
+                case sf::Key::Down :
+                    {
+                        uSE_Quaternion glq_rotvec;
+                        glq_rotvec.from_axis(uSE_GLVector(1,0,0),-0.1);
+                        m_view_quaternion = glq_rotvec * m_view_quaternion;
+                    }
+                    break;
+                case sf::Key::Z :
+                    {
+                        m_camera_position = uSE_GLVector(m_camera_position.getX(),m_camera_position.getY()-0.001,m_camera_position.getZ());
+                    }
+                    break;
+                case sf::Key::S :
+                    {
+                        m_camera_position = uSE_GLVector(m_camera_position.getX(),m_camera_position.getY()+0.001,m_camera_position.getZ());
+                    }
+                    break;
+                case sf::Key::Q :
+                    {
+                        m_camera_position = uSE_GLVector(m_camera_position.getX()+0.001,m_camera_position.getY(),m_camera_position.getZ());
+                    }
+                    break;
+                case sf::Key::D :
+                    {
+                        m_camera_position = uSE_GLVector(m_camera_position.getX()-0.001,m_camera_position.getY(),m_camera_position.getZ());
+                    }
+                    break;
+                case sf::Key::Subtract :
+                    {
+                        m_camera_position = uSE_GLVector(m_camera_position.getX(),m_camera_position.getY(),m_camera_position.getZ()+0.001);
+                    }
+                    break;
+                case sf::Key::Add :
+                    {
+                        m_camera_position = uSE_GLVector(m_camera_position.getX(),m_camera_position.getY(),m_camera_position.getZ()-0.001);
+                    }
+                    break;
+                default :
+                    break;
+            }
+        }
+    }
+}

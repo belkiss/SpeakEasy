@@ -1,6 +1,8 @@
 #pragma once
 #define GL_GLEXT_PROTOTYPES
 
+#include <map>
+
 #include "uSE_Quaternion.h"
 #include "SE_Generator.h"
 #include <SFML/Window/Event.hpp>
@@ -15,6 +17,7 @@ class SE_Screen
         void paintGL     ();
 
         void keyPressEvent (const sf::Key::Code &inEvent);
+        void keyReleaseEvent (const sf::Key::Code &inEvent);
 
     private: // members
         GLfloat m_rotation_factor;
@@ -34,9 +37,13 @@ class SE_Screen
         GLuint m_vertexShaderID;
         GLuint m_pixelShaderID;
 
+        std::map < sf::Key::Code, bool > m_pressed_keys;
+
     private: // methods
         void    draw();
         void    draw_axis();
+
+        void    process_keyboard();
 
 };
 
