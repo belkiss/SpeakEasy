@@ -8,7 +8,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 SE_Screen::SE_Screen():
-    m_angle(0),
+    m_speed(10.f),
+    m_rotation_speed(100.f),
     m_camera_position(-5,-1,-2),// relative to world position
     m_view_quaternion(1,uSE_GLVector(-0.5,0,0)),
     m_programID(0),
@@ -32,8 +33,6 @@ void SE_Screen::initializeGL()
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);  // enable backface culling
 //     glCullFace(GL_BACK); // choose wich face to cull
-
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     m_generator.generateGround();
 
@@ -179,6 +178,9 @@ void SE_Screen::resizeGL(int inWidth, int inHeight)
 ///////////////////////////////////////////////////////////////////////////////
 void SE_Screen::paintGL()
 {
+    m_elapsed = m_clock.GetElapsedTime();
+    m_clock.Reset();
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glMatrixMode(GL_MODELVIEW);
@@ -349,59 +351,59 @@ void SE_Screen::process_keyboard()
                 case sf::Key::Left :
                     {
                         uSE_Quaternion glq_rotvec;
-                        glq_rotvec.from_axis(uSE_GLVector(0,1,0),-0.1);
+                        glq_rotvec.from_axis(uSE_GLVector(0,1,0),- m_rotation_speed * m_elapsed);
                         m_view_quaternion = glq_rotvec * m_view_quaternion;
                     }
                     break;
                 case sf::Key::Right :
                     {
                         uSE_Quaternion glq_rotvec;
-                        glq_rotvec.from_axis(uSE_GLVector(0,1,0),0.1);
+                        glq_rotvec.from_axis(uSE_GLVector(0,1,0), m_rotation_speed * m_elapsed);
                         m_view_quaternion = glq_rotvec * m_view_quaternion;
                     }
                     break;
                 case sf::Key::Up :
                     {
                         uSE_Quaternion glq_rotvec;
-                        glq_rotvec.from_axis(uSE_GLVector(1,0,0),0.1);
+                        glq_rotvec.from_axis(uSE_GLVector(1,0,0), m_rotation_speed * m_elapsed);
                         m_view_quaternion = glq_rotvec * m_view_quaternion;
                     }
                     break;
                 case sf::Key::Down :
                     {
                         uSE_Quaternion glq_rotvec;
-                        glq_rotvec.from_axis(uSE_GLVector(1,0,0),-0.1);
+                        glq_rotvec.from_axis(uSE_GLVector(1,0,0), - m_rotation_speed * m_elapsed);
                         m_view_quaternion = glq_rotvec * m_view_quaternion;
                     }
                     break;
                 case sf::Key::Z :
                     {
-                        m_camera_position = uSE_GLVector(m_camera_position.getX(),m_camera_position.getY()-0.001,m_camera_position.getZ());
+                        m_camera_position = uSE_GLVector(m_camera_position.getX(), m_camera_position.getY()- m_speed * m_elapsed, m_camera_position.getZ());
                     }
                     break;
                 case sf::Key::S :
                     {
-                        m_camera_position = uSE_GLVector(m_camera_position.getX(),m_camera_position.getY()+0.001,m_camera_position.getZ());
+                        m_camera_position = uSE_GLVector(m_camera_position.getX(), m_camera_position.getY() + m_speed * m_elapsed, m_camera_position.getZ());
                     }
                     break;
                 case sf::Key::Q :
                     {
-                        m_camera_position = uSE_GLVector(m_camera_position.getX()+0.001,m_camera_position.getY(),m_camera_position.getZ());
+                        m_camera_position = uSE_GLVector(m_camera_position.getX() + m_speed * m_elapsed, m_camera_position.getY(), m_camera_position.getZ());
                     }
                     break;
                 case sf::Key::D :
                     {
-                        m_camera_position = uSE_GLVector(m_camera_position.getX()-0.001,m_camera_position.getY(),m_camera_position.getZ());
+                        m_camera_position = uSE_GLVector(m_camera_position.getX() - m_speed * m_elapsed, m_camera_position.getY(), m_camera_position.getZ());
                     }
                     break;
                 case sf::Key::Subtract :
                     {
-                        m_camera_position = uSE_GLVector(m_camera_position.getX(),m_camera_position.getY(),m_camera_position.getZ()+0.001);
+                        m_camera_position = uSE_GLVector(m_camera_position.getX(), m_camera_position.getY(), m_camera_position.getZ() + m_speed * m_elapsed);
                     }
                     break;
                 case sf::Key::Add :
                     {
-                        m_camera_position = uSE_GLVector(m_camera_position.getX(),m_camera_position.getY(),m_camera_position.getZ()-0.001);
+                        m_camera_position = uSE_GLVector(m_camera_position.getX(), m_camera_position.getY(), m_camera_position.getZ() - m_speed * m_elapsed);
                     }
                     break;
                 default :

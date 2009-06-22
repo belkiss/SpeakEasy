@@ -12,7 +12,12 @@ SET(CMAKE_COLOR_MAKEFILE ON)
 # set(EXECUTABLE_OUTPUT_PATH build/${CMAKE_BUILD_TYPE})
 # set(EXECUTABLE_OUTPUT_PATH build)
 
-ADD_DEFINITIONS( -Wall -Wextra )
+IF(WIN32)
+    SET(CMAKE_CXX_WARNING_LEVEL 4)
+ENDIF(WIN32)
+IF(UNIX)
+    ADD_DEFINITIONS( -Wall -Wextra )
+ENDIF(UNIX)
 
 # Generation of source file list, 1st parameter is the FUNCTION name, second is the cmake list where to store the result, third is the target
 FILE(

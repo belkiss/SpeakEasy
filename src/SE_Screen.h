@@ -6,6 +6,7 @@
 #include "uSE_Quaternion.h"
 #include "SE_Generator.h"
 #include <SFML/Window/Event.hpp>
+#include <SFML/System/Clock.hpp>
 
 class SE_Screen
 {
@@ -20,9 +21,11 @@ class SE_Screen
         void keyReleaseEvent (const sf::Key::Code &inEvent);
 
     private: // members
-        GLfloat m_rotation_factor;
+        sf::Clock m_clock;
+        float     m_elapsed;
 
-        GLfloat m_angle;
+        float m_speed;
+        float m_rotation_speed;
 
         uSE_GLVector m_camera_position;
         uSE_Quaternion m_view_quaternion;
