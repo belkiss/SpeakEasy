@@ -9,12 +9,14 @@
 ///////////////////////////////////////////////////////////////////////////////
 SE_Screen::SE_Screen():
     m_speed(10.f),
-    m_rotation_speed(100.f),
+    m_rotation_speed(5.f),
     m_camera_position(-5,-1,-2),// relative to world position
-    m_view_quaternion(1,uSE_GLVector(-0.5,0,0)),
+    m_view_quaternion(1,uSE_GLVector(0,0,0)),
     m_programID(0),
     m_vertexShaderID(0),
-    m_pixelShaderID(0)
+    m_pixelShaderID(0),
+    m_cursor_moved_by_us(true),
+    m_mouse_old_pos(320,240)
 {
     m_view_quaternion.from_axis(uSE_GLVector(1,0,0),-90);
 }
@@ -180,6 +182,7 @@ void SE_Screen::paintGL()
 {
     m_elapsed = m_clock.GetElapsedTime();
     m_clock.Reset();
+    process_keyboard();
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -237,7 +240,6 @@ void SE_Screen::draw_axis()
 ///////////////////////////////////////////////////////////////////////////////
 void SE_Screen::draw()
 {
-    process_keyboard();
     float modelviewMatrix[16];
     float projectionMatrix[16];
 
@@ -340,6 +342,42 @@ void SE_Screen::keyReleaseEvent(const sf::Key::Code &inEvent)
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
+void SE_Screen::mouseMoveEvent (sf::Window * inApp, const int &inX, const int &inY)
+{
+    if(!m_cursor_moved_by_us)
+    {
+        int move_x = inX - m_mouse_old_pos.first;
+
+        if(move_x != 0) // turn right / left
+        {
+            uSE_Quaternion glq_rotvec;
+            glq_rotvec.from_axis(uSE_GLVector(0,0,1), move_x * m_rotation_speed * m_elapsed);
+            m_view_quaternion = m_view_quaternion * glq_rotvec;
+        }
+
+        int move_y = inY - m_mouse_old_pos.second;
+        if(move_y != 0) // look up / down
+        {
+            uSE_Quaternion glq_rotvec;
+            glq_rotvec.from_axis(uSE_GLVector(1,0,0), move_y * m_rotation_speed * m_elapsed);
+            m_view_quaternion = glq_rotvec * m_view_quaternion;
+        }
+
+        m_mouse_old_pos = std::make_pair(inX,inY);
+
+        m_cursor_moved_by_us = true;
+        inApp->SetCursorPosition(320,240);
+    }
+    else
+    {
+        m_mouse_old_pos = std::make_pair(320,240);
+        m_cursor_moved_by_us = false;
+    }
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 void SE_Screen::process_keyboard()
 {
     for( std::map<sf::Key::Code, bool>::iterator it = m_pressed_keys.begin(); it != m_pressed_keys.end(); ++it)
@@ -351,15 +389,15 @@ void SE_Screen::process_keyboard()
                 case sf::Key::Left :
                     {
                         uSE_Quaternion glq_rotvec;
-                        glq_rotvec.from_axis(uSE_GLVector(0,1,0),- m_rotation_speed * m_elapsed);
-                        m_view_quaternion = glq_rotvec * m_view_quaternion;
+                        glq_rotvec.from_axis(uSE_GLVector(0,0,1),- m_rotation_speed * m_elapsed);
+                        m_view_quaternion = m_view_quaternion * glq_rotvec;
                     }
                     break;
                 case sf::Key::Right :
                     {
                         uSE_Quaternion glq_rotvec;
-                        glq_rotvec.from_axis(uSE_GLVector(0,1,0), m_rotation_speed * m_elapsed);
-                        m_view_quaternion = glq_rotvec * m_view_quaternion;
+                        glq_rotvec.from_axis(uSE_GLVector(0,0,1), m_rotation_speed * m_elapsed);
+                        m_view_quaternion = m_view_quaternion * glq_rotvec;
                     }
                     break;
                 case sf::Key::Up :

@@ -7,6 +7,7 @@
 #include "SE_Generator.h"
 #include <SFML/Window/Event.hpp>
 #include <SFML/System/Clock.hpp>
+#include <SFML/Window/Window.hpp>
 
 class SE_Screen
 {
@@ -19,6 +20,8 @@ class SE_Screen
 
         void keyPressEvent (const sf::Key::Code &inEvent);
         void keyReleaseEvent (const sf::Key::Code &inEvent);
+
+        void mouseMoveEvent (sf::Window * inApp, const int &inX, const int &inY);
 
     private: // members
         sf::Clock m_clock;
@@ -41,6 +44,9 @@ class SE_Screen
         GLuint m_pixelShaderID;
 
         std::map < sf::Key::Code, bool > m_pressed_keys;
+
+        bool m_cursor_moved_by_us;
+        std::pair<int,int> m_mouse_old_pos;
 
     private: // methods
         void    draw();
