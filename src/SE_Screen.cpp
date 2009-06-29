@@ -1,5 +1,5 @@
 #include "SE_Screen.h"
-
+#include <iostream>
 #include <cassert>
 #include <vector>
 #include <fstream>
@@ -268,7 +268,7 @@ void SE_Screen::draw()
 
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_generator.getVBOIndicesIndex() ); // Bind The Buffer
 
-    glDrawElements( GL_TRIANGLES, m_generator.getGroundIndicesNb(), GL_UNSIGNED_BYTE, (char*) 0 );
+    glDrawElements( GL_TRIANGLES, m_generator.getGroundIndicesNb(), GL_UNSIGNED_INT, (char*) 0 );
 
     glDisableVertexAttribArray(0);
 }
@@ -292,22 +292,10 @@ void SE_Screen::keyPressEvent (const sf::Key::Code &inEvent)
                 glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // GL_FILL to fully paint the triangles, GL_LINE to draw only borders
             }
             break;
-        case sf::Key::Left :
-        case sf::Key::Right :
-        case sf::Key::Up :
-        case sf::Key::Down :
-        case sf::Key::Z :
-        case sf::Key::S :
-        case sf::Key::Q :
-        case sf::Key::D :
-        case sf::Key::Subtract :
-        case sf::Key::Add :
+        default :
             {
                 m_pressed_keys[inEvent] = true;
             }
-            break;
-
-        default :
             break;
     }
 
@@ -320,21 +308,10 @@ void SE_Screen::keyReleaseEvent(const sf::Key::Code &inEvent)
 {
     switch(inEvent)
     {
-        case sf::Key::Left :
-        case sf::Key::Right :
-        case sf::Key::Up :
-        case sf::Key::Down :
-        case sf::Key::Z :
-        case sf::Key::S :
-        case sf::Key::Q :
-        case sf::Key::D :
-        case sf::Key::Subtract :
-        case sf::Key::Add :
+        default :
             {
                 m_pressed_keys[inEvent] = false;
             }
-            break;
-        default :
             break;
     }
 }
@@ -386,6 +363,11 @@ void SE_Screen::process_keyboard()
         {
             switch(it->first)
             {
+                case sf::Key::Divide :
+                    {
+                        m_generator.subdivideGround();
+                    }
+                    break;
                 case sf::Key::Left :
                     {
                         uSE_Quaternion glq_rotvec;

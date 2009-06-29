@@ -12,5 +12,5 @@ void main(void)
     gl_Position = projection_matrix * pos;
 
     // make the color varying with vertex position
-    outVertexColor_vs = vec4(inVertexPosition.x/10,inVertexPosition.y/10,inVertexPosition.z/10,1.0);
+    outVertexColor_vs = vec4(inVertexPosition.x/512,inVertexPosition.y/512,inVertexPosition.z,1.0);
 }

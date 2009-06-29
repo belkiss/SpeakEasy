@@ -12,6 +12,7 @@ class SE_Generator
         unsigned int getGroundIndicesNb () { return m_groundIndicesNb; }
 
         void generateGround();
+        void subdivideGround();
 
     private: //members
         unsigned int m_VBOVerticesIndex;
