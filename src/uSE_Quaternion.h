@@ -14,7 +14,10 @@ class uSE_Quaternion
         uSE_GLVector m_vector;
 
     public: //methods
+        void set_real( const float inReal );
+
         void from_axis(uSE_GLVector inAxis, float inDegrees);
+        uSE_GLVector to_axis();
 
         float get_real() const { return m_real;}
         const uSE_GLVector & get_vector() const { return m_vector;}
@@ -25,6 +28,7 @@ class uSE_Quaternion
         uSE_Quaternion conjugation();
         uSE_Quaternion reciprocal();
 
+        void getNormSquared( float &outNorm );
         void getNorm( float &outNorm );
 
         void normalize();

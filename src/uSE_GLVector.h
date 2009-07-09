@@ -21,8 +21,8 @@ class uSE_GLVector
 
         void set(GLfloat inX, GLfloat inY, GLfloat inZ);
 
-        void getNorm( GLfloat &outNorm );
         void getNormSquared( GLfloat &outNorm );
+        void getNorm( GLfloat &outNorm );
 
         void normalize();
 

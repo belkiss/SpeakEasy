@@ -1,4 +1,7 @@
 #pragma once
+#define GL_GLEXT_PROTOTYPES
+#include <vector>
+#include <GL/gl.h>
 
 class SE_Generator
 {
@@ -18,5 +21,8 @@ class SE_Generator
         unsigned int m_VBOVerticesIndex;
         unsigned int m_VBOIndicesIndex;
         unsigned int m_groundIndicesNb;
+
+        std::vector<GLfloat> m_ground_vertices;
+        std::vector<GLuint> m_ground_indices;
 };
 

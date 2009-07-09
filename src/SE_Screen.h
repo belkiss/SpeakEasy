@@ -35,6 +35,7 @@ class SE_Screen
 
         SE_Generator m_generator;
 
+        GLuint m_vbonbindices;
         GLuint m_vbovix;
         GLuint m_vboiix;
 

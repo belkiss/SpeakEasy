@@ -8,16 +8,21 @@
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 SE_Screen::SE_Screen():
+    m_elapsed(0.f),
     m_speed(10.f),
     m_rotation_speed(5.f),
-    m_camera_position(-5,-1,-2),// relative to world position
+    m_camera_position(-5,-1,-5),// relative to world position
     m_view_quaternion(1,uSE_GLVector(0,0,0)),
+    m_vbonbindices(0),
+    m_vbovix(0),
+    m_vboiix(0),
     m_programID(0),
     m_vertexShaderID(0),
     m_pixelShaderID(0),
     m_cursor_moved_by_us(true),
-    m_mouse_old_pos(320,240)
+    m_mouse_old_pos(320,240) // init with width/2 and height/2
 {
+    // TODO : put that in init
     m_view_quaternion.from_axis(uSE_GLVector(1,0,0),-90);
 }
 
@@ -70,6 +75,8 @@ void SE_Screen::initializeGL()
 
     vl_indices.push_back(0);
     vl_indices.push_back(3);
+
+    m_vbonbindices = vl_indices.size();
 
     // Generate And Bind The Vertex Buffer
     glGenBuffers( 1, &m_vbovix );                  // Generate the name and store it in buffer ID
@@ -229,8 +236,7 @@ void SE_Screen::draw_axis()
 
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_vboiix ); // Bind The Buffer
 
-    #warning replace constant 6 by nb of vertices
-    glDrawElements( GL_LINES, 6, GL_UNSIGNED_BYTE, (char*) 0 );
+    glDrawElements( GL_LINES, m_vbonbindices, GL_UNSIGNED_BYTE, (char*) 0 );
 
     glDisableVertexAttribArray(0);
 }
@@ -330,6 +336,7 @@ void SE_Screen::mouseMoveEvent (sf::Window * inApp, const int &inX, const int &i
             uSE_Quaternion glq_rotvec;
             glq_rotvec.from_axis(uSE_GLVector(0,0,1), move_x * m_rotation_speed * m_elapsed);
             m_view_quaternion = m_view_quaternion * glq_rotvec;
+            m_view_quaternion.normalize();
         }
 
         int move_y = inY - m_mouse_old_pos.second;
@@ -338,6 +345,7 @@ void SE_Screen::mouseMoveEvent (sf::Window * inApp, const int &inX, const int &i
             uSE_Quaternion glq_rotvec;
             glq_rotvec.from_axis(uSE_GLVector(1,0,0), move_y * m_rotation_speed * m_elapsed);
             m_view_quaternion = glq_rotvec * m_view_quaternion;
+            m_view_quaternion.normalize();
         }
 
         m_mouse_old_pos = std::make_pair(inX,inY);
@@ -357,6 +365,18 @@ void SE_Screen::mouseMoveEvent (sf::Window * inApp, const int &inX, const int &i
 ///////////////////////////////////////////////////////////////////////////////
 void SE_Screen::process_keyboard()
 {
+    uSE_Quaternion cam_lookat_quat;
+    cam_lookat_quat.from_axis(uSE_GLVector(1,0,0),-90);
+
+    uSE_Quaternion new_lookat_quat = m_view_quaternion.conjugation() * cam_lookat_quat * m_view_quaternion;
+    new_lookat_quat.normalize();
+    uSE_GLVector dir_vec = new_lookat_quat.get_vector();
+    dir_vec.normalize();
+
+    // compute the right vec from vector product between dir and up
+    uSE_GLVector right_vec = dir_vec ^ uSE_GLVector(0,0,1);
+    // std::cout<<" x: "<<right_vec.getX()<<" y: "<<right_vec.getY()<<" z: "<<right_vec.getZ()<<std::endl;
+
     for( std::map<sf::Key::Code, bool>::iterator it = m_pressed_keys.begin(); it != m_pressed_keys.end(); ++it)
     {
         if(it->second)
@@ -366,6 +386,7 @@ void SE_Screen::process_keyboard()
                 case sf::Key::Divide :
                     {
                         m_generator.subdivideGround();
+                        it->second = false; // to avoid too many repetitions of subdivision
                     }
                     break;
                 case sf::Key::Left :
@@ -398,30 +419,30 @@ void SE_Screen::process_keyboard()
                     break;
                 case sf::Key::Z :
                     {
-                        m_camera_position = uSE_GLVector(m_camera_position.getX(), m_camera_position.getY()- m_speed * m_elapsed, m_camera_position.getZ());
+                        m_camera_position = uSE_GLVector(m_camera_position.getX()-dir_vec.getY()*m_speed * m_elapsed, m_camera_position.getY()+dir_vec.getX()*m_speed * m_elapsed, m_camera_position.getZ());
                     }
                     break;
                 case sf::Key::S :
                     {
-                        m_camera_position = uSE_GLVector(m_camera_position.getX(), m_camera_position.getY() + m_speed * m_elapsed, m_camera_position.getZ());
+                        m_camera_position = uSE_GLVector(m_camera_position.getX()+dir_vec.getY()*m_speed * m_elapsed, m_camera_position.getY()-dir_vec.getX()*m_speed * m_elapsed, m_camera_position.getZ());
                     }
                     break;
                 case sf::Key::Q :
                     {
-                        m_camera_position = uSE_GLVector(m_camera_position.getX() + m_speed * m_elapsed, m_camera_position.getY(), m_camera_position.getZ());
+                        m_camera_position = uSE_GLVector(m_camera_position.getX()+right_vec.getY()*m_speed * m_elapsed, m_camera_position.getY()-right_vec.getX()*m_speed * m_elapsed, m_camera_position.getZ());
                     }
                     break;
                 case sf::Key::D :
                     {
-                        m_camera_position = uSE_GLVector(m_camera_position.getX() - m_speed * m_elapsed, m_camera_position.getY(), m_camera_position.getZ());
+                        m_camera_position = uSE_GLVector(m_camera_position.getX()-right_vec.getY()*m_speed * m_elapsed, m_camera_position.getY()+right_vec.getX()*m_speed * m_elapsed, m_camera_position.getZ());
                     }
                     break;
-                case sf::Key::Subtract :
+                case sf::Key::LControl :
                     {
                         m_camera_position = uSE_GLVector(m_camera_position.getX(), m_camera_position.getY(), m_camera_position.getZ() + m_speed * m_elapsed);
                     }
                     break;
-                case sf::Key::Add :
+                case sf::Key::Space :
                     {
                         m_camera_position = uSE_GLVector(m_camera_position.getX(), m_camera_position.getY(), m_camera_position.getZ() - m_speed * m_elapsed);
                     }
