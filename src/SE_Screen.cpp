@@ -3,7 +3,9 @@
 #include <cassert>
 #include <vector>
 #include <fstream>
+#include <sstream>
 #include <GL/glu.h>
+#include "config.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -91,8 +93,10 @@ void SE_Screen::initializeGL()
     ////////////// AXIS CODE OFF //////////////////////////
     ///////////////////////////////////////////////////////
 
-    #warning get the path from environment variable
-    std::ifstream vsfileIn("shaders/vs_simple.glsl", std::ios::binary);
+    std::stringstream vs_filename(std::stringstream::in | std::stringstream::out);
+    vs_filename << SHADERS_DIR << "/vs_simple.glsl";
+
+    std::ifstream vsfileIn(vs_filename.str().c_str(), std::ios::binary);
     if (!vsfileIn.good())
     {
         assert(false);// File does not exist
@@ -103,8 +107,10 @@ void SE_Screen::initializeGL()
 
     vsfileIn.close();
 
-    #warning get the path from environment variable
-    std::ifstream pixelfileIn("shaders/ps_simple.glsl", std::ios::binary);
+    std::stringstream ps_filename(std::stringstream::in | std::stringstream::out);
+    ps_filename << SHADERS_DIR << "/ps_simple.glsl";
+
+    std::ifstream pixelfileIn(ps_filename.str().c_str(), std::ios::binary);
     if (!pixelfileIn.good())
     {
         assert(false);// File does not exist

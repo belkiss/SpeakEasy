@@ -19,31 +19,4 @@ IF(UNIX)
     ADD_DEFINITIONS( -Wall -Wextra )
 ENDIF(UNIX)
 
-# Generation of source file list, 1st parameter is the FUNCTION name, second is the cmake list where to store the result, third is the target
-FILE(
-    GLOB_RECURSE
-    source_files
-    src/*
-)
-
-# executable declaration
-ADD_EXECUTABLE(
-    speakeasy
-    ${source_files}
-)
-
-# create symlink for shaders directory
-EXECUTE_PROCESS(
-    COMMAND ${CMAKE_COMMAND} -E create_symlink
-    ${CMAKE_SOURCE_DIR}/src/shaders
-    ${CMAKE_BINARY_DIR}/shaders
-)
-
-# linker setup
-TARGET_LINK_LIBRARIES(
-    speakeasy
-    GL
-    GLU
-    sfml-system
-    sfml-window
-)
+ADD_SUBDIRECTORY(src)
