@@ -1,3 +1,6 @@
+#ifdef _WIN32
+#include <windows.h>
+#endif
 #include <iostream>
 #include <SFML/Window.hpp>
 #include "SE_Screen.h"

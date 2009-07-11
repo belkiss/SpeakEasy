@@ -10,7 +10,7 @@ SET(CMAKE_COLOR_MAKEFILE ON)
 
 # set the destination of the executable, the CMAKE_BUILD_TYPE is set at launch of cmake executable
 # set(EXECUTABLE_OUTPUT_PATH build/${CMAKE_BUILD_TYPE})
-# set(EXECUTABLE_OUTPUT_PATH build)
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
 IF(WIN32)
     SET(CMAKE_CXX_WARNING_LEVEL 4)

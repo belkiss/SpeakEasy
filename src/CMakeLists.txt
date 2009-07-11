@@ -45,4 +45,21 @@ TARGET_LINK_LIBRARIES(
     sfml-window
 )
 
+IF(WIN32)
+    # Use the highest warning level for visual studio.
+    SET(CMAKE_CXX_WARNING_LEVEL 4)
+    IF(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
+        STRING(REGEX REPLACE "/W[0-4]" "/W4"
+        CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    ELSE(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
+    ENDIF(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
+    set_target_properties(speakeasy PROPERTIES LINK_FLAGS_DEBUG "/SUBSYSTEM:CONSOLE")
+    set_target_properties(speakeasy PROPERTIES COMPILE_DEFINITIONS_DEBUG "_CONSOLE")
+    set_target_properties(speakeasy PROPERTIES LINK_FLAGS_RELWITHDEBINFO "/SUBSYSTEM:CONSOLE")
+    set_target_properties(speakeasy PROPERTIES COMPILE_DEFINITIONS_RELWITHDEBINFO "_CONSOLE")
+    set_target_properties(speakeasy PROPERTIES LINK_FLAGS_RELEASE "/SUBSYSTEM:WINDOWS")
+    set_target_properties(speakeasy PROPERTIES LINK_FLAGS_MINSIZEREL "/SUBSYSTEM:WINDOWS")
+ENDIF(WIN32)
+
 INSTALL(TARGETS speakeasy DESTINATION "bin")

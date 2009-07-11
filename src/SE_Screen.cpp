@@ -4,8 +4,27 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
-#include <GL/glu.h>
 #include "config.h"
+#include <GL/glu.h>
+
+#ifdef _WIN32
+#include <GL/glext.h>
+PFNGLGENBUFFERSARBPROC glGenBuffers = NULL;
+PFNGLBINDBUFFERPROC glBindBuffer = NULL;
+PFNGLBUFFERDATAPROC glBufferData = NULL;
+PFNGLCREATEPROGRAMPROC glCreateProgram = NULL;
+PFNGLCREATESHADERPROC glCreateShader = NULL;
+PFNGLSHADERSOURCEPROC glShaderSource = NULL;
+PFNGLCOMPILESHADERPROC glCompileShader = NULL;
+PFNGLATTACHSHADERPROC glAttachShader = NULL;
+PFNGLLINKPROGRAMPROC glLinkProgram = NULL;
+PFNGLUSEPROGRAMPROC glUseProgram = NULL;
+PFNGLENABLEVERTEXATTRIBARRAYPROC glEnableVertexAttribArray = NULL;
+PFNGLGETUNIFORMLOCATIONPROC glGetUniformLocation = NULL;
+PFNGLUNIFORMMATRIX4FVPROC glUniformMatrix4fv = NULL;
+PFNGLVERTEXATTRIBPOINTERPROC glVertexAttribPointer = NULL;
+PFNGLDISABLEVERTEXATTRIBARRAYPROC glDisableVertexAttribArray = NULL;
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -24,6 +43,24 @@ SE_Screen::SE_Screen():
     m_cursor_moved_by_us(true),
     m_mouse_old_pos(320,240) // init with width/2 and height/2
 {
+#ifdef _WIN32
+    glGenBuffers = (PFNGLGENBUFFERSARBPROC)wglGetProcAddress("glGenBuffers");
+    glBindBuffer = (PFNGLBINDBUFFERPROC)wglGetProcAddress("glBindBuffer");
+    glBufferData = (PFNGLBUFFERDATAPROC)wglGetProcAddress("glBufferData");
+    glCreateProgram = (PFNGLCREATEPROGRAMPROC)wglGetProcAddress("glCreateProgram");
+    glCreateShader = (PFNGLCREATESHADERPROC)wglGetProcAddress("glCreateShader");
+    glShaderSource = (PFNGLSHADERSOURCEPROC)wglGetProcAddress("glShaderSource");
+    glCompileShader = (PFNGLCOMPILESHADERPROC)wglGetProcAddress("glCompileShader");
+    glAttachShader = (PFNGLATTACHSHADERPROC)wglGetProcAddress("glAttachShader");
+    glLinkProgram = (PFNGLLINKPROGRAMPROC)wglGetProcAddress("glLinkProgram");
+    glUseProgram = (PFNGLUSEPROGRAMPROC)wglGetProcAddress("glUseProgram");
+    glEnableVertexAttribArray = (PFNGLENABLEVERTEXATTRIBARRAYPROC)wglGetProcAddress("glEnableVertexAttribArray");
+    glGetUniformLocation = (PFNGLGETUNIFORMLOCATIONPROC)wglGetProcAddress("glGetUniformLocation");
+    glUniformMatrix4fv = (PFNGLUNIFORMMATRIX4FVPROC)wglGetProcAddress("glUniformMatrix4fv");
+    glVertexAttribPointer = (PFNGLVERTEXATTRIBPOINTERPROC)wglGetProcAddress("glVertexAttribPointer");
+    glDisableVertexAttribArray = (PFNGLDISABLEVERTEXATTRIBARRAYPROC)wglGetProcAddress("glDisableVertexAttribArray");
+#endif
+
     // TODO : put that in init
     m_view_quaternion.from_axis(uSE_GLVector(1,0,0),-90);
 }
@@ -85,7 +122,7 @@ void SE_Screen::initializeGL()
     vl_indices.push_back(0);
     vl_indices.push_back(3);
 
-    m_vbonbindices = vl_indices.size();
+    m_vbonbindices = (GLuint)vl_indices.size();
 
     // Generate And Bind The Vertex Buffer
     glGenBuffers( 1, &m_vbovix );                  // Generate the name and store it in buffer ID
@@ -146,7 +183,7 @@ void SE_Screen::initializeGL()
     glCompileShader(m_vertexShaderID);
     glCompileShader(m_pixelShaderID);
 
-    #warning check the result of the shader compilation
+    // TODO: check the result of the shader compilation
     // GLint result;
     // glGetShaderiv(m_pixelShaderID, GL_COMPILE_STATUS, &result);
     // std::cout<<"GL_COMPILE_STATUS "<<result<<std::endl;
@@ -157,7 +194,7 @@ void SE_Screen::initializeGL()
 
     // link GLSL program
     glLinkProgram(m_programID);
-    #warning check the result of the link
+    // TODO: check the result of the link
     // GLint* reslink = new GLint[20];
     // glGetProgramiv(m_programID, GL_LINK_STATUS, reslink);
     // std::cout<<"GL_LINK_STATUS "<<reslink[0]<<std::endl;
@@ -165,7 +202,7 @@ void SE_Screen::initializeGL()
     // glGetProgramiv(m_programID, GL_ATTACHED_SHADERS, reslink);
     // std::cout<<"GL_ATTACHED_SHADERS "<<reslink[0]<<std::endl;
 
-    #warning check the result of the link
+    // TODO: check the result of the link
     // GLsizei sizelog;
     // GLchar * infoLog = new GLchar[1000];
     // glGetProgramInfoLog(m_programID, 1000, &sizelog, infoLog);
@@ -325,14 +362,7 @@ void SE_Screen::keyPressEvent (const sf::Key::Code &inEvent)
 ///////////////////////////////////////////////////////////////////////////////
 void SE_Screen::keyReleaseEvent(const sf::Key::Code &inEvent)
 {
-    switch(inEvent)
-    {
-        default :
-            {
-                m_pressed_keys[inEvent] = false;
-            }
-            break;
-    }
+    m_pressed_keys[inEvent] = false;
 }
 
 
