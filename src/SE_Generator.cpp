@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <SFML/System/Randomizer.hpp>
+#include "uSE_GLMesh.h"
 
 unsigned int SQUARELAND_SIDE_ELEMENTS_NB = 10;
 unsigned int SQUARELAND_SIDE_SIZE = 50;
@@ -31,6 +32,21 @@ SE_Generator::~SE_Generator()
 ////////////////////////////////////////////////////////////////////////////////
 void SE_Generator::generateGround()
 {
+//     uSE_GLMesh test;
+// 
+//     // Generate And Bind The Vertex Buffer
+//     glGenBuffers( 1, &m_VBOVerticesIndex );                  // Generate the name and store it in buffer ID
+//     glBindBuffer( GL_ARRAY_BUFFER, m_VBOVerticesIndex ); // Bind The Buffer
+//     glBufferData( GL_ARRAY_BUFFER, test.get_nb_vertices() * sizeof(GLfloat), &test.get_vertices().front(), GL_STATIC_DRAW );    // Load The Data
+// 
+//     glGenBuffers( 1, &m_VBOIndicesIndex);                  // Get A Valid Name
+//     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_VBOIndicesIndex ); // Bind The Buffer
+//     glBufferData( GL_ELEMENT_ARRAY_BUFFER, test.get_nb_indices() * sizeof(GLuint),&test.get_indices().front(), GL_STATIC_DRAW );    // Load The Data
+// 
+// 
+//     m_groundIndicesNb =  test.get_nb_indices();
+//     test.display();
+
     float step = (float)SQUARELAND_SIDE_SIZE / SQUARELAND_SIDE_ELEMENTS_NB;
 
     m_groundIndicesNb = SQUARELAND_SIDE_ELEMENTS_NB * SQUARELAND_SIDE_ELEMENTS_NB * 6;

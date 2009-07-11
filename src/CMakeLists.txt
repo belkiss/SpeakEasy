@@ -1,6 +1,8 @@
 INCLUDE_DIRECTORIES($(SpeakEasy_SOURCE_DIR)/src)
 
 SET(SpeakEasy_src
+    uSE_GLMesh.cpp
+    uSE_GLTriangle.cpp
     SE_Generator.cpp
     SE_Screen.cpp
     uSE_GLMatrix.cpp
@@ -19,7 +21,7 @@ EXECUTE_PROCESS(
 IF (NOT SHADERS_DIR)
   SET(SHADERS_DIR ${CMAKE_BINARY_DIR}/shaders)
 ENDIF(NOT SHADERS_DIR)
-MESSAGE(STATUS "Données situées dans ${SHADERS_DIR}")
+MESSAGE(STATUS "Shaders located in ${SHADERS_DIR}")
 
 CONFIGURE_FILE(
     ${CMAKE_SOURCE_DIR}/config.h.cmake

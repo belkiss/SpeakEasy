@@ -13,6 +13,7 @@ class SE_Screen
 {
     public:
         SE_Screen();
+        virtual ~SE_Screen();
 
         void initializeGL();
         void resizeGL    (int width, int height);
