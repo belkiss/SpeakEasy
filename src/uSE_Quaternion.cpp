@@ -163,7 +163,7 @@ uSE_GLMatrix  uSE_Quaternion::get_matrix()
 ////////////////////////////////////////////////////////////////////////////////
 void uSE_Quaternion::from_axis(uSE_GLVector inAxis, float inDegrees)
 {
-    float anglerad = M_PI*inDegrees/180.f;
+    float anglerad = (float)M_PI*inDegrees/180.f;
     m_real = cos(anglerad/2.f);
     m_vector = inAxis * sin(anglerad/2.f);
 }

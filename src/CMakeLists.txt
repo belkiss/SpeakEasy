@@ -11,15 +11,27 @@ SET(SpeakEasy_src
     main.cpp
 )
 
-# create symlink for shaders directory
-EXECUTE_PROCESS(
-    COMMAND ${CMAKE_COMMAND} -E create_symlink
-    ${CMAKE_SOURCE_DIR}/src/shaders
-    ${CMAKE_BINARY_DIR}/shaders
-)
+IF(WIN32)
+    SET(SFML_LIBS sfml-system-d sfml-window-d)
+    # copy shaders directory
+    EXECUTE_PROCESS(
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/src/shaders
+        ${CMAKE_BINARY_DIR}/shaders
+    )
+ENDIF(WIN32)
+IF(UNIX)
+    SET(SFML_LIBS sfml-system sfml-window)
+    # create symlink for shaders directory
+    EXECUTE_PROCESS(
+        COMMAND ${CMAKE_COMMAND} -E create_symlink
+        ${CMAKE_SOURCE_DIR}/src/shaders
+        ${CMAKE_BINARY_DIR}/shaders
+    )
+ENDIF(UNIX)
 
 IF (NOT SHADERS_DIR)
-  SET(SHADERS_DIR ${CMAKE_BINARY_DIR}/shaders)
+    SET(SHADERS_DIR ${CMAKE_BINARY_DIR}/shaders)
 ENDIF(NOT SHADERS_DIR)
 MESSAGE(STATUS "Shaders located in ${SHADERS_DIR}")
 
@@ -36,13 +48,14 @@ ADD_EXECUTABLE(
     ${SpeakEasy_src}
 )
 
+FIND_PACKAGE(OpenGL)
+
 # linker setup
 TARGET_LINK_LIBRARIES(
     speakeasy
-    GL
-    GLU
-    sfml-system
-    sfml-window
+    ${OPENGL_LIBRARIES}
+    ${OPENGL_glu_LIBRARY}
+    ${SFML_LIBS}
 )
 
 IF(WIN32)
