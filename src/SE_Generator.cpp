@@ -1,3 +1,6 @@
+#ifdef _WIN32
+#include "GLee.h"
+#endif
 #include "SE_Generator.h"
 
 #include <iostream>
