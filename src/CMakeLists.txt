@@ -28,12 +28,23 @@ IF(UNIX)
         ${CMAKE_SOURCE_DIR}/src/shaders
         ${CMAKE_BINARY_DIR}/shaders
     )
+    # create symlink for data/obj directory
+    EXECUTE_PROCESS(
+        COMMAND ${CMAKE_COMMAND} -E create_symlink
+        ${CMAKE_SOURCE_DIR}/data
+        ${CMAKE_BINARY_DIR}/data
+    )
 ENDIF(UNIX)
 
 IF (NOT SHADERS_DIR)
     SET(SHADERS_DIR ${CMAKE_BINARY_DIR}/shaders)
 ENDIF(NOT SHADERS_DIR)
 MESSAGE(STATUS "Shaders located in ${SHADERS_DIR}")
+
+IF (NOT OBJ_MODELS_DIR)
+    SET(OBJ_MODELS_DIR ${CMAKE_BINARY_DIR}/data/obj)
+ENDIF(NOT OBJ_MODELS_DIR)
+MESSAGE(STATUS "OBJ files located in ${OBJ_MODELS_DIR}")
 
 CONFIGURE_FILE(
     ${CMAKE_SOURCE_DIR}/config.h.cmake

@@ -8,14 +8,14 @@
 #include <SFML/System/Randomizer.hpp>
 #include "uSE_GLMesh.h"
 
-unsigned int SQUARELAND_SIDE_ELEMENTS_NB = 10;
-unsigned int SQUARELAND_SIDE_SIZE = 50;
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 SE_Generator::SE_Generator():
     m_VBOVerticesIndex(0),
     m_VBOIndicesIndex(0),
+    m_groundSideElementsNb(10),
+    m_groundSideSize(50),
     m_groundIndicesNb(0)
 {
     // set the seed for the random number generator
@@ -36,6 +36,7 @@ SE_Generator::~SE_Generator()
 void SE_Generator::generateGround()
 {
 //     uSE_GLMesh test;
+//     test.parseobj("../data/obj/humanoid_rot.obj");
 // 
 //     // Generate And Bind The Vertex Buffer
 //     glGenBuffers( 1, &m_VBOVerticesIndex );                  // Generate the name and store it in buffer ID
@@ -50,16 +51,16 @@ void SE_Generator::generateGround()
 //     m_groundIndicesNb =  test.get_nb_indices();
 //     test.display();
 
-    float step = (float)SQUARELAND_SIDE_SIZE / SQUARELAND_SIDE_ELEMENTS_NB;
+    float step = (float)m_groundSideSize / m_groundSideElementsNb;
 
-    m_groundIndicesNb = SQUARELAND_SIDE_ELEMENTS_NB * SQUARELAND_SIDE_ELEMENTS_NB * 6;
+    m_groundIndicesNb = m_groundSideElementsNb * m_groundSideElementsNb * 6;
 
-    m_ground_vertices.reserve((SQUARELAND_SIDE_ELEMENTS_NB + 1) * (SQUARELAND_SIDE_ELEMENTS_NB + 1) * 3);
+    m_ground_vertices.reserve((m_groundSideElementsNb + 1) * (m_groundSideElementsNb + 1) * 3);
     m_ground_indices .reserve(m_groundIndicesNb);
 
-    for(unsigned int i = 0; i <= SQUARELAND_SIDE_ELEMENTS_NB; i++)
+    for(unsigned int i = 0; i <= m_groundSideElementsNb; i++)
     {
-        for(unsigned int j = 0; j <= SQUARELAND_SIDE_ELEMENTS_NB; j++)
+        for(unsigned int j = 0; j <= m_groundSideElementsNb; j++)
         {
             m_ground_vertices.push_back( i*step );// x
             m_ground_vertices.push_back( j*step );// y
@@ -69,18 +70,18 @@ void SE_Generator::generateGround()
         }
     }
 
-    for(unsigned int i = 0; i < SQUARELAND_SIDE_ELEMENTS_NB; i++)
+    for(unsigned int i = 0; i < m_groundSideElementsNb; i++)
     {
-        for(unsigned int j = 0; j < SQUARELAND_SIDE_ELEMENTS_NB; j++)
+        for(unsigned int j = 0; j < m_groundSideElementsNb; j++)
         {
             // note : the order is very important !!!!
-            m_ground_indices.push_back((i         * (SQUARELAND_SIDE_ELEMENTS_NB + 1)) + j);
-            m_ground_indices.push_back((( i + 1 ) * (SQUARELAND_SIDE_ELEMENTS_NB + 1)) + j);
-            m_ground_indices.push_back((( i + 1 ) * (SQUARELAND_SIDE_ELEMENTS_NB + 1)) + j + 1);
+            m_ground_indices.push_back((i         * (m_groundSideElementsNb + 1)) + j);
+            m_ground_indices.push_back((( i + 1 ) * (m_groundSideElementsNb + 1)) + j);
+            m_ground_indices.push_back((( i + 1 ) * (m_groundSideElementsNb + 1)) + j + 1);
 
-            m_ground_indices.push_back((i         * (SQUARELAND_SIDE_ELEMENTS_NB + 1)) + j);
-            m_ground_indices.push_back((( i + 1 ) * (SQUARELAND_SIDE_ELEMENTS_NB + 1)) + j + 1);
-            m_ground_indices.push_back((i         * (SQUARELAND_SIDE_ELEMENTS_NB + 1)) + j + 1);
+            m_ground_indices.push_back((i         * (m_groundSideElementsNb + 1)) + j);
+            m_ground_indices.push_back((( i + 1 ) * (m_groundSideElementsNb + 1)) + j + 1);
+            m_ground_indices.push_back((i         * (m_groundSideElementsNb + 1)) + j + 1);
         }
     }
 
@@ -100,21 +101,21 @@ void SE_Generator::generateGround()
 ////////////////////////////////////////////////////////////////////////////////
 void SE_Generator::subdivideGround()
 {
-    SQUARELAND_SIDE_ELEMENTS_NB++;
+    m_groundSideElementsNb++;
 
-    float step = (float)SQUARELAND_SIDE_SIZE / SQUARELAND_SIDE_ELEMENTS_NB;
+    float step = (float)m_groundSideSize / m_groundSideElementsNb;
 
     std::vector<GLfloat> vl_vertices;
     std::vector<GLuint> vl_indices;
 
-    m_groundIndicesNb = SQUARELAND_SIDE_ELEMENTS_NB * SQUARELAND_SIDE_ELEMENTS_NB * 6;
+    m_groundIndicesNb = m_groundSideElementsNb * m_groundSideElementsNb * 6;
 
-    vl_vertices.reserve((SQUARELAND_SIDE_ELEMENTS_NB + 1) * (SQUARELAND_SIDE_ELEMENTS_NB + 1) * 3);
+    vl_vertices.reserve((m_groundSideElementsNb + 1) * (m_groundSideElementsNb + 1) * 3);
     vl_indices .reserve(m_groundIndicesNb);
 
-    for(unsigned int i = 0; i <= SQUARELAND_SIDE_ELEMENTS_NB; i++)
+    for(unsigned int i = 0; i <= m_groundSideElementsNb; i++)
     {
-        for(unsigned int j = 0; j <= SQUARELAND_SIDE_ELEMENTS_NB; j++)
+        for(unsigned int j = 0; j <= m_groundSideElementsNb; j++)
         {
             vl_vertices.push_back( i*step );// x
             vl_vertices.push_back( j*step );// y
@@ -124,18 +125,18 @@ void SE_Generator::subdivideGround()
         }
     }
 
-    for(unsigned int i = 0; i < SQUARELAND_SIDE_ELEMENTS_NB; i++)
+    for(unsigned int i = 0; i < m_groundSideElementsNb; i++)
     {
-        for(unsigned int j = 0; j < SQUARELAND_SIDE_ELEMENTS_NB; j++)
+        for(unsigned int j = 0; j < m_groundSideElementsNb; j++)
         {
             // note : the order is very important !!!!
-            vl_indices.push_back((i         * (SQUARELAND_SIDE_ELEMENTS_NB + 1)) + j);
-            vl_indices.push_back((( i + 1 ) * (SQUARELAND_SIDE_ELEMENTS_NB + 1)) + j);
-            vl_indices.push_back((( i + 1 ) * (SQUARELAND_SIDE_ELEMENTS_NB + 1)) + j + 1);
+            vl_indices.push_back((i         * (m_groundSideElementsNb + 1)) + j);
+            vl_indices.push_back((( i + 1 ) * (m_groundSideElementsNb + 1)) + j);
+            vl_indices.push_back((( i + 1 ) * (m_groundSideElementsNb + 1)) + j + 1);
 
-            vl_indices.push_back((i         * (SQUARELAND_SIDE_ELEMENTS_NB + 1)) + j);
-            vl_indices.push_back((( i + 1 ) * (SQUARELAND_SIDE_ELEMENTS_NB + 1)) + j + 1);
-            vl_indices.push_back((i         * (SQUARELAND_SIDE_ELEMENTS_NB + 1)) + j + 1);
+            vl_indices.push_back((i         * (m_groundSideElementsNb + 1)) + j);
+            vl_indices.push_back((( i + 1 ) * (m_groundSideElementsNb + 1)) + j + 1);
+            vl_indices.push_back((i         * (m_groundSideElementsNb + 1)) + j + 1);
         }
     }
 

@@ -33,8 +33,13 @@ class SE_Screen
         float m_speed;
         float m_rotation_speed;
 
-        uSE_GLVector m_camera_position;
+        uSE_GLVector   m_camera_position;
+        uSE_Quaternion m_camera_rotation;
+        
         uSE_Quaternion m_view_quaternion;
+
+        uSE_GLVector   m_character_position;
+        uSE_Quaternion m_character_rotation;
 
         SE_Generator m_generator;
 

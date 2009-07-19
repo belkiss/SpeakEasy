@@ -2,6 +2,7 @@
 #include "GLee.h"
 #endif
 #include "SE_Screen.h"
+#include "uSE_GLMesh.h"
 #include <iostream>
 #include <cassert>
 #include <vector>
@@ -17,8 +18,11 @@ SE_Screen::SE_Screen():
     m_elapsed(0.f),
     m_speed(10.f),
     m_rotation_speed(5.f),
-    m_camera_position(-5,-1,-5),// relative to world position
+    m_camera_position(-5,-1,0),// relative to world position
+    m_camera_rotation(1,uSE_GLVector(0,0,0)),
     m_view_quaternion(1,uSE_GLVector(0,0,0)),
+    m_character_position(0,-0.2,-1),
+    m_character_rotation(1,uSE_GLVector(0,0,0)),
     m_vbonbindices(0),
     m_vbovix(0),
     m_vboiix(0),
@@ -56,53 +60,27 @@ void SE_Screen::initializeGL()
 
     m_generator.generateGround();
 
-    ///////////////////////////////////////////////////////
-    ////////////// AXIS CODE ON ///////////////////////////
-    ///////////////////////////////////////////////////////
-    // generate axis
-    std::vector<GLfloat> vl_vertices;
-    std::vector<GLubyte> vl_indices;
+    uSE_GLMesh character_mesh;
 
-    vl_vertices.push_back( 0 );// x
-    vl_vertices.push_back( 0 );// y
-    vl_vertices.push_back( 0 );// z
+    std::stringstream character_filename(std::stringstream::in | std::stringstream::out);
+    character_filename << OBJ_MODELS_DIR << "/humanoid_pose.obj";
 
-    vl_vertices.push_back( 0.25f );// x
-    vl_vertices.push_back( 0 );// y
-    vl_vertices.push_back( 0 );// z
-
-    vl_vertices.push_back( 0 );// x
-    vl_vertices.push_back( 0.25f );// y
-    vl_vertices.push_back( 0 );// z
-
-    vl_vertices.push_back( 0 );// x
-    vl_vertices.push_back( 0 );// y
-    vl_vertices.push_back( 0.25f );// z
-
-    // note : the order is very important !!!!
-    vl_indices.push_back(0);
-    vl_indices.push_back(1);
-
-    vl_indices.push_back(0);
-    vl_indices.push_back(2);
-
-    vl_indices.push_back(0);
-    vl_indices.push_back(3);
-
-    m_vbonbindices = (GLuint)vl_indices.size();
+    character_mesh.parseobj(character_filename.str());
 
     // Generate And Bind The Vertex Buffer
     glGenBuffers( 1, &m_vbovix );                  // Generate the name and store it in buffer ID
     glBindBuffer( GL_ARRAY_BUFFER, m_vbovix ); // Bind The Buffer
-    glBufferData( GL_ARRAY_BUFFER, vl_vertices.size() * sizeof(GLfloat), &vl_vertices.front(), GL_STATIC_DRAW );    // Load The Data
+    glBufferData( GL_ARRAY_BUFFER, character_mesh.get_nb_vertices() * sizeof(GLfloat), &character_mesh.get_vertices().front(), GL_STATIC_DRAW );    // Load The Data
+    // Generate And Bind The Vertex Buffer
+
 
     glGenBuffers( 1, &m_vboiix);                  // Get A Valid Name
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_vboiix ); // Bind The Buffer
-    glBufferData( GL_ELEMENT_ARRAY_BUFFER, vl_indices.size() * sizeof(GLubyte),&vl_indices.front(), GL_STATIC_DRAW );    // Load The Data
+    glBufferData( GL_ELEMENT_ARRAY_BUFFER, character_mesh.get_nb_indices() * sizeof(GLuint),&character_mesh.get_indices().front(), GL_STATIC_DRAW );    // Load The Data
 
-    ///////////////////////////////////////////////////////
-    ////////////// AXIS CODE OFF //////////////////////////
-    ///////////////////////////////////////////////////////
+    m_vbonbindices =  character_mesh.get_nb_indices();
+    character_mesh.display();
+
 
     std::stringstream vs_filename(std::stringstream::in | std::stringstream::out);
     vs_filename << SHADERS_DIR << "/vs_simple.glsl";
@@ -212,13 +190,16 @@ void SE_Screen::paintGL()
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glTranslatef(0,0,-1);
+    glTranslatef(m_character_position.getX(),m_character_position.getY(),m_character_position.getZ());
+    glMultMatrixf(m_camera_rotation.get_matrix().get_array());
+    glPushMatrix();
+    glMultMatrixf(m_character_rotation.get_matrix().get_array());
     draw_axis();
+    glPopMatrix();
 
-    glLoadMatrixf(m_view_quaternion.get_matrix().get_array());
+    glMultMatrixf(m_view_quaternion.get_matrix().get_array());
     glTranslatef(m_camera_position.getX(),m_camera_position.getY(),m_camera_position.getZ());
     draw();
-
 }
 
 
@@ -253,7 +234,7 @@ void SE_Screen::draw_axis()
 
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_vboiix ); // Bind The Buffer
 
-    glDrawElements( GL_LINES, m_vbonbindices, GL_UNSIGNED_BYTE, (char*) 0 );
+    glDrawElements( GL_TRIANGLES, m_vbonbindices, GL_UNSIGNED_INT, (char*) 0 );
 
     glDisableVertexAttribArray(0);
 }
@@ -344,9 +325,9 @@ void SE_Screen::mouseMoveEvent (sf::Window * inApp, const int &inX, const int &i
         if(move_x != 0) // turn right / left
         {
             uSE_Quaternion glq_rotvec;
-            glq_rotvec.from_axis(uSE_GLVector(0,0,1), move_x * m_rotation_speed * m_elapsed);
-            m_view_quaternion = m_view_quaternion * glq_rotvec;
-            m_view_quaternion.normalize();
+            glq_rotvec.from_axis(uSE_GLVector(0,1,0), move_x * m_rotation_speed * m_elapsed);
+            m_camera_rotation = m_camera_rotation * glq_rotvec;
+            m_camera_rotation.normalize();
         }
 
         int move_y = inY - m_mouse_old_pos.second;
@@ -354,8 +335,8 @@ void SE_Screen::mouseMoveEvent (sf::Window * inApp, const int &inX, const int &i
         {
             uSE_Quaternion glq_rotvec;
             glq_rotvec.from_axis(uSE_GLVector(1,0,0), move_y * m_rotation_speed * m_elapsed);
-            m_view_quaternion = glq_rotvec * m_view_quaternion;
-            m_view_quaternion.normalize();
+            m_camera_rotation = glq_rotvec * m_camera_rotation;
+            m_camera_rotation.normalize();
         }
 
         m_mouse_old_pos = std::make_pair(inX,inY);
@@ -378,14 +359,20 @@ void SE_Screen::process_keyboard()
     uSE_Quaternion cam_lookat_quat;
     cam_lookat_quat.from_axis(uSE_GLVector(1,0,0),-90);
 
-    uSE_Quaternion new_lookat_quat = m_view_quaternion.conjugation() * cam_lookat_quat * m_view_quaternion;
+    uSE_Quaternion new_lookat_quat = m_camera_rotation.conjugation() * cam_lookat_quat * m_camera_rotation;
     new_lookat_quat.normalize();
     uSE_GLVector dir_vec = new_lookat_quat.get_vector();
     dir_vec.normalize();
-
+    // std::cout<<"dircam x: "<<dir_vec.getX()<<" y: "<<dir_vec.getY()<<" z: "<<dir_vec.getZ()<<std::endl;
     // compute the right vec from vector product between dir and up
-    uSE_GLVector right_vec = dir_vec ^ uSE_GLVector(0,0,1);
+    uSE_GLVector right_vec = dir_vec ^ uSE_GLVector(0,1,0);
     // std::cout<<" x: "<<right_vec.getX()<<" y: "<<right_vec.getY()<<" z: "<<right_vec.getZ()<<std::endl;
+
+//    uSE_Quaternion tmp_quat = m_character_rotation.conjugation() * cam_lookat_quat * m_character_rotation;
+//    tmp_quat.normalize();
+//    uSE_GLVector pers_vec = tmp_quat.get_vector();
+//    pers_vec.normalize();
+    //std::cout<<"dirpers x: "<<pers_vec.getX()<<" y: "<<pers_vec.getY()<<" z: "<<pers_vec.getZ()<<std::endl;
 
     for( std::map<sf::Key::Code, bool>::iterator it = m_pressed_keys.begin(); it != m_pressed_keys.end(); ++it)
     {
@@ -402,15 +389,15 @@ void SE_Screen::process_keyboard()
                 case sf::Key::Left :
                     {
                         uSE_Quaternion glq_rotvec;
-                        glq_rotvec.from_axis(uSE_GLVector(0,0,1),- m_rotation_speed * m_elapsed);
-                        m_view_quaternion = m_view_quaternion * glq_rotvec;
+                        glq_rotvec.from_axis(uSE_GLVector(0,1,0),- 20 * m_rotation_speed * m_elapsed);
+                        m_character_rotation = m_character_rotation * glq_rotvec;
                     }
                     break;
                 case sf::Key::Right :
                     {
                         uSE_Quaternion glq_rotvec;
-                        glq_rotvec.from_axis(uSE_GLVector(0,0,1), m_rotation_speed * m_elapsed);
-                        m_view_quaternion = m_view_quaternion * glq_rotvec;
+                        glq_rotvec.from_axis(uSE_GLVector(0,1,0), 20 * m_rotation_speed * m_elapsed);
+                        m_character_rotation = m_character_rotation * glq_rotvec;
                     }
                     break;
                 case sf::Key::Up :
@@ -429,22 +416,22 @@ void SE_Screen::process_keyboard()
                     break;
                 case sf::Key::Z :
                     {
-                        m_camera_position = uSE_GLVector(m_camera_position.getX()-dir_vec.getY()*m_speed * m_elapsed, m_camera_position.getY()+dir_vec.getX()*m_speed * m_elapsed, m_camera_position.getZ());
+                        m_camera_position = uSE_GLVector(m_camera_position.getX()+dir_vec.getZ()*m_speed * m_elapsed, m_camera_position.getY()+dir_vec.getX()*m_speed * m_elapsed, m_camera_position.getZ());
                     }
                     break;
                 case sf::Key::S :
                     {
-                        m_camera_position = uSE_GLVector(m_camera_position.getX()+dir_vec.getY()*m_speed * m_elapsed, m_camera_position.getY()-dir_vec.getX()*m_speed * m_elapsed, m_camera_position.getZ());
+                        m_camera_position = uSE_GLVector(m_camera_position.getX()-dir_vec.getZ()*m_speed * m_elapsed, m_camera_position.getY()-dir_vec.getX()*m_speed * m_elapsed, m_camera_position.getZ());
                     }
                     break;
                 case sf::Key::Q :
                     {
-                        m_camera_position = uSE_GLVector(m_camera_position.getX()+right_vec.getY()*m_speed * m_elapsed, m_camera_position.getY()-right_vec.getX()*m_speed * m_elapsed, m_camera_position.getZ());
+                        m_camera_position = uSE_GLVector(m_camera_position.getX()-right_vec.getZ()*m_speed * m_elapsed, m_camera_position.getY()-right_vec.getX()*m_speed * m_elapsed, m_camera_position.getZ());
                     }
                     break;
                 case sf::Key::D :
                     {
-                        m_camera_position = uSE_GLVector(m_camera_position.getX()-right_vec.getY()*m_speed * m_elapsed, m_camera_position.getY()+right_vec.getX()*m_speed * m_elapsed, m_camera_position.getZ());
+                        m_camera_position = uSE_GLVector(m_camera_position.getX()+right_vec.getZ()*m_speed * m_elapsed, m_camera_position.getY()+right_vec.getX()*m_speed * m_elapsed, m_camera_position.getZ());
                     }
                     break;
                 case sf::Key::LControl :

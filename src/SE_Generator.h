@@ -24,6 +24,9 @@ class SE_Generator
     private: //members
         unsigned int m_VBOVerticesIndex;
         unsigned int m_VBOIndicesIndex;
+
+        unsigned int m_groundSideElementsNb;
+        unsigned int m_groundSideSize;
         unsigned int m_groundIndicesNb;
 
         std::vector<GLfloat> m_ground_vertices;

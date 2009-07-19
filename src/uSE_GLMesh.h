@@ -5,6 +5,8 @@
 #include <GL/gl.h>
 #include <vector>
 #include "uSE_GLTriangle.h"
+#include "uSE_GLVector.h"
+#include <string>
 
 class uSE_GLMesh
 {
@@ -25,5 +27,9 @@ class uSE_GLMesh
         const std::vector<GLfloat> & get_vertices() { return m_vertices; }
         const std::vector<GLuint> & get_indices() { return m_indices; }
 
+        void parseobj( std::string inFilename );
+        void parsemd5mesh( const std::string& inFilename );
+
+        // for debug
         void display();
 };
