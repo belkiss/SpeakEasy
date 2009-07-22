@@ -180,3 +180,15 @@ uSE_GLVector uSE_Quaternion::to_axis()
 }
 
 
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+void uSE_Quaternion::computeReal()
+{
+    float tmp = 1.f - (m_vector.getX() * m_vector.getX())
+                    - (m_vector.getY() * m_vector.getY())
+                    - (m_vector.getZ() * m_vector.getZ());
+
+    tmp < 0 ? m_real = 0 : m_real = sqrt(tmp);
+
+}
+

@@ -29,6 +29,7 @@ class uSE_GLMesh
 
         void parseobj( std::string inFilename );
         void parsemd5mesh( const std::string& inFilename );
+        void parsemd5anim( const std::string& inFilename );
 
         // for debug
         void display();

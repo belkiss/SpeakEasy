@@ -7,7 +7,6 @@
 
 int main()
 {
-
     sf::WindowSettings settings;
     settings.DepthBits         = 24; // set 24 bits Z-buffer
     settings.StencilBits       = 8;  // set 8 bits stencil-buffer

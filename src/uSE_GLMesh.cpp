@@ -5,6 +5,8 @@
 #include <sstream>
 #include <cassert>
 
+#include "uSE_Quaternion.h"
+
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 uSE_GLMesh::uSE_GLMesh()
@@ -252,16 +254,15 @@ void uSE_GLMesh::parsemd5mesh( const std::string& inFilename )
     std::ifstream md5mesh_file(inFilename.c_str());
     assert(md5mesh_file);
 
-    int MD5Version;
-    std::string commandline;
-    unsigned int numJoints;
-    unsigned int numMeshes;
-
+    int                  MD5Version;
+    std::string          commandline;
+    unsigned int         numJoints;
+    unsigned int         numMeshes;
     std::vector< joint > joints;
-    std::string line;
-    std::string first_word_of_line;
-
-    std::string tmp;
+    std::vector< mesh >  meshes;
+    std::string          line;
+    std::string          first_word_of_line;
+    std::string          tmp;
 
     while( ! md5mesh_file.eof() )
     {
@@ -273,62 +274,46 @@ void uSE_GLMesh::parsemd5mesh( const std::string& inFilename )
         if(first_word_of_line == "MD5Version")
         {
             ss>>MD5Version;
-
-            std::cout<<"MD5Version "<<MD5Version<<std::endl;
         }
         else if(first_word_of_line == "commandline")
         {
             ss>>commandline;
-        
-            std::cout<<"commandline "<<commandline<<std::endl<<std::endl;
         }
         else if(first_word_of_line == "numJoints")
         {
             ss>>numJoints;
-
-            std::cout<<"numJoints "<<numJoints<<std::endl;
         }
         else if(first_word_of_line == "numMeshes")
         {
             ss>>numMeshes;
-
-            std::cout<<"numMeshes "<<numMeshes<<std::endl<<std::endl;
         }
         else if(first_word_of_line == "joints")
         {
-            std::cout<<"joints {"<<std::endl;
             for(unsigned int i = 0; i < numJoints; i++)
             {
                 joint current;
 
                 char bracket;
                 md5mesh_file >>current.name
-                            >>current.parent>>bracket>>current.pos_x>>current.pos_y>>current.pos_z>>bracket
-                            >>bracket>>current.orient_x>>current.orient_y>>current.orient_z>>bracket;
+                             >>current.parent>>bracket>>current.pos_x>>current.pos_y>>current.pos_z>>bracket
+                             >>bracket>>current.orient_x>>current.orient_y>>current.orient_z>>bracket;
 
                 // if the last element asked from the stream is not a string, then it leaves \n
                 std::getline(md5mesh_file, tmp);
 
                 joints.push_back(current);
-
-                std::cout<<'\t'<<current.name<< " "<<current.parent<< " ( "<<current.pos_x<< " "<<current.pos_y<< " "<<current.pos_z<< " ) ( "<<current.orient_x<< " "<<current.orient_y<< " "<<current.orient_z<<" )"<<std::endl;
             }
-            std::cout<<"}"<<std::endl<<std::endl;
         }
         else if(first_word_of_line == "mesh")
         {
-            std::cout<<"mesh {"<<std::endl;
             mesh current;
 
             // shader "name"
             md5mesh_file>>tmp>>current.shader;
 
-            std::cout<<"\t shader "<<current.shader<<std::endl<<std::endl;
-
             // numverts number
             md5mesh_file>>tmp>>current.numVerts;
 
-            std::cout<<"\t numverts "<<current.numVerts<<std::endl;
             for(unsigned int i = 0; i < current.numVerts; i++)
             {
                 vertex current_vertex;
@@ -342,15 +327,11 @@ void uSE_GLMesh::parsemd5mesh( const std::string& inFilename )
                 std::getline(md5mesh_file, tmp);
 
                 current.vertices.push_back(current_vertex);
-
-                std::cout<<"\t vert "<<current_vertex.index<< " ( "<<current_vertex.tex_s<<" "<<current_vertex.tex_t << " ) "<<current_vertex.start_weight<<" "<<current_vertex.count_weight<<std::endl;
             }
-            std::cout<<std::endl;
 
             // numtris number
             md5mesh_file>>tmp>>current.numTris;
 
-            std::cout<<"\t numtris "<<current.numTris<<std::endl;
             for(unsigned int i = 0; i < current.numTris; i++)
             {
                 triangle current_triangle;
@@ -363,15 +344,11 @@ void uSE_GLMesh::parsemd5mesh( const std::string& inFilename )
                 std::getline(md5mesh_file, tmp);
 
                 current.triangles.push_back(current_triangle);
-
-                std::cout<<"\t tri "<<current_triangle.index<< " "<<current_triangle.vert_index_0<< " "<<current_triangle.vert_index_1 << " "<<current_triangle.vert_index_2<<std::endl;
             }
-            std::cout<<std::endl;
 
             // numweights number
             md5mesh_file>>tmp>>current.numWeights;
 
-            std::cout<<"\t numweights "<<current.numWeights<<std::endl;
             for(unsigned int i = 0; i < current.numWeights; i++)
             {
                 weight current_weight;
@@ -387,11 +364,95 @@ void uSE_GLMesh::parsemd5mesh( const std::string& inFilename )
                 std::getline(md5mesh_file, tmp);
 
                 current.weights.push_back(current_weight);
-
-                std::cout<<"\t weight "<<current_weight.index<< " " << current_weight.joint << " " << current_weight.bias <<" ( " << current_weight.pos_x << " " << current_weight.pos_y << " " << current_weight.pos_z << " )" << std::endl;
             }
-            std::cout<<"}"<<std::endl;
+
+            meshes.push_back(current);
         }
     }
     md5mesh_file.close();
+
+for(std::vector<mesh>::iterator it = meshes.begin(); it != meshes.end(); ++it)
+{
+    for(unsigned int i = 0; i < (*it).numVerts; i++)
+    {
+        uSE_GLVector vertex_pos;
+
+        for(int j = 0; j < (*it).vertices.at(i).count_weight; j++)
+        {
+            weight curr_weight = (*it).weights.at((*it).vertices.at(i).start_weight + j);
+            joint  curr_joint  = joints.at(curr_weight.joint);
+
+            uSE_Quaternion rot_quat(0, uSE_GLVector(curr_joint.orient_x, curr_joint.orient_y, curr_joint.orient_z));
+            rot_quat.computeReal();
+
+            uSE_GLVector after_rot_pos = (rot_quat.conjugation() * uSE_Quaternion(1, uSE_GLVector(curr_weight.pos_x, curr_weight.pos_y, curr_weight.pos_z)) * rot_quat).get_vector();
+
+            vertex_pos.set(vertex_pos.getX() + (curr_joint.pos_x + after_rot_pos.getX()) * curr_weight.bias,
+                           vertex_pos.getY() + (curr_joint.pos_y + after_rot_pos.getY()) * curr_weight.bias,
+                           vertex_pos.getZ() + (curr_joint.pos_z + after_rot_pos.getZ()) * curr_weight.bias);
+        }
+
+        m_vertices.push_back(vertex_pos.getX());
+        m_vertices.push_back(vertex_pos.getY());
+        m_vertices.push_back(vertex_pos.getZ());
+    }
+
+    // it seams that the md5mesh exporter in blender gives the faces in the wrong order
+    for(unsigned int i = 0; i < (*it).numTris; i++)
+    {
+        m_indices.push_back((*it).triangles.at(i).vert_index_2);
+        m_indices.push_back((*it).triangles.at(i).vert_index_1);
+        m_indices.push_back((*it).triangles.at(i).vert_index_0);
+    }
+
+}
+
+#if 0
+    std::cout<<"MD5Version "<<MD5Version<<std::endl;
+    std::cout<<"commandline "<<commandline<<std::endl<<std::endl;
+
+    std::cout<<"numJoints "<<numJoints<<std::endl;
+    std::cout<<"numMeshes "<<numMeshes<<std::endl<<std::endl;
+
+    std::cout<<"joints {"<<std::endl;
+        for(std::vector<joint>::iterator it = joints.begin(); it != joints.end(); ++it)
+        {
+            std::cout<<'\t'<<(*it).name<< " "<<(*it).parent<< " ( "<<(*it).pos_x<< " "<<(*it).pos_y<< " "<<(*it).pos_z<< " ) ( "<<(*it).orient_x<< " "<<(*it).orient_y<< " "<<(*it).orient_z<<" )"<<std::endl;
+        }
+    std::cout<<"}"<<std::endl<<std::endl;
+
+    std::cout<<"mesh {"<<std::endl;
+        for(std::vector<mesh>::iterator it = meshes.begin(); it != meshes.end(); ++it)
+        {
+            std::cout<<"\t shader "<<(*it).shader<<std::endl<<std::endl;
+
+            std::cout<<"\t numverts "<<(*it).numVerts<<std::endl;
+                for(std::vector<vertex>::iterator it_vertex = (*it).vertices.begin(); it_vertex != (*it).vertices.end(); ++it_vertex)
+                {
+                    std::cout<<"\t vert "<<(*it_vertex).index<< " ( "<<(*it_vertex).tex_s<<" "<<(*it_vertex).tex_t << " ) "<<(*it_vertex).start_weight<<" "<<(*it_vertex).count_weight<<std::endl;
+                }
+            std::cout<<std::endl;
+
+            std::cout<<"\t numtris "<<(*it).numTris<<std::endl;
+                for(std::vector<triangle>::iterator it_tris = (*it).triangles.begin(); it_tris != (*it).triangles.end(); ++it_tris)
+                {
+                    std::cout<<"\t tri "<<(*it_tris).index<< " "<<(*it_tris).vert_index_0<< " "<<(*it_tris).vert_index_1 << " "<<(*it_tris).vert_index_2<<std::endl;
+                }
+            std::cout<<std::endl;
+
+            std::cout<<"\t numweights "<<(*it).numWeights<<std::endl;
+            for(std::vector<weight>::iterator it_weights = (*it).weights.begin(); it_weights != (*it).weights.end(); ++it_weights)
+            {
+                std::cout<<"\t weight "<<(*it_weights).index<< " " << (*it_weights).joint << " " << (*it_weights).bias <<" ( " << (*it_weights).pos_x << " " << (*it_weights).pos_y << " " << (*it_weights).pos_z << " )" << std::endl;
+            }
+        }
+    std::cout<<"}"<<std::endl;
+#endif
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+void uSE_GLMesh::parsemd5anim( const std::string& inFilename )
+{
 }

@@ -31,6 +31,8 @@ class uSE_Quaternion
         void getNormSquared( float &outNorm );
         void getNorm( float &outNorm );
 
+        void computeReal();
+
         void normalize();
 
         uSE_Quaternion  operator+  ( const uSE_Quaternion &inQuaternion );

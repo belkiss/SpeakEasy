@@ -1,11 +1,11 @@
 INCLUDE_DIRECTORIES($(SpeakEasy_SOURCE_DIR)/src)
 
 SET(SpeakEasy_src
-    uSE_GLMesh.cpp
-    uSE_GLTriangle.cpp
     SE_Generator.cpp
     SE_Screen.cpp
     uSE_GLMatrix.cpp
+    uSE_GLMesh.cpp
+    uSE_GLTriangle.cpp
     uSE_GLVector.cpp
     uSE_Quaternion.cpp
     main.cpp
@@ -41,10 +41,10 @@ IF (NOT SHADERS_DIR)
 ENDIF(NOT SHADERS_DIR)
 MESSAGE(STATUS "Shaders located in ${SHADERS_DIR}")
 
-IF (NOT OBJ_MODELS_DIR)
-    SET(OBJ_MODELS_DIR ${CMAKE_BINARY_DIR}/data/obj)
-ENDIF(NOT OBJ_MODELS_DIR)
-MESSAGE(STATUS "OBJ files located in ${OBJ_MODELS_DIR}")
+IF (NOT MD5_MODELS_DIR)
+    SET(MD5_MODELS_DIR ${CMAKE_BINARY_DIR}/data/md5)
+ENDIF(NOT MD5_MODELS_DIR)
+MESSAGE(STATUS "MD5 files located in ${MD5_MODELS_DIR}")
 
 CONFIGURE_FILE(
     ${CMAKE_SOURCE_DIR}/config.h.cmake
