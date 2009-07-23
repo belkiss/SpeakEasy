@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <map>
 #include <cassert>
 
 #include "uSE_Quaternion.h"
@@ -254,12 +255,15 @@ void uSE_GLMesh::parsemd5mesh( const std::string& inFilename )
     std::ifstream md5mesh_file(inFilename.c_str());
     assert(md5mesh_file);
 
+    // file content containers
     int                  MD5Version;
     std::string          commandline;
     unsigned int         numJoints;
     unsigned int         numMeshes;
     std::vector< joint > joints;
     std::vector< mesh >  meshes;
+
+    // tools to parse
     std::string          line;
     std::string          first_word_of_line;
     std::string          tmp;
@@ -451,8 +455,189 @@ for(std::vector<mesh>::iterator it = meshes.begin(); it != meshes.end(); ++it)
 }
 
 
+struct hierarchy_joint
+{
+    std::string name;
+    int         parent;
+    int         flags;
+    int         startIndex;
+};
+
+struct frame_bound
+{
+    float  min_x;
+    float  min_y;
+    float  min_z;
+    float  max_x;
+    float  max_y;
+    float  max_z;
+};
+
+struct baseframe_joint
+{
+    float       pos_x;
+    float       pos_y;
+    float       pos_z;
+    float       orient_x;
+    float       orient_y;
+    float       orient_z;
+};
+
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 void uSE_GLMesh::parsemd5anim( const std::string& inFilename )
 {
+    std::ifstream md5anim_file(inFilename.c_str());
+    assert(md5anim_file);
+
+    // file content containers
+    int                          MD5Version;
+    std::string                  commandline;
+    unsigned int                 numFrames;
+    unsigned int                 numJoints;
+    unsigned int                 frameRate;
+    unsigned int                 numAnimatedComponents;
+    std::vector<hierarchy_joint> hierarchy;
+    std::vector<frame_bound>     bounds;
+    std::vector<baseframe_joint> baseframe;
+    std::map< unsigned int, std::vector<float> > frames;
+    // tools to parse
+    std::string          line;
+    std::string          first_word_of_line;
+    std::string          tmp;
+
+    while( ! md5anim_file.eof() )
+    {
+        first_word_of_line.clear();
+        std::getline(md5anim_file, line);
+        std::stringstream ss(line);
+        ss>>first_word_of_line;
+
+        if(first_word_of_line == "MD5Version")
+        {
+            ss>>MD5Version;
+        }
+        else if(first_word_of_line == "commandline")
+        {
+            ss>>commandline;
+        }
+        else if(first_word_of_line == "numFrames")
+        {
+            ss>>numFrames;
+        }
+        else if(first_word_of_line == "numJoints")
+        {
+            ss>>numJoints;
+        }
+        else if(first_word_of_line == "frameRate")
+        {
+            ss>>frameRate;
+        }
+        else if(first_word_of_line == "numAnimatedComponents")
+        {
+            ss>>numAnimatedComponents;
+        }
+        else if(first_word_of_line == "hierarchy")
+        {
+            for(unsigned int i = 0; i < numJoints; i++)
+            {
+                hierarchy_joint current;
+
+                md5anim_file >>current.name
+                             >>current.parent>>current.flags>>current.startIndex;
+
+                // if the last element asked from the stream is not a string, then it leaves \n
+                std::getline(md5anim_file, tmp);
+
+                hierarchy.push_back(current);
+            }
+        }
+        else if(first_word_of_line == "bounds")
+        {
+            for(unsigned int i = 0; i < numFrames; i++)
+            {
+                frame_bound current;
+
+                char bracket;
+                md5anim_file >>bracket>>current.min_x>>current.min_y>>current.min_z>>bracket
+                             >>bracket>>current.max_x>>current.max_y>>current.max_z>>bracket;
+
+                bounds.push_back(current);
+            }
+        }
+        else if(first_word_of_line == "baseframe")
+        {
+            for(unsigned int i = 0; i < numJoints; i++)
+            {
+                baseframe_joint current;
+
+                char bracket;
+                md5anim_file >>bracket>>current.pos_x>>current.pos_y>>current.pos_z>>bracket
+                             >>bracket>>current.orient_x>>current.orient_y>>current.orient_z>>bracket;
+
+                baseframe.push_back(current);
+            }
+        }
+        else if(first_word_of_line == "frame")
+        {
+            unsigned int current_index;
+
+            ss>>current_index;
+
+            std::vector<float> current_frame;
+
+            for(unsigned int i = 0; i < numAnimatedComponents; i++)
+            {
+                float current_element;
+                md5anim_file>>current_element;
+
+                current_frame.push_back(current_element);
+            }
+            frames.insert(std::make_pair(current_index, current_frame));
+        }
+    }
+
+#if 0
+    std::cout<<"MD5Version "<<MD5Version<<std::endl;
+    std::cout<<"commandline "<<commandline<<std::endl<<std::endl;
+
+    std::cout<<"numFrames "<<numFrames<<std::endl;
+    std::cout<<"numJoints "<<numJoints<<std::endl;
+    std::cout<<"frameRate "<<frameRate<<std::endl;
+    std::cout<<"numAnimatedComponents "<<numAnimatedComponents<<std::endl<<std::endl;
+
+    std::cout<<"hierarchy {"<<std::endl;
+        for(std::vector<hierarchy_joint>::iterator it_hj = hierarchy.begin(); it_hj != hierarchy.end(); ++it_hj)
+        {
+            std::cout<<"\t "<<(*it_hj).name<<"\t"<<(*it_hj).parent<<" "<<(*it_hj).flags<<" "<<(*it_hj).startIndex<<std::endl;
+        }
+    std::cout<<"}"<<std::endl<<std::endl;
+
+    std::cout<<"bounds {"<<std::endl;
+        for(std::vector<frame_bound>::iterator it_fb = bounds.begin(); it_fb != bounds.end(); ++it_fb)
+        {
+            std::cout<<"\t( "<<(*it_fb).min_x<<" "<<(*it_fb).min_y<<" "<<(*it_fb).min_z<<" ) ( "
+                     <<(*it_fb).max_x<<" "<<(*it_fb).max_y<<" "<<(*it_fb).max_z<<" )"<<std::endl;
+        }
+    std::cout<<"}"<<std::endl<<std::endl;
+
+    std::cout<<"baseframe {"<<std::endl;
+        for(std::vector<baseframe_joint>::iterator it_bfj = baseframe.begin(); it_bfj != baseframe.end(); ++it_bfj)
+        {
+            std::cout<<"\t ( "<<(*it_bfj).pos_x<<" "<<(*it_bfj).pos_y<<" "<<(*it_bfj).pos_z<<" ) ( "
+                     << (*it_bfj).orient_x<< " "<<(*it_bfj).orient_y<<" "<<(*it_bfj).orient_z<<" )"<<std::endl;
+        }
+    std::cout<<"}"<<std::endl<<std::endl;
+
+    for(std::map<unsigned int, std::vector<float> >::iterator it = frames.begin(); it != frames.end(); ++it)
+    {
+        std::cout<<"frame "<<(*it).first<<" {";
+        for(unsigned int i = 0; i < (*it).second.size(); ++i)
+        {
+            i%6 == 0 ? std::cout<<std::endl<<'\t' : std::cout<<" ";
+            std::cout<<(*it).second.at(i);
+        }
+        std::cout<<std::endl<<"}"<<std::endl<<std::endl;
+    }
+#endif
 }

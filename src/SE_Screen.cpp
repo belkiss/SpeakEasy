@@ -64,9 +64,10 @@ void SE_Screen::initializeGL()
     uSE_GLMesh character_mesh;
 
     std::stringstream character_filename(std::stringstream::in | std::stringstream::out);
-    character_filename << MD5_MODELS_DIR << "/humanoid.md5mesh";
+    character_filename << MD5_MODELS_DIR << "/humanoid.md5";
 
-    character_mesh.parsemd5mesh(character_filename.str());
+    character_mesh.parsemd5mesh(character_filename.str() + "mesh");
+    character_mesh.parsemd5anim(character_filename.str() + "anim");
 
     // Generate And Bind The Vertex Buffer
     glGenBuffers( 1, &m_vbovix );                  // Generate the name and store it in buffer ID
@@ -390,14 +391,14 @@ void SE_Screen::process_keyboard()
                 case sf::Key::Left :
                     {
                         uSE_Quaternion glq_rotvec;
-                        glq_rotvec.from_axis(uSE_GLVector(0,1,0),- 20 * m_rotation_speed * m_elapsed);
+                        glq_rotvec.from_axis(uSE_GLVector(0,0,1), 20 * m_rotation_speed * m_elapsed);
                         m_character_rotation = m_character_rotation * glq_rotvec;
                     }
                     break;
                 case sf::Key::Right :
                     {
                         uSE_Quaternion glq_rotvec;
-                        glq_rotvec.from_axis(uSE_GLVector(0,1,0), 20 * m_rotation_speed * m_elapsed);
+                        glq_rotvec.from_axis(uSE_GLVector(0,0,1), -20 * m_rotation_speed * m_elapsed);
                         m_character_rotation = m_character_rotation * glq_rotvec;
                     }
                     break;
