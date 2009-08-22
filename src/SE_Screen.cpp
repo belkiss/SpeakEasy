@@ -2,7 +2,7 @@
 #include "GLee.h"
 #endif
 #include "SE_Screen.h"
-#include "uSE_GLMesh.h"
+#include "uSE_MD5Model.h"
 #include <iostream>
 #include <cassert>
 #include <vector>
@@ -61,27 +61,31 @@ void SE_Screen::initializeGL()
 
     m_generator.generateGround();
 
-    uSE_GLMesh character_mesh;
+    uSE_MD5Model character_model;
 
     std::stringstream character_filename(std::stringstream::in | std::stringstream::out);
     character_filename << MD5_MODELS_DIR << "/humanoid.md5";
 
-    character_mesh.parsemd5mesh(character_filename.str() + "mesh");
-    character_mesh.parsemd5anim(character_filename.str() + "anim");
+    character_model.parsemd5mesh(character_filename.str() + "mesh");
+    character_model.parsemd5anim(character_filename.str() + "anim");
+
+//     character_model.generateVerticesIndicesFromAnimAtFrame(0, 1);
+
+    character_model.generateVerticesIndicesPose();
+
 
     // Generate And Bind The Vertex Buffer
     glGenBuffers( 1, &m_vbovix );                  // Generate the name and store it in buffer ID
     glBindBuffer( GL_ARRAY_BUFFER, m_vbovix ); // Bind The Buffer
-    glBufferData( GL_ARRAY_BUFFER, character_mesh.get_nb_vertices() * sizeof(GLfloat), &character_mesh.get_vertices().front(), GL_STATIC_DRAW );    // Load The Data
+    glBufferData( GL_ARRAY_BUFFER, character_model.get_nb_pose_vertices() * sizeof(GLfloat), &character_model.get_pose_vertices().front(), GL_STATIC_DRAW );    // Load The Data
     // Generate And Bind The Vertex Buffer
 
 
     glGenBuffers( 1, &m_vboiix);                  // Get A Valid Name
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_vboiix ); // Bind The Buffer
-    glBufferData( GL_ELEMENT_ARRAY_BUFFER, character_mesh.get_nb_indices() * sizeof(GLuint),&character_mesh.get_indices().front(), GL_STATIC_DRAW );    // Load The Data
+    glBufferData( GL_ELEMENT_ARRAY_BUFFER, character_model.get_nb_pose_indices() * sizeof(GLuint),&character_model.get_pose_indices().front(), GL_STATIC_DRAW );    // Load The Data
 
-    m_vbonbindices =  character_mesh.get_nb_indices();
-    character_mesh.display();
+    m_vbonbindices =  character_model.get_nb_pose_indices();
 
 
     std::stringstream vs_filename(std::stringstream::in | std::stringstream::out);

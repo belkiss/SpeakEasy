@@ -15,6 +15,7 @@ class uSE_Quaternion
 
     public: //methods
         void set_real( const float inReal );
+        void set_vector( const uSE_GLVector inVector ) { m_vector = inVector; }
 
         void from_axis(uSE_GLVector inAxis, float inDegrees);
         uSE_GLVector to_axis();

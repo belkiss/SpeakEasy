@@ -3,9 +3,16 @@ INCLUDE_DIRECTORIES($(SpeakEasy_SOURCE_DIR)/src)
 SET(SpeakEasy_src
     SE_Generator.cpp
     SE_Screen.cpp
+    uSE_MD5Model.cpp
+    uSE_Mesh.cpp
+    uSE_Animation.cpp
+    uSE_Joint.cpp
+    uSE_AnimJoint.cpp
+    uSE_Triangle.cpp
+    uSE_Weight.cpp
+    uSE_Vertex.cpp
+    uSE_BoundBox.cpp
     uSE_GLMatrix.cpp
-    uSE_GLMesh.cpp
-    uSE_GLTriangle.cpp
     uSE_GLVector.cpp
     uSE_Quaternion.cpp
     main.cpp

@@ -22,6 +22,10 @@ class uSE_GLVector
         GLfloat getY() const {return m_y;}
         GLfloat getZ() const {return m_z;}
 
+        void setX( const GLfloat inX ) { m_x = inX; }
+        void setY( const GLfloat inY ) { m_y = inY; }
+        void setZ( const GLfloat inZ ) { m_z = inZ; }
+
         void set(GLfloat inX, GLfloat inY, GLfloat inZ);
 
         void getNormSquared( GLfloat &outNorm );
