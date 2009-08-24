@@ -43,6 +43,7 @@ class uSE_MD5Model
         std::map<int, std::vector<GLuint>  > m_frames_indices;
 
     public:
+        int  getNbFramesFromAnim( const unsigned int inAnim ) { return m_animations.at(inAnim).getNbFrames(); }
         void generateVerticesIndicesFromAnimAtFrame( const unsigned int inAnim, const unsigned int inFrame );
 };
 

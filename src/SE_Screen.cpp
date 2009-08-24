@@ -2,7 +2,6 @@
 #include "GLee.h"
 #endif
 #include "SE_Screen.h"
-#include "uSE_MD5Model.h"
 #include <iostream>
 #include <cassert>
 #include <vector>
@@ -30,7 +29,9 @@ SE_Screen::SE_Screen():
     m_vertexShaderID(0),
     m_pixelShaderID(0),
     m_cursor_moved_by_us(true),
-    m_mouse_old_pos(320,240) // init with width/2 and height/2
+    m_mouse_old_pos(320,240), // init with width/2 and height/2
+    m_frame_walk(0),
+    m_frame_stand(0)
 {
     // TODO : put that in init
     m_view_quaternion.from_axis(uSE_GLVector(1,0,0),-90);
@@ -61,32 +62,19 @@ void SE_Screen::initializeGL()
 
     m_generator.generateGround();
 
-    uSE_MD5Model character_model;
-
     std::stringstream character_filename(std::stringstream::in | std::stringstream::out);
-    character_filename << MD5_MODELS_DIR << "/humanoid.md5";
 
-    character_model.parsemd5mesh(character_filename.str() + "mesh");
-    character_model.parsemd5anim(character_filename.str() + "anim");
+    character_filename << MD5_MODELS_DIR << "/humanoid";
 
-    character_model.generateVerticesIndicesFromAnimAtFrame(0, 1);
-
-    character_model.generateVerticesIndicesPose();
-
+    m_character_model.parsemd5mesh(character_filename.str() +           ".md5mesh");
+    m_character_model.parsemd5anim(character_filename.str() + "walk"  + ".md5anim");
+    m_character_model.parsemd5anim(character_filename.str() + "stand" + ".md5anim");
 
     // Generate And Bind The Vertex Buffer
     glGenBuffers( 1, &m_vbovix );                  // Generate the name and store it in buffer ID
-    glBindBuffer( GL_ARRAY_BUFFER, m_vbovix ); // Bind The Buffer
-    glBufferData( GL_ARRAY_BUFFER, character_model.get_nb_pose_vertices() * sizeof(GLfloat), &character_model.get_pose_vertices().front(), GL_STATIC_DRAW );    // Load The Data
-    // Generate And Bind The Vertex Buffer
-
-
     glGenBuffers( 1, &m_vboiix);                  // Get A Valid Name
-    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_vboiix ); // Bind The Buffer
-    glBufferData( GL_ELEMENT_ARRAY_BUFFER, character_model.get_nb_pose_indices() * sizeof(GLuint),&character_model.get_pose_indices().front(), GL_STATIC_DRAW );    // Load The Data
 
-    m_vbonbindices =  character_model.get_nb_pose_indices();
-
+    genCharAndAnimate();
 
     std::stringstream vs_filename(std::stringstream::in | std::stringstream::out);
     vs_filename << SHADERS_DIR << "/vs_simple.glsl";
@@ -191,7 +179,7 @@ void SE_Screen::paintGL()
     m_elapsed = m_clock.GetElapsedTime();
     m_clock.Reset();
     process_keyboard();
-
+    genCharAndAnimate();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glMatrixMode(GL_MODELVIEW);
@@ -455,4 +443,31 @@ void SE_Screen::process_keyboard()
             }
         }
     }
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+void SE_Screen::genCharAndAnimate()
+{
+    if( !m_pressed_keys[sf::Key::Z] && !m_pressed_keys[sf::Key::S])
+    {
+        m_frame_stand + 2 > m_character_model.getNbFramesFromAnim(1) ? m_frame_stand = 0 : m_frame_stand++;
+        m_character_model.generateVerticesIndicesFromAnimAtFrame(1, m_frame_stand);
+    }
+    else
+    {
+        m_frame_walk + 2 > m_character_model.getNbFramesFromAnim(0) ? m_frame_walk = 0 : m_frame_walk++;
+        m_character_model.generateVerticesIndicesFromAnimAtFrame(0, m_frame_walk);
+    }
+
+    m_character_model.generateVerticesIndicesPose();
+
+    glBindBuffer( GL_ARRAY_BUFFER, m_vbovix ); // Bind The Buffer
+    glBufferData( GL_ARRAY_BUFFER, m_character_model.get_nb_pose_vertices() * sizeof(GLfloat), &m_character_model.get_pose_vertices().front(), GL_STATIC_DRAW );    // Load The Data
+
+    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_vboiix ); // Bind The Buffer
+    glBufferData( GL_ELEMENT_ARRAY_BUFFER, m_character_model.get_nb_pose_indices() * sizeof(GLuint),&m_character_model.get_pose_indices().front(), GL_STATIC_DRAW );    // Load The Data
+
+    m_vbonbindices =  m_character_model.get_nb_pose_indices();
 }

@@ -10,6 +10,7 @@
 #include <SFML/Window/Event.hpp>
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/Window.hpp>
+#include "uSE_MD5Model.h"
 
 class SE_Screen
 {
@@ -57,11 +58,17 @@ class SE_Screen
         bool m_cursor_moved_by_us;
         std::pair<int,int> m_mouse_old_pos;
 
+        uSE_MD5Model m_character_model;
+        int          m_frame_walk;
+        int          m_frame_stand;
+
     private: // methods
         void    draw();
         void    draw_axis();
 
         void    process_keyboard();
+
+        void    genCharAndAnimate();
 
 };
 

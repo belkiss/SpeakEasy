@@ -257,7 +257,7 @@ void uSE_MD5Model::parsemd5anim( const std::string& inFilename )
     std::ifstream md5anim_file(inFilename.c_str());
     assert(md5anim_file);
 
-    uSE_Animation curr_animation;
+    uSE_Animation curr_animation(inFilename);
 
     // tools for anim parsing, useless to store...(for now ?)
     int                          MD5Version;
@@ -441,6 +441,9 @@ void uSE_MD5Model::parsemd5anim( const std::string& inFilename )
 ////////////////////////////////////////////////////////////////////////////////
 void uSE_MD5Model::generateVerticesIndicesPose()
 {
+    m_pose_vertices.clear();
+    m_pose_indices.clear();
+
     for(std::vector<uSE_Mesh>::iterator it = m_meshes.begin(); it != m_meshes.end(); ++it)
     {
         unsigned int numVerts = it->getVerticesCount();
