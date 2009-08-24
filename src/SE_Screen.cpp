@@ -69,7 +69,7 @@ void SE_Screen::initializeGL()
     character_model.parsemd5mesh(character_filename.str() + "mesh");
     character_model.parsemd5anim(character_filename.str() + "anim");
 
-//     character_model.generateVerticesIndicesFromAnimAtFrame(0, 1);
+    character_model.generateVerticesIndicesFromAnimAtFrame(0, 1);
 
     character_model.generateVerticesIndicesPose();
 

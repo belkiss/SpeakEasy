@@ -565,7 +565,7 @@ void uSE_MD5Model::generateVerticesIndicesFromAnimAtFrame( const unsigned int in
 
             currentSkelJoint.setPosition(parentSkelJoint.getPosition() + rotatedPos );
 
-            uSE_Quaternion rotatedOrient = rot_quat.conjugation() * animatedOrientation * rot_quat;
+            uSE_Quaternion rotatedOrient = animatedOrientation * rot_quat;
 
             currentSkelJoint.setOrientation(rotatedOrient);
         }
