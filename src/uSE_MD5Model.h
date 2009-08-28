@@ -29,6 +29,7 @@ class uSE_MD5Model
     public:
         void generateVerticesIndicesPose();
 
+        unsigned int get_nb_meshes       () { return m_meshes.size(); }
         unsigned int get_nb_pose_vertices() { return m_pose_vertices.size(); }
         unsigned int get_nb_pose_indices () { return m_pose_indices.size(); }
 

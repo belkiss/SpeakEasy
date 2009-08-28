@@ -15,6 +15,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 SE_Screen::SE_Screen():
     m_elapsed(0.f),
+    m_anim_elapsed(0.f),
     m_speed(10.f),
     m_rotation_speed(5.f),
     m_camera_position(-5,-1,0),// relative to world position
@@ -177,9 +178,15 @@ void SE_Screen::resizeGL(int inWidth, int inHeight)
 void SE_Screen::paintGL()
 {
     m_elapsed = m_clock.GetElapsedTime();
+    m_anim_elapsed += m_elapsed;
     m_clock.Reset();
     process_keyboard();
-    genCharAndAnimate();
+    if(m_anim_elapsed >= 0.0417f)
+    {
+        genCharAndAnimate();
+        m_anim_elapsed = 0.f;
+    }
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glMatrixMode(GL_MODELVIEW);

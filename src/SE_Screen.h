@@ -30,6 +30,7 @@ class SE_Screen
     private: // members
         sf::Clock m_clock;
         float     m_elapsed;
+        float     m_anim_elapsed;
 
         float m_speed;
         float m_rotation_speed;

@@ -444,6 +444,9 @@ void uSE_MD5Model::generateVerticesIndicesPose()
     m_pose_vertices.clear();
     m_pose_indices.clear();
 
+    int decal = 0;
+    int old_vx_nb = 0;
+
     for(std::vector<uSE_Mesh>::iterator it = m_meshes.begin(); it != m_meshes.end(); ++it)
     {
         unsigned int numVerts = it->getVerticesCount();
@@ -480,10 +483,12 @@ void uSE_MD5Model::generateVerticesIndicesPose()
         {
             uSE_Triangle curr_tri = it->getTriangleAtIndex(i);
 
-            m_pose_indices.push_back(curr_tri.getThirdPositionIndex());
-            m_pose_indices.push_back(curr_tri.getSecondPositionIndex());
-            m_pose_indices.push_back(curr_tri.getFirstPositionIndex());
+            m_pose_indices.push_back(curr_tri.getThirdPositionIndex()  + decal * old_vx_nb);
+            m_pose_indices.push_back(curr_tri.getSecondPositionIndex() + decal * old_vx_nb);
+            m_pose_indices.push_back(curr_tri.getFirstPositionIndex()  + decal * old_vx_nb);
         }
+        old_vx_nb = numVerts;
+        decal++;
     }
 }
 
