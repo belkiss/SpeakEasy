@@ -30,10 +30,10 @@ void uSE_MD5Model::parsemd5mesh( const std::string& inFilename )
     assert(md5mesh_file);
 
     // tools for mesh parsing, useless to store...(for now ?)
-    int                  MD5Version;
-    std::string          commandline;
-    unsigned int         numJoints;
-    unsigned int         numMeshes;
+    int                  MD5Version  = 0;
+    std::string          commandline("");
+    unsigned int         numJoints   = 0;
+    unsigned int         numMeshes   = 0;
 
 
     // tools to parse
@@ -260,16 +260,16 @@ void uSE_MD5Model::parsemd5anim( const std::string& inFilename )
     uSE_Animation curr_animation(inFilename);
 
     // tools for anim parsing, useless to store...(for now ?)
-    int                          MD5Version;
-    std::string                  commandline;
-    unsigned int                 numFrames;
-    unsigned int                 numJoints;
-    int                          numAnimatedComponents;
+    int                          MD5Version = 0;
+    std::string                  commandline("");
+    unsigned int                 numFrames  = 0;
+    unsigned int                 numJoints  = 0;
+    int                          numAnimatedComponents = 0;
 
     // tools to parse
-    std::string          line;
-    std::string          first_word_of_line;
-    std::string          tmp;
+    std::string          line("");
+    std::string          first_word_of_line("");
+    std::string          tmp("");
 
     while( ! md5anim_file.eof() )
     {
@@ -561,7 +561,7 @@ void uSE_MD5Model::generateVerticesIndicesFromAnimAtFrame( const unsigned int in
         {
             currentSkelJoint.setPosition(animatedPosition);
             currentSkelJoint.setOrientation(animatedOrientation);
-#warning create map for joints per frame
+            // TODO : create map for joints per frame
         }
         else
         {

@@ -26,6 +26,12 @@ IF(WIN32)
         ${CMAKE_SOURCE_DIR}/src/shaders
         ${CMAKE_BINARY_DIR}/shaders
     )
+    # copy data/md5 directory
+    EXECUTE_PROCESS(
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/data
+        ${CMAKE_BINARY_DIR}/data
+    )
 ENDIF(WIN32)
 IF(UNIX)
     SET(SFML_LIBS sfml-system sfml-window)
@@ -35,7 +41,7 @@ IF(UNIX)
         ${CMAKE_SOURCE_DIR}/src/shaders
         ${CMAKE_BINARY_DIR}/shaders
     )
-    # create symlink for data/obj directory
+    # create symlink for data/md5 directory
     EXECUTE_PROCESS(
         COMMAND ${CMAKE_COMMAND} -E create_symlink
         ${CMAKE_SOURCE_DIR}/data
