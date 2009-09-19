@@ -10,7 +10,7 @@ uSE_Weight::uSE_Weight()
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-uSE_Weight::uSE_Weight( const int inDependingJoint, const float inBiasFactor, const uSE_GLVector inPosition ):
+uSE_Weight::uSE_Weight( const int & inDependingJoint, const float & inBiasFactor, const Vector3f & inPosition ):
     m_depending_joint(inDependingJoint),
     m_bias_factor(inBiasFactor),
     m_position(inPosition)

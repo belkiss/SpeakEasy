@@ -5,7 +5,7 @@
 
 #include <map>
 
-#include "uSE_Quaternion.h"
+#include <Eigen/Geometry>
 #include "SE_Generator.h"
 #include <SFML/Window/Event.hpp>
 #include <SFML/System/Clock.hpp>
@@ -36,12 +36,12 @@ class SE_Screen
         float m_rotation_speed;
 
         uSE_GLVector   m_camera_position;
-        uSE_Quaternion m_camera_rotation;
 
-        uSE_Quaternion m_view_quaternion;
+        Eigen::Quaternionf m_camera_rotation;
+        Eigen::Quaternionf m_view_quaternion;
 
-        uSE_GLVector   m_character_position;
-        uSE_Quaternion m_character_rotation;
+        uSE_GLVector       m_character_position;
+        Eigen::Quaternionf m_character_rotation;
 
         SE_Generator m_generator;
 

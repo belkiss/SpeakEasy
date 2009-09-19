@@ -10,6 +10,18 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
+void computeW( Quaternionf & ioQuat )
+{
+    float tmp = 1.f - (ioQuat.x() * ioQuat.x())
+                    - (ioQuat.y() * ioQuat.y())
+                    - (ioQuat.z() * ioQuat.z());
+
+    ioQuat.w() = tmp < 0 ? 0.f : sqrt(tmp);
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 uSE_MD5Model::uSE_MD5Model()
 {
 
@@ -88,15 +100,13 @@ void uSE_MD5Model::parsemd5mesh( const std::string& inFilename )
                              >> tmp_orient_x >> tmp_orient_y >> tmp_orient_z
                              >> bracket;
 
-                uSE_GLVector tmp_position(tmp_pos_x, tmp_pos_y, tmp_pos_z);
-
-                uSE_Quaternion tmp_orientation(0, uSE_GLVector(tmp_orient_x, tmp_orient_y, tmp_orient_z));
-                tmp_orientation.computeReal();
+                Quaternionf tmp_orientation( 0, tmp_orient_x, tmp_orient_y, tmp_orient_z);
+                computeW(tmp_orientation);
 
                 // if the last element asked from the stream is not a string, then it leaves \n
                 std::getline(md5mesh_file, tmp);
 
-                uSE_Joint current(tmp_name, tmp_parent, tmp_position, tmp_orientation);
+                uSE_Joint current(tmp_name, tmp_parent, Vector3f(tmp_pos_x, tmp_pos_y, tmp_pos_z), tmp_orientation);
                 m_joints.push_back(current);
             }
         }
@@ -186,12 +196,10 @@ void uSE_MD5Model::parsemd5mesh( const std::string& inFilename )
                              >> tmp_bias
                              >> bracket >> tmp_pos_x >> tmp_pos_y >> tmp_pos_z >> bracket;
 
-                uSE_GLVector tmp_position(tmp_pos_x, tmp_pos_y, tmp_pos_z);
-
                 // if the last element asked from the stream is not a string, then it leaves \n
                 std::getline(md5mesh_file, tmp);
 
-                uSE_Weight current_weight(tmp_depending_joint, tmp_bias, tmp_position);
+                uSE_Weight current_weight(tmp_depending_joint, tmp_bias, Vector3f(tmp_pos_x, tmp_pos_y, tmp_pos_z));
                 current.add_weight(current_weight);
             }
 
@@ -210,7 +218,7 @@ void uSE_MD5Model::parsemd5mesh( const std::string& inFilename )
     std::cout<<"joints {"<<std::endl;
         for(std::vector<uSE_Joint>::iterator it = m_joints.begin(); it != m_joints.end(); ++it)
         {
-            std::cout<<std::fixed<</'\t'<<it->getName()<< " "<<it->getParentIndex()<< " ( "<<it->getPosition().getX()<< " "<<it->getPosition().getY()<< " "<<it->getPosition().getZ()<< " ) ( "<<it->getOrientation().get_vector().getX()<< " "<<it->getOrientation().get_vector().getY()<< " "<<it->getOrientation().get_vector().getZ()<<" )"<<std::endl;
+            std::cout<<std::fixed<<'\t'<<it->getName()<< " "<<it->getParentIndex()<< " ( "<<it->getPosition().x()<< " "<<it->getPosition().y()<< " "<<it->getPosition().z()<< " ) ( "<<it->getOrientation().x()<< " "<<it->getOrientation().y()<< " "<<it->getOrientation().z()<<" )"<<std::endl;
         }
     std::cout<<"}"<<std::endl<<std::endl;
 
@@ -242,7 +250,7 @@ void uSE_MD5Model::parsemd5mesh( const std::string& inFilename )
             for(unsigned int i = 0; i < numweights; i++)
             {
                 uSE_Weight curr_weight = it->getWeightAtIndex(i);
-                std::cout<<"\t weight "<<i<< " " << curr_weight.getDependingJoint() << " " << curr_weight.getBiasFactor() <<" ( " << curr_weight.getPosition().getX() << " " << curr_weight.getPosition().getY() << " " << curr_weight.getPosition().getZ() << " )" << std::endl;
+                std::cout<<"\t weight "<<i<< " " << curr_weight.getDependingJoint() << " " << curr_weight.getBiasFactor() <<" ( " << curr_weight.getPosition().x() << " " << curr_weight.getPosition().y() << " " << curr_weight.getPosition().z() << " )" << std::endl;
             }
         }
     std::cout<<"}"<<std::endl;
@@ -354,12 +362,10 @@ void uSE_MD5Model::parsemd5anim( const std::string& inFilename )
                 md5anim_file >>bracket>>tmp_pos_x>>tmp_pos_y>>tmp_pos_z>>bracket
                              >>bracket>>tmp_orient_x>>tmp_orient_y>>tmp_orient_z>>bracket;
 
-                uSE_GLVector tmp_position(tmp_pos_x, tmp_pos_y, tmp_pos_z);
+                Quaternionf tmp_orientation(0, tmp_orient_x, tmp_orient_y, tmp_orient_z);
+                computeW(tmp_orientation);
 
-                uSE_Quaternion tmp_orientation(0, uSE_GLVector(tmp_orient_x, tmp_orient_y, tmp_orient_z));
-                tmp_orientation.computeReal();
-
-                uSE_Joint current("", -1, tmp_position, tmp_orientation);
+                uSE_Joint current("", -1, Vector3f(tmp_pos_x, tmp_pos_y, tmp_pos_z), tmp_orientation);
 
                 curr_animation.addBaseFrameJoint(current);
             }
@@ -452,7 +458,8 @@ void uSE_MD5Model::generateVerticesIndicesPose()
         unsigned int numVerts = it->getVerticesCount();
         for(unsigned int i = 0; i < numVerts; i++)
         {
-            uSE_GLVector vertex_pos;
+            Vector3f vertex_pos;
+            vertex_pos.setZero();
 
             uSE_Vertex curr_vertex = it->getVertexAtIndex(i);
 
@@ -465,15 +472,15 @@ void uSE_MD5Model::generateVerticesIndicesPose()
                 uSE_Joint  curr_joint  = m_joints.at(curr_weight.getDependingJoint());
 
                 // real part already computed
-                uSE_Quaternion rot_quat = curr_joint.getOrientation();
+                Quaternionf rot_quat = curr_joint.getOrientation();
 
-                uSE_GLVector after_rot_pos = (rot_quat.conjugation() * uSE_Quaternion(1, curr_weight.getPosition()) * rot_quat).get_vector();
+                Vector3f after_rot_pos = (rot_quat.conjugate() * Quaternionf( 1, curr_weight.getPosition().x(), curr_weight.getPosition().y(), curr_weight.getPosition().z()) * rot_quat).vec();
 
                 vertex_pos = vertex_pos + (curr_joint.getPosition() + after_rot_pos) * curr_weight.getBiasFactor();
             }
-            m_pose_vertices.push_back(vertex_pos.getX());
-            m_pose_vertices.push_back(vertex_pos.getY());
-            m_pose_vertices.push_back(vertex_pos.getZ());
+            m_pose_vertices.push_back(vertex_pos.x());
+            m_pose_vertices.push_back(vertex_pos.y());
+            m_pose_vertices.push_back(vertex_pos.z());
         }
 
         unsigned int numTris = it->getTrianglesCount();
@@ -499,6 +506,7 @@ void uSE_MD5Model::generateVerticesIndicesFromAnimAtFrame( const unsigned int in
 {
     assert(inAnim < m_animations.size());
 
+    // TODO : USE map for joints per frame
     m_frames_vertices[inAnim].clear();
     m_frames_indices [inAnim].clear();
 
@@ -512,46 +520,44 @@ void uSE_MD5Model::generateVerticesIndicesFromAnimAtFrame( const unsigned int in
 
         uSE_AnimJoint curr_anim_joint = curr_animation.getAnimJointAtIndex(i);
 
-        uSE_GLVector   animatedPosition    = current_joint.getPosition();
-        uSE_Quaternion animatedOrientation = current_joint.getOrientation();
+        Vector3f    animatedPosition    = current_joint.getPosition();
+        Quaternionf animatedOrientation = current_joint.getOrientation();
 
         int step = 0;
 
         int curr_flags = curr_anim_joint.getFlags();
         if(curr_flags & 1)
         {
-            animatedPosition.setX(curr_animation.getFrameComponentFromFrameAtIndex(inFrame, curr_anim_joint.getDataStartIndex() + step));
+            animatedPosition.x() = curr_animation.getFrameComponentFromFrameAtIndex(inFrame, curr_anim_joint.getDataStartIndex() + step);
             step++;
         }
         if(curr_flags & 2)
         {
-            animatedPosition.setY(curr_animation.getFrameComponentFromFrameAtIndex(inFrame, curr_anim_joint.getDataStartIndex() + step));
+            animatedPosition.y() = curr_animation.getFrameComponentFromFrameAtIndex(inFrame, curr_anim_joint.getDataStartIndex() + step);
             step++;
         }
         if(curr_flags & 4)
         {
-            animatedPosition.setZ(curr_animation.getFrameComponentFromFrameAtIndex(inFrame, curr_anim_joint.getDataStartIndex() + step));
+            animatedPosition.z() = curr_animation.getFrameComponentFromFrameAtIndex(inFrame, curr_anim_joint.getDataStartIndex() + step);
             step++;
         }
 
         if(curr_flags & 8)
         {
-            animatedOrientation.set_vector(uSE_GLVector(curr_animation.getFrameComponentFromFrameAtIndex(inFrame, curr_anim_joint.getDataStartIndex() + step), animatedOrientation.get_vector().getY(), animatedOrientation.get_vector().getZ()));
+            animatedOrientation.vec() = Vector3f(curr_animation.getFrameComponentFromFrameAtIndex(inFrame, curr_anim_joint.getDataStartIndex() + step), animatedOrientation.y(), animatedOrientation.z());
             step++;
         }
         if(curr_flags & 16)
         {
-            animatedOrientation.set_vector(uSE_GLVector(animatedOrientation.get_vector().getX(), curr_animation.getFrameComponentFromFrameAtIndex(inFrame, curr_anim_joint.getDataStartIndex() + step), animatedOrientation.get_vector().getZ()));
+            animatedOrientation.vec() = Vector3f(animatedOrientation.x(), curr_animation.getFrameComponentFromFrameAtIndex(inFrame, curr_anim_joint.getDataStartIndex() + step), animatedOrientation.z());
             step++;
         }
         if(curr_flags & 32)
         {
-            animatedOrientation.set_vector(uSE_GLVector(animatedOrientation.get_vector().getX(), animatedOrientation.get_vector().getY(), curr_animation.getFrameComponentFromFrameAtIndex(inFrame, curr_anim_joint.getDataStartIndex() + step)));
+            animatedOrientation.vec() = Vector3f(animatedOrientation.x(), animatedOrientation.y(), curr_animation.getFrameComponentFromFrameAtIndex(inFrame, curr_anim_joint.getDataStartIndex() + step));
             step++;
         }
-        animatedOrientation.computeReal();
-
-
+        computeW(animatedOrientation);
 
         uSE_Joint currentSkelJoint;
         currentSkelJoint.setName(curr_anim_joint.getName());
@@ -561,19 +567,18 @@ void uSE_MD5Model::generateVerticesIndicesFromAnimAtFrame( const unsigned int in
         {
             currentSkelJoint.setPosition(animatedPosition);
             currentSkelJoint.setOrientation(animatedOrientation);
-            // TODO : create map for joints per frame
         }
         else
         {
             uSE_Joint parentSkelJoint = m_joints.at(currentSkelJoint.getParentIndex());
 
-            uSE_Quaternion rot_quat = parentSkelJoint.getOrientation();
+            Quaternionf rot_quat = parentSkelJoint.getOrientation();
 
-            uSE_GLVector rotatedPos = (rot_quat.conjugation() * uSE_Quaternion(1, animatedPosition) * rot_quat).get_vector();
+            Vector3f rotatedPos = (rot_quat.conjugate() * Quaternionf(1, animatedPosition.x(), animatedPosition.y(), animatedPosition.z()) * rot_quat).vec();
 
             currentSkelJoint.setPosition(parentSkelJoint.getPosition() + rotatedPos );
 
-            uSE_Quaternion rotatedOrient = animatedOrientation * rot_quat;
+            Quaternionf rotatedOrient = animatedOrientation * rot_quat;
 
             currentSkelJoint.setOrientation(rotatedOrient);
         }

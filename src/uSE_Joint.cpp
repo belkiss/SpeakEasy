@@ -1,5 +1,5 @@
 #include "uSE_Joint.h"
-
+#include <iostream>
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 uSE_Joint::uSE_Joint()
@@ -9,7 +9,10 @@ uSE_Joint::uSE_Joint()
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-uSE_Joint::uSE_Joint( const std::string & inName, const int inParentIndex, const uSE_GLVector & inPosition, const uSE_Quaternion & inOrientation):
+uSE_Joint::uSE_Joint(   const std::string & inName,
+                        const int         & inParentIndex,
+                        const Vector3f    & inPosition,
+                        const Quaternionf & inOrientation):
     m_name(inName),
     m_parent_index(inParentIndex),
     m_position(inPosition),

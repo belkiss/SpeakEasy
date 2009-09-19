@@ -6,7 +6,6 @@
 #include "uSE_AnimJoint.h"
 #include "uSE_BoundBox.h"
 #include "uSE_GLVector.h"
-#include "uSE_Quaternion.h"
 #include "uSE_Joint.h"
 
 class uSE_Animation

@@ -13,7 +13,6 @@ SET(SpeakEasy_src
     uSE_Vertex.cpp
     uSE_BoundBox.cpp
     uSE_GLVector.cpp
-    uSE_Quaternion.cpp
     main.cpp
 )
 

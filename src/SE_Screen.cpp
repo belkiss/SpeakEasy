@@ -11,18 +11,25 @@
 #include <GL/glu.h>
 #include <Eigen/Core>
 
+using namespace Eigen;
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+float toRad( const float inDeg )
+{
+    return (float)M_PI*inDeg/180.f;
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 SE_Screen::SE_Screen():
     m_elapsed(0.f),
     m_anim_elapsed(0.f),
     m_speed(10.f),
-    m_rotation_speed(5.f),
+    m_rotation_speed(5),
     m_camera_position(-5,-1,0),// relative to world position
-    m_camera_rotation(1,uSE_GLVector(0,0,0)),
-    m_view_quaternion(1,uSE_GLVector(0,0,0)),
     m_character_position(0,-0.2,-1),
-    m_character_rotation(1,uSE_GLVector(0,0,0)),
     m_vbonbindices(0),
     m_vbovix(0),
     m_vboiix(0),
@@ -35,9 +42,11 @@ SE_Screen::SE_Screen():
     m_frame_walk(0),
     m_frame_stand(0)
 {
+    m_camera_rotation.setIdentity();
+
     // TODO : put that in init
-    m_view_quaternion.from_axis(uSE_GLVector(1,0,0),-90);
-    m_character_rotation.from_axis(uSE_GLVector(1,0,0),-90);
+    m_view_quaternion    = Quaternionf(AngleAxisf( toRad(-90), Vector3f(1,0,0)));
+    m_character_rotation = Quaternionf(AngleAxisf( toRad(-90), Vector3f(1,0,0)));
 }
 
 
@@ -136,7 +145,7 @@ void SE_Screen::initializeGL()
     const GLchar* vs_tmp = static_cast<const GLchar*>(vertexShaderSource.c_str());
     glShaderSource(m_vertexShaderID,1,&vs_tmp, NULL);
 
-    const GLchar* gs_tmp = static_cast<const GLchar*>(geometryShaderSource.c_str());
+//     const GLchar* gs_tmp = static_cast<const GLchar*>(geometryShaderSource.c_str());
 //     glShaderSource(m_geometryShaderID,1,&gs_tmp, NULL);
 
     const GLchar* ps_tmp = static_cast<const GLchar*>(pixelShaderSource.c_str());
@@ -215,8 +224,8 @@ void SE_Screen::paintGL()
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    Eigen::Matrix4f cam_rot_m4;
-    m_camera_rotation.get_matrix(cam_rot_m4);
+    Matrix4f cam_rot_m4 = Matrix4f::Identity();
+    cam_rot_m4.minor(3,3) = m_camera_rotation.toRotationMatrix();
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -224,14 +233,15 @@ void SE_Screen::paintGL()
     glMultMatrixf(cam_rot_m4.data());
     glPushMatrix();
 
-    Eigen::Matrix4f char_rot_m4;
-    m_character_rotation.get_matrix(char_rot_m4);
+    Matrix4f char_rot_m4 = Matrix4f::Identity();
+    char_rot_m4.minor(3,3) = m_character_rotation.toRotationMatrix();
     glMultMatrixf(char_rot_m4.data());
     draw_axis();
     glPopMatrix();
 
-    Eigen::Matrix4f view_rot_m4;
-    m_view_quaternion.get_matrix(view_rot_m4);
+    Matrix4f view_rot_m4 = Matrix4f::Identity();
+    view_rot_m4.minor(3,3) = m_view_quaternion.toRotationMatrix();
+
     glMultMatrixf(view_rot_m4.data());
     glTranslatef(m_camera_position.getX(),m_camera_position.getY(),m_camera_position.getZ());
     draw();
@@ -359,18 +369,16 @@ void SE_Screen::mouseMoveEvent (sf::Window * inApp, const int &inX, const int &i
 
         if(move_x != 0) // turn right / left
         {
-            uSE_Quaternion glq_rotvec;
-            glq_rotvec.from_axis(uSE_GLVector(0,1,0), move_x * m_rotation_speed * m_elapsed);
-            m_camera_rotation = m_camera_rotation * glq_rotvec;
+            Quaternionf eiq_rotvec(AngleAxisf( toRad(move_x * m_rotation_speed * m_elapsed), Vector3f(0,1,0) ));
+            m_camera_rotation = m_camera_rotation * eiq_rotvec;
             m_camera_rotation.normalize();
         }
 
         int move_y = inY - m_mouse_old_pos.second;
         if(move_y != 0) // look up / down
         {
-            uSE_Quaternion glq_rotvec;
-            glq_rotvec.from_axis(uSE_GLVector(1,0,0), move_y * m_rotation_speed * m_elapsed);
-            m_camera_rotation = glq_rotvec * m_camera_rotation;
+            Quaternionf eiq_rotvec(AngleAxisf( toRad(move_y * m_rotation_speed * m_elapsed), Vector3f(1,0,0) ));
+            m_camera_rotation = eiq_rotvec * m_camera_rotation;
             m_camera_rotation.normalize();
         }
 
@@ -391,23 +399,17 @@ void SE_Screen::mouseMoveEvent (sf::Window * inApp, const int &inX, const int &i
 ////////////////////////////////////////////////////////////////////////////////
 void SE_Screen::process_keyboard()
 {
-    uSE_Quaternion cam_lookat_quat;
-    cam_lookat_quat.from_axis(uSE_GLVector(1,0,0),-90);
+    Quaternionf cam_lookat_quat(AngleAxisf( toRad(-90), Vector3f(1,0,0)));
+    cam_lookat_quat.normalize();
 
-    uSE_Quaternion new_lookat_quat = m_camera_rotation.conjugation() * cam_lookat_quat * m_camera_rotation;
+    Quaternionf new_lookat_quat = m_camera_rotation.conjugate() * cam_lookat_quat * m_camera_rotation;
     new_lookat_quat.normalize();
-    uSE_GLVector dir_vec = new_lookat_quat.get_vector();
-    dir_vec.normalize();
-    // std::cout<<"dircam x: "<<dir_vec.getX()<<" y: "<<dir_vec.getY()<<" z: "<<dir_vec.getZ()<<std::endl;
-    // compute the right vec from vector product between dir and up
-    uSE_GLVector right_vec = dir_vec ^ uSE_GLVector(0,1,0);
-    // std::cout<<" x: "<<right_vec.getX()<<" y: "<<right_vec.getY()<<" z: "<<right_vec.getZ()<<std::endl;
 
-//    uSE_Quaternion tmp_quat = m_character_rotation.conjugation() * cam_lookat_quat * m_character_rotation;
-//    tmp_quat.normalize();
-//    uSE_GLVector pers_vec = tmp_quat.get_vector();
-//    pers_vec.normalize();
-    //std::cout<<"dirpers x: "<<pers_vec.getX()<<" y: "<<pers_vec.getY()<<" z: "<<pers_vec.getZ()<<std::endl;
+    Vector3f dir_vec = new_lookat_quat.vec();
+    dir_vec.normalize();
+
+    // compute the right vec from vector product between dir and up
+    Vector3f right_vec = dir_vec.cross(Vector3f(0,1,0));
 
     for( std::map<sf::Key::Code, bool>::iterator it = m_pressed_keys.begin(); it != m_pressed_keys.end(); ++it)
     {
@@ -423,50 +425,46 @@ void SE_Screen::process_keyboard()
                     break;
                 case sf::Key::Left :
                     {
-                        uSE_Quaternion glq_rotvec;
-                        glq_rotvec.from_axis(uSE_GLVector(0,0,1), 20 * m_rotation_speed * m_elapsed);
+                        Quaternionf glq_rotvec(AngleAxisf( toRad( m_rotation_speed * m_elapsed ), Vector3f(0,0,1)));
                         m_character_rotation = m_character_rotation * glq_rotvec;
                     }
                     break;
                 case sf::Key::Right :
                     {
-                        uSE_Quaternion glq_rotvec;
-                        glq_rotvec.from_axis(uSE_GLVector(0,0,1), -20 * m_rotation_speed * m_elapsed);
+                        Quaternionf glq_rotvec(AngleAxisf( toRad(-m_rotation_speed * m_elapsed ), Vector3f(0,0,1)));
                         m_character_rotation = m_character_rotation * glq_rotvec;
                     }
                     break;
                 case sf::Key::Up :
                     {
-                        uSE_Quaternion glq_rotvec;
-                        glq_rotvec.from_axis(uSE_GLVector(1,0,0), m_rotation_speed * m_elapsed);
+                        Quaternionf glq_rotvec(AngleAxisf( toRad( m_rotation_speed * m_elapsed ), Vector3f(1,0,0)));
                         m_view_quaternion = glq_rotvec * m_view_quaternion;
                     }
                     break;
                 case sf::Key::Down :
                     {
-                        uSE_Quaternion glq_rotvec;
-                        glq_rotvec.from_axis(uSE_GLVector(1,0,0), - m_rotation_speed * m_elapsed);
+                        Quaternionf glq_rotvec(AngleAxisf( toRad(-m_rotation_speed * m_elapsed ), Vector3f(1,0,0)));
                         m_view_quaternion = glq_rotvec * m_view_quaternion;
                     }
                     break;
                 case sf::Key::Z :
                     {
-                        m_camera_position = uSE_GLVector(m_camera_position.getX()+dir_vec.getZ()*m_speed * m_elapsed, m_camera_position.getY()+dir_vec.getX()*m_speed * m_elapsed, m_camera_position.getZ());
+                        m_camera_position = uSE_GLVector(m_camera_position.getX()+dir_vec.z()*m_speed * m_elapsed, m_camera_position.getY()+dir_vec.x()*m_speed * m_elapsed, m_camera_position.getZ());
                     }
                     break;
                 case sf::Key::S :
                     {
-                        m_camera_position = uSE_GLVector(m_camera_position.getX()-dir_vec.getZ()*m_speed * m_elapsed, m_camera_position.getY()-dir_vec.getX()*m_speed * m_elapsed, m_camera_position.getZ());
+                        m_camera_position = uSE_GLVector(m_camera_position.getX()-dir_vec.z()*m_speed * m_elapsed, m_camera_position.getY()-dir_vec.x()*m_speed * m_elapsed, m_camera_position.getZ());
                     }
                     break;
                 case sf::Key::Q :
                     {
-                        m_camera_position = uSE_GLVector(m_camera_position.getX()-right_vec.getZ()*m_speed * m_elapsed, m_camera_position.getY()-right_vec.getX()*m_speed * m_elapsed, m_camera_position.getZ());
+                        m_camera_position = uSE_GLVector(m_camera_position.getX()-right_vec.z()*m_speed * m_elapsed, m_camera_position.getY()-right_vec.x()*m_speed * m_elapsed, m_camera_position.getZ());
                     }
                     break;
                 case sf::Key::D :
                     {
-                        m_camera_position = uSE_GLVector(m_camera_position.getX()+right_vec.getZ()*m_speed * m_elapsed, m_camera_position.getY()+right_vec.getX()*m_speed * m_elapsed, m_camera_position.getZ());
+                        m_camera_position = uSE_GLVector(m_camera_position.getX()+right_vec.z()*m_speed * m_elapsed, m_camera_position.getY()+right_vec.x()*m_speed * m_elapsed, m_camera_position.getZ());
                     }
                     break;
                 case sf::Key::LControl :
