@@ -1,4 +1,4 @@
-#version 130
+#version 150
 
 in vec3 inVertexPosition;
 out vec4 outVertexColor_vs;

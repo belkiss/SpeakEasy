@@ -135,27 +135,28 @@ bool uSE_Quaternion::operator== ( const uSE_Quaternion &inQuaternion )
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-uSE_GLMatrix  uSE_Quaternion::get_matrix()
+void uSE_Quaternion::get_matrix( Eigen::Matrix4f& outMat4f )
 {
-    return uSE_GLMatrix( 1 - 2*m_vector.getY()*m_vector.getY() - 2*m_vector.getZ()*m_vector.getZ(),
-    2*m_vector.getX()*m_vector.getY() + 2*m_real*m_vector.getZ(),
-    2*m_vector.getX()*m_vector.getZ() - 2*m_real*m_vector.getY(),
-    0,
+    outMat4f = Eigen::Matrix4f::Identity();
+    outMat4f << 1 - 2*m_vector.getY()*m_vector.getY() - 2*m_vector.getZ()*m_vector.getZ(),
+                2*m_vector.getX()*m_vector.getY() - 2*m_real*m_vector.getZ(),
+                2*m_vector.getX()*m_vector.getZ() + 2*m_real*m_vector.getY(),
+                0,
 
-    2*m_vector.getX()*m_vector.getY() - 2*m_real*m_vector.getZ(),
-    1 - 2*m_vector.getX()*m_vector.getX() - 2*m_vector.getZ()*m_vector.getZ(),
-    2*m_vector.getY()*m_vector.getZ() + 2*m_real*m_vector.getX(),
-    0,
+                2*m_vector.getX()*m_vector.getY() + 2*m_real*m_vector.getZ(),
+                1 - 2*m_vector.getX()*m_vector.getX() - 2*m_vector.getZ()*m_vector.getZ(),
+                2*m_vector.getY()*m_vector.getZ() - 2*m_real*m_vector.getX(),
+                0,
 
-    2*m_vector.getX()*m_vector.getZ() + 2*m_real*m_vector.getY(),
-    2*m_vector.getY()*m_vector.getZ() - 2*m_real*m_vector.getX(),
-    1 - 2*m_vector.getX()*m_vector.getX() - 2*m_vector.getY()*m_vector.getY(),
-    0,
+                2*m_vector.getX()*m_vector.getZ() - 2*m_real*m_vector.getY(),
+                2*m_vector.getY()*m_vector.getZ() + 2*m_real*m_vector.getX(),
+                1 - 2*m_vector.getX()*m_vector.getX() - 2*m_vector.getY()*m_vector.getY(),
+                0,
 
-    0,
-    0,
-    0,
-    1);
+                0,
+                0,
+                0,
+                1;
 }
 
 

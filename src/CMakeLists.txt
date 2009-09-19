@@ -12,27 +12,11 @@ SET(SpeakEasy_src
     uSE_Weight.cpp
     uSE_Vertex.cpp
     uSE_BoundBox.cpp
-    uSE_GLMatrix.cpp
     uSE_GLVector.cpp
     uSE_Quaternion.cpp
     main.cpp
 )
 
-IF(WIN32)
-    SET(SFML_LIBS sfml-system-d sfml-window-d)
-    # copy shaders directory
-    EXECUTE_PROCESS(
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_SOURCE_DIR}/src/shaders
-        ${CMAKE_BINARY_DIR}/shaders
-    )
-    # copy data/md5 directory
-    EXECUTE_PROCESS(
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_SOURCE_DIR}/data
-        ${CMAKE_BINARY_DIR}/data
-    )
-ENDIF(WIN32)
 IF(UNIX)
     SET(SFML_LIBS sfml-system sfml-window)
     # create symlink for shaders directory
@@ -49,40 +33,21 @@ IF(UNIX)
     )
 ENDIF(UNIX)
 
-IF (NOT SHADERS_DIR)
-    SET(SHADERS_DIR ${CMAKE_BINARY_DIR}/shaders)
-ENDIF(NOT SHADERS_DIR)
-MESSAGE(STATUS "Shaders located in ${SHADERS_DIR}")
-
-IF (NOT MD5_MODELS_DIR)
-    SET(MD5_MODELS_DIR ${CMAKE_BINARY_DIR}/data/md5)
-ENDIF(NOT MD5_MODELS_DIR)
-MESSAGE(STATUS "MD5 files located in ${MD5_MODELS_DIR}")
-
-CONFIGURE_FILE(
-    ${CMAKE_SOURCE_DIR}/config.h.cmake
-    ${CMAKE_BINARY_DIR}/config.h
-)
-
-INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR})
-
-# executable declaration
-ADD_EXECUTABLE(
-    speakeasy
-    ${SpeakEasy_src}
-)
-
-FIND_PACKAGE(OpenGL)
-
-# linker setup
-TARGET_LINK_LIBRARIES(
-    speakeasy
-    ${OPENGL_LIBRARIES}
-    ${OPENGL_glu_LIBRARY}
-    ${SFML_LIBS}
-)
-
 IF(WIN32)
+    SET(SFML_LIBS sfml-system-d sfml-window-d)
+    # copy shaders directory
+    EXECUTE_PROCESS(
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/src/shaders
+        ${CMAKE_BINARY_DIR}/shaders
+    )
+    # copy data/md5 directory
+    EXECUTE_PROCESS(
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/data
+        ${CMAKE_BINARY_DIR}/data
+    )
+
     # Use the highest warning level for visual studio.
     SET(CMAKE_CXX_WARNING_LEVEL 4)
     IF(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
@@ -98,5 +63,37 @@ IF(WIN32)
     set_target_properties(speakeasy PROPERTIES LINK_FLAGS_RELEASE "/SUBSYSTEM:WINDOWS")
     set_target_properties(speakeasy PROPERTIES LINK_FLAGS_MINSIZEREL "/SUBSYSTEM:WINDOWS")
 ENDIF(WIN32)
+
+IF (NOT SHADERS_DIR)
+    SET(SHADERS_DIR ${CMAKE_BINARY_DIR}/shaders)
+ENDIF(NOT SHADERS_DIR)
+MESSAGE(STATUS "Shaders located in ${SHADERS_DIR}")
+
+IF (NOT MD5_MODELS_DIR)
+    SET(MD5_MODELS_DIR ${CMAKE_BINARY_DIR}/data/md5)
+ENDIF(NOT MD5_MODELS_DIR)
+MESSAGE(STATUS "MD5 files located in ${MD5_MODELS_DIR}")
+
+CONFIGURE_FILE(
+    ${CMAKE_SOURCE_DIR}/config.h.cmake
+    ${CMAKE_BINARY_DIR}/config.h
+)
+
+INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR}
+                    ${EIGEN2_INCLUDE_DIR})
+
+# executable declaration
+ADD_EXECUTABLE(
+    speakeasy
+    ${SpeakEasy_src}
+)
+
+# linker setup
+TARGET_LINK_LIBRARIES(
+    speakeasy
+    ${OPENGL_LIBRARIES}
+    ${OPENGL_glu_LIBRARY}
+    ${SFML_LIBS}
+)
 
 INSTALL(TARGETS speakeasy DESTINATION "bin")

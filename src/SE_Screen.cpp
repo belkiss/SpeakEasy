@@ -9,7 +9,7 @@
 #include <sstream>
 #include "config.h"
 #include <GL/glu.h>
-
+#include <Eigen/Core>
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -28,6 +28,7 @@ SE_Screen::SE_Screen():
     m_vboiix(0),
     m_programID(0),
     m_vertexShaderID(0),
+    m_geometryShaderID(0),
     m_pixelShaderID(0),
     m_cursor_moved_by_us(true),
     m_mouse_old_pos(320,240), // init with width/2 and height/2
@@ -72,11 +73,13 @@ void SE_Screen::initializeGL()
     m_character_model.parsemd5anim(character_filename.str() + "stand" + ".md5anim");
 
     // Generate And Bind The Vertex Buffer
-    glGenBuffers( 1, &m_vbovix );                  // Generate the name and store it in buffer ID
-    glGenBuffers( 1, &m_vboiix);                  // Get A Valid Name
+    glGenBuffers( 1, &m_vbovix ); // Generate the name and store it in buffer ID
+    glGenBuffers( 1, &m_vboiix ); // Get A Valid Name
 
     genCharAndAnimate();
 
+    ////////////////////////////////////////////////////////////////////////////
+    // Load vertex shader
     std::stringstream vs_filename(std::stringstream::in | std::stringstream::out);
     vs_filename << SHADERS_DIR << "/vs_simple.glsl";
 
@@ -85,12 +88,28 @@ void SE_Screen::initializeGL()
     {
         assert(false);// File does not exist
     }
-
     //This line reads in the whole file into a string
     std::string vertexShaderSource(std::istreambuf_iterator<char>(vsfileIn), (std::istreambuf_iterator<char>()));
-
     vsfileIn.close();
+    ////////////////////////////////////////////////////////////////////////////
 
+    ////////////////////////////////////////////////////////////////////////////
+    // Load geometry shader
+    std::stringstream gs_filename(std::stringstream::in | std::stringstream::out);
+    gs_filename << SHADERS_DIR << "/gs_simple.glsl";
+
+    std::ifstream gsfileIn(gs_filename.str().c_str(), std::ios::binary);
+    if (!gsfileIn.good())
+    {
+        assert(false);// File does not exist
+    }
+    //This line reads in the whole file into a string
+    std::string geometryShaderSource(std::istreambuf_iterator<char>(gsfileIn), (std::istreambuf_iterator<char>()));
+    gsfileIn.close();
+    ////////////////////////////////////////////////////////////////////////////
+
+    ////////////////////////////////////////////////////////////////////////////
+    // Load pixel shader
     std::stringstream ps_filename(std::stringstream::in | std::stringstream::out);
     ps_filename << SHADERS_DIR << "/ps_simple.glsl";
 
@@ -99,28 +118,34 @@ void SE_Screen::initializeGL()
     {
         assert(false);// File does not exist
     }
-
+    //This line reads in the whole file into a string
     std::string pixelShaderSource(std::istreambuf_iterator<char>(pixelfileIn), (std::istreambuf_iterator<char>()));
-
+    pixelfileIn.close();
+    ////////////////////////////////////////////////////////////////////////////
 
     // get unique id for gl program
     m_programID = glCreateProgram();
 
     // get unique ids for gl shaders
-    m_vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
-    m_pixelShaderID = glCreateShader(GL_FRAGMENT_SHADER);
+    m_vertexShaderID   = glCreateShader(GL_VERTEX_SHADER);
+    m_geometryShaderID = glCreateShader(GL_GEOMETRY_SHADER_EXT);
+    m_pixelShaderID    = glCreateShader(GL_FRAGMENT_SHADER);
 
 
     // read shaders files and put them into corresponding index
-    const GLchar* tmp = static_cast<const GLchar*>(vertexShaderSource.c_str());
-    glShaderSource(m_vertexShaderID,1,&tmp, NULL);
+    const GLchar* vs_tmp = static_cast<const GLchar*>(vertexShaderSource.c_str());
+    glShaderSource(m_vertexShaderID,1,&vs_tmp, NULL);
 
-    const GLchar* tmpp = static_cast<const GLchar*>(pixelShaderSource.c_str());
-    glShaderSource(m_pixelShaderID,1,&tmpp, NULL);
+    const GLchar* gs_tmp = static_cast<const GLchar*>(geometryShaderSource.c_str());
+//     glShaderSource(m_geometryShaderID,1,&gs_tmp, NULL);
+
+    const GLchar* ps_tmp = static_cast<const GLchar*>(pixelShaderSource.c_str());
+    glShaderSource(m_pixelShaderID,1,&ps_tmp, NULL);
 
 
     // compile the shaders
     glCompileShader(m_vertexShaderID);
+//     glCompileShader(m_geometryShaderID);
     glCompileShader(m_pixelShaderID);
 
     // TODO: check the result of the shader compilation
@@ -130,6 +155,7 @@ void SE_Screen::initializeGL()
 
     // attach the shaders
     glAttachShader(m_programID, m_vertexShaderID);
+//     glAttachShader(m_programID, m_geometryShaderID);
     glAttachShader(m_programID, m_pixelShaderID);
 
     // link GLSL program
@@ -189,16 +215,24 @@ void SE_Screen::paintGL()
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    Eigen::Matrix4f cam_rot_m4;
+    m_camera_rotation.get_matrix(cam_rot_m4);
+
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glTranslatef(m_character_position.getX(),m_character_position.getY(),m_character_position.getZ());
-    glMultMatrixf(m_camera_rotation.get_matrix().get_array());
+    glMultMatrixf(cam_rot_m4.data());
     glPushMatrix();
-    glMultMatrixf(m_character_rotation.get_matrix().get_array());
+
+    Eigen::Matrix4f char_rot_m4;
+    m_character_rotation.get_matrix(char_rot_m4);
+    glMultMatrixf(char_rot_m4.data());
     draw_axis();
     glPopMatrix();
 
-    glMultMatrixf(m_view_quaternion.get_matrix().get_array());
+    Eigen::Matrix4f view_rot_m4;
+    m_view_quaternion.get_matrix(view_rot_m4);
+    glMultMatrixf(view_rot_m4.data());
     glTranslatef(m_camera_position.getX(),m_camera_position.getY(),m_camera_position.getZ());
     draw();
 }

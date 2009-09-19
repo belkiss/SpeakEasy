@@ -3,7 +3,6 @@
 #include <windows.h>
 #endif
 #include <GL/gl.h>
-#include "uSE_GLMatrix.h"
 
 class uSE_GLVector
 {

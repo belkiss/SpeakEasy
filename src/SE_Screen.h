@@ -37,7 +37,7 @@ class SE_Screen
 
         uSE_GLVector   m_camera_position;
         uSE_Quaternion m_camera_rotation;
-        
+
         uSE_Quaternion m_view_quaternion;
 
         uSE_GLVector   m_character_position;
@@ -51,7 +51,9 @@ class SE_Screen
 
         // shader members
         GLuint m_programID;
+
         GLuint m_vertexShaderID;
+        GLuint m_geometryShaderID;
         GLuint m_pixelShaderID;
 
         std::map < sf::Key::Code, bool > m_pressed_keys;
