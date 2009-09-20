@@ -9,16 +9,12 @@
 #include <sstream>
 #include "config.h"
 #include <GL/glu.h>
+#include <glibmm.h>
+
+#include "misc.h"
+
 #include <Eigen/Core>
-
 using namespace Eigen;
-
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-float toRad( const float inDeg )
-{
-    return (float)M_PI*inDeg/180.f;
-}
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -89,47 +85,23 @@ void SE_Screen::initializeGL()
 
     ////////////////////////////////////////////////////////////////////////////
     // Load vertex shader
-    std::stringstream vs_filename(std::stringstream::in | std::stringstream::out);
-    vs_filename << SHADERS_DIR << "/vs_simple.glsl";
-
-    std::ifstream vsfileIn(vs_filename.str().c_str(), std::ios::binary);
-    if (!vsfileIn.good())
-    {
-        assert(false);// File does not exist
-    }
-    //This line reads in the whole file into a string
-    std::string vertexShaderSource(std::istreambuf_iterator<char>(vsfileIn), (std::istreambuf_iterator<char>()));
-    vsfileIn.close();
+    Glib::ustring vertexShaderSource;
+    loadFileToString(Glib::ustring::compose("%1/%2",SHADERS_DIR,"vs_simple.glsl"),
+                     vertexShaderSource);
     ////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////////////////////////////////////////////////
     // Load geometry shader
-    std::stringstream gs_filename(std::stringstream::in | std::stringstream::out);
-    gs_filename << SHADERS_DIR << "/gs_simple.glsl";
-
-    std::ifstream gsfileIn(gs_filename.str().c_str(), std::ios::binary);
-    if (!gsfileIn.good())
-    {
-        assert(false);// File does not exist
-    }
-    //This line reads in the whole file into a string
-    std::string geometryShaderSource(std::istreambuf_iterator<char>(gsfileIn), (std::istreambuf_iterator<char>()));
-    gsfileIn.close();
+    Glib::ustring geometryShaderSource;
+    loadFileToString(Glib::ustring::compose("%1/%2",SHADERS_DIR,"gs_simple.glsl"),
+                     geometryShaderSource);
     ////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////////////////////////////////////////////////
     // Load pixel shader
-    std::stringstream ps_filename(std::stringstream::in | std::stringstream::out);
-    ps_filename << SHADERS_DIR << "/ps_simple.glsl";
-
-    std::ifstream pixelfileIn(ps_filename.str().c_str(), std::ios::binary);
-    if (!pixelfileIn.good())
-    {
-        assert(false);// File does not exist
-    }
-    //This line reads in the whole file into a string
-    std::string pixelShaderSource(std::istreambuf_iterator<char>(pixelfileIn), (std::istreambuf_iterator<char>()));
-    pixelfileIn.close();
+    Glib::ustring pixelShaderSource;
+    loadFileToString(Glib::ustring::compose("%1/%2",SHADERS_DIR,"ps_simple.glsl"),
+                     pixelShaderSource);
     ////////////////////////////////////////////////////////////////////////////
 
     // get unique id for gl program

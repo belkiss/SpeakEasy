@@ -13,6 +13,7 @@ SET(SpeakEasy_src
     uSE_Vertex.cpp
     uSE_BoundBox.cpp
     uSE_GLVector.cpp
+    misc.cpp
     main.cpp
 )
 
@@ -79,7 +80,8 @@ CONFIGURE_FILE(
 )
 
 INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR}
-                    ${EIGEN2_INCLUDE_DIR})
+                    ${EIGEN2_INCLUDE_DIR}
+                    ${GLIBMM_INCLUDE_DIRS})
 
 # executable declaration
 ADD_EXECUTABLE(
@@ -93,6 +95,7 @@ TARGET_LINK_LIBRARIES(
     ${OPENGL_LIBRARIES}
     ${OPENGL_glu_LIBRARY}
     ${SFML_LIBS}
+    ${GLIBMM_LIBRARIES}
 )
 
 INSTALL(TARGETS speakeasy DESTINATION "bin")
