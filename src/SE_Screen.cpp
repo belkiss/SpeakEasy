@@ -68,6 +68,7 @@ void SE_Screen::initializeGL()
 //     glCullFace(GL_BACK); // choose wich face to cull
 
     m_generator.generateGround();
+    m_generator.generateBuildings();
 
     std::stringstream character_filename(std::stringstream::in | std::stringstream::out);
 
@@ -208,7 +209,7 @@ void SE_Screen::paintGL()
     Matrix4f char_rot_m4 = Matrix4f::Identity();
     char_rot_m4.minor(3,3) = m_character_rotation.toRotationMatrix();
     glMultMatrixf(char_rot_m4.data());
-    draw_axis();
+    draw_character();
     glPopMatrix();
 
     Matrix4f view_rot_m4 = Matrix4f::Identity();
@@ -222,7 +223,7 @@ void SE_Screen::paintGL()
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-void SE_Screen::draw_axis()
+void SE_Screen::draw_character()
 {
     float modelviewMatrix[16];
     float projectionMatrix[16];
@@ -244,6 +245,9 @@ void SE_Screen::draw_axis()
 
     location = glGetUniformLocation(m_programID,"projection_matrix");
     glUniformMatrix4fv(location, 1, false, projectionMatrix);
+
+    location = glGetUniformLocation(m_programID,"draw_what");
+    glUniform1i(location, 0);
 
     glBindBuffer( GL_ARRAY_BUFFER, m_vbovix ); // Bind The Buffer
 
@@ -274,22 +278,11 @@ void SE_Screen::draw()
     GLuint location = glGetUniformLocation(m_programID,"modelview_matrix");
     glUniformMatrix4fv(location, 1, false, modelviewMatrix);
 
-// std::cout<< modelviewMatrix[0] << " " << modelviewMatrix[4]<< " "<< modelviewMatrix[8]<< " "<< modelviewMatrix[12]<<std::endl;
-// std::cout<< modelviewMatrix[1] << " " << modelviewMatrix[5]<< " "<< modelviewMatrix[9]<< " "<< modelviewMatrix[13]<<std::endl;
-// std::cout<< modelviewMatrix[2] << " " << modelviewMatrix[6]<< " "<< modelviewMatrix[10]<< " "<< modelviewMatrix[14]<<std::endl;
-// std::cout<< modelviewMatrix[3] << " " << modelviewMatrix[7]<< " "<< modelviewMatrix[11]<< " "<< modelviewMatrix[15]<<std::endl<<std::endl;
-
     location = glGetUniformLocation(m_programID,"projection_matrix");
     glUniformMatrix4fv(location, 1, false, projectionMatrix);
 
-    glBindBuffer( GL_ARRAY_BUFFER, m_generator.getVBOVerticesIndex() ); // Bind The Buffer
-
-    // instead of (char*) there is a macro BUFFER_OFFSET (unverified)
-    glVertexAttribPointer((GLint)0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_generator.getVBOIndicesIndex() ); // Bind The Buffer
-
-    glDrawElements( GL_TRIANGLES, m_generator.getGroundIndicesNb(), GL_UNSIGNED_INT, (char*) 0 );
+    m_generator.drawGround(m_programID);
+    m_generator.drawBuildings(m_programID);
 
     glDisableVertexAttribArray(0);
 }

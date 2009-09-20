@@ -67,7 +67,7 @@ class SE_Screen
 
     private: // methods
         void    draw();
-        void    draw_axis();
+        void    draw_character();
 
         void    process_keyboard();
 

@@ -6,11 +6,33 @@ out vec4 outVertexColor_vs;
 uniform mat4 projection_matrix;
 uniform mat4 modelview_matrix;
 
+uniform int draw_what;
+
 void main(void)
 {
     vec4 pos = modelview_matrix * vec4(inVertexPosition, 1.0);
     gl_Position = projection_matrix * pos;
 
     // make the color varying with vertex position
-    outVertexColor_vs = vec4(inVertexPosition.x/512,inVertexPosition.y/512,inVertexPosition.z,1.0);
+    if(draw_what == 0) // character
+    {
+        outVertexColor_vs = vec4(inVertexPosition.z/2.f+0.5,
+                                 inVertexPosition.z/2.f+0.5,
+                                 inVertexPosition.z/2.f+0.5,
+                                 1.0);
+    }
+    else if(draw_what == 1) // ground
+    {
+        outVertexColor_vs = vec4(inVertexPosition.z*100.f/255.f,
+                                 inVertexPosition.z*100.f/255.f,
+                                 inVertexPosition.z*100.f/255.f,
+                                 1.0);
+    }
+    else // buildings
+    {
+        outVertexColor_vs = vec4(inVertexPosition.z/20.f*85.f/255.f,
+                                 0,
+                                 0,
+                                 1);
+    }
 }
