@@ -3,27 +3,29 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
 PROJECT(SpeakEasy)
 
-# to see command line of gcc
+# see full compilation lines
 SET(CMAKE_VERBOSE_MAKEFILE 0)
-# to add Color on CMake Process
+
+# add color on CMake output
 SET(CMAKE_COLOR_MAKEFILE ON)
 
 # set the destination of the executable, the CMAKE_BUILD_TYPE is set at launch of cmake executable
 # set(EXECUTABLE_OUTPUT_PATH build/${CMAKE_BUILD_TYPE})
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
-FIND_PACKAGE(OpenGL REQUIRED)
-
+# tell cmake to check for custom modules
 SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules")
-FIND_PACKAGE(Eigen2 REQUIRED)
 
-FIND_PACKAGE(PkgConfig)
 
-pkg_check_modules(GLIBMM REQUIRED glibmm-2.4)
+FIND_PACKAGE(OpenGL    REQUIRED)
+FIND_PACKAGE(SFML      REQUIRED)
+FIND_PACKAGE(Eigen2    REQUIRED)
+FIND_PACKAGE(PkgConfig REQUIRED)
+    pkg_check_modules(GLIBMM REQUIRED glibmm-2.4)
+
 
 IF(WIN32)
     SET(CMAKE_CXX_WARNING_LEVEL 4)
-    ADD_DEFINITIONS(-DSFML_DYNAMIC)
 ENDIF(WIN32)
 IF(UNIX)
     ADD_DEFINITIONS( -Wall -Wextra )
