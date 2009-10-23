@@ -2,7 +2,7 @@
 #ifndef _WIN32
 #define GL_GLEXT_PROTOTYPES
 #endif
-
+#include<Eigen/StdVector>
 #include <map>
 
 #include <Eigen/Geometry>

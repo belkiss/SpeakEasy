@@ -16,6 +16,7 @@ class uSE_Joint
 
         virtual ~uSE_Joint();
 
+        EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     private://members
         std::string    m_name;
         int            m_parent_index;

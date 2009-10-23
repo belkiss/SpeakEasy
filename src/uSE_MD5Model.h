@@ -1,4 +1,5 @@
 #pragma once
+#include<Eigen/StdVector>
 #include "uSE_Mesh.h"
 #include "uSE_Joint.h"
 #include "uSE_Animation.h"

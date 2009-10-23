@@ -2,8 +2,8 @@
 #include <windows.h>
 #endif
 #include <iostream>
-#include <SFML/Window.hpp>
 #include "SE_Screen.h"
+#include <SFML/Window.hpp>
 
 int main()
 {
