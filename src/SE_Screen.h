@@ -2,7 +2,7 @@
 #ifndef _WIN32
 #define GL_GLEXT_PROTOTYPES
 #endif
-#include<Eigen/StdVector>
+#include "uSE_MD5Model.h"
 #include <map>
 
 #include <Eigen/Geometry>
@@ -10,7 +10,7 @@
 #include <SFML/Window/Event.hpp>
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/Window.hpp>
-#include "uSE_MD5Model.h"
+
 
 class SE_Screen
 {
