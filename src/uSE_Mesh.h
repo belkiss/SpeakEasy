@@ -23,19 +23,19 @@ class uSE_Mesh
         std::vector<uSE_Weight>   m_weights;
 
     public://methods
-        void add_vertex(const uSE_Vertex & inVertex);
-        void add_triangle(const uSE_Triangle & inTriangle);
-        void add_weight(const uSE_Weight & inWeight );
+        void         add_vertex  ( const uSE_Vertex&   inVertex );
+        void         add_triangle( const uSE_Triangle& inTriangle );
+        void         add_weight  ( const uSE_Weight&   inWeight );
 
-        std::string  getShaderName    () { return m_shader_name; }
+        std::string  getShaderName ();
 
-        unsigned int getVerticesCount () { return m_vertices.size(); }
-        uSE_Vertex   getVertexAtIndex ( int inIndex ) { return m_vertices.at(inIndex); }
+        unsigned int getVerticesCount ();
+        uSE_Vertex   getVertexAtIndex ( int inIndex );
 
-        unsigned int getTrianglesCount() { return m_triangles.size(); }
-        uSE_Triangle getTriangleAtIndex (int inIndex ) { return m_triangles.at(inIndex); }
+        unsigned int getTrianglesCount ();
+        uSE_Triangle getTriangleAtIndex (int inIndex );
 
-        unsigned int getWeightsCount  () { return m_weights.size(); }
-        uSE_Weight   getWeightAtIndex ( int inIndex ) { return m_weights.at(inIndex); }
+        unsigned int getWeightsCount ();
+        uSE_Weight   getWeightAtIndex ( int inIndex );
 
 };

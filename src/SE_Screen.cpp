@@ -1,6 +1,7 @@
 #ifdef _WIN32
 #include "GLee.h"
 #endif
+
 #include "SE_Screen.h"
 #include <iostream>
 #include <cassert>
@@ -14,7 +15,6 @@
 #include "misc.h"
 
 #include <Eigen/Core>
-using namespace Eigen;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -41,8 +41,8 @@ SE_Screen::SE_Screen():
     m_camera_rotation.setIdentity();
 
     // TODO : put that in init
-    m_view_quaternion    = Quaternionf(AngleAxisf( toRad(-90), Vector3f(1,0,0)));
-    m_character_rotation = Quaternionf(AngleAxisf( toRad(-90), Vector3f(1,0,0)));
+    m_view_quaternion    = Eigen::Quaternionf(Eigen::AngleAxisf( se_misc::toRad(-90), Eigen::Vector3f(1,0,0)));
+    m_character_rotation = Eigen::Quaternionf(Eigen::AngleAxisf( se_misc::toRad(-90), Eigen::Vector3f(1,0,0)));
 }
 
 
@@ -87,22 +87,22 @@ void SE_Screen::initializeGL()
     ////////////////////////////////////////////////////////////////////////////
     // Load vertex shader
     Glib::ustring vertexShaderSource;
-    loadFileToString(Glib::ustring::compose("%1/%2",SHADERS_DIR,"vs_simple.glsl"),
-                     vertexShaderSource);
+    se_misc::loadFileToString(Glib::ustring::compose("%1/%2",SHADERS_DIR,"vs_simple.glsl"),
+                              vertexShaderSource);
     ////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////////////////////////////////////////////////
     // Load geometry shader
     Glib::ustring geometryShaderSource;
-    loadFileToString(Glib::ustring::compose("%1/%2",SHADERS_DIR,"gs_simple.glsl"),
-                     geometryShaderSource);
+    se_misc::loadFileToString(Glib::ustring::compose("%1/%2",SHADERS_DIR,"gs_simple.glsl"),
+                              geometryShaderSource);
     ////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////////////////////////////////////////////////
     // Load pixel shader
     Glib::ustring pixelShaderSource;
-    loadFileToString(Glib::ustring::compose("%1/%2",SHADERS_DIR,"ps_simple.glsl"),
-                     pixelShaderSource);
+    se_misc::loadFileToString(Glib::ustring::compose("%1/%2",SHADERS_DIR,"ps_simple.glsl"),
+                              pixelShaderSource);
     ////////////////////////////////////////////////////////////////////////////
 
     // get unique id for gl program
@@ -197,7 +197,7 @@ void SE_Screen::paintGL()
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    Matrix4f cam_rot_m4 = Matrix4f::Identity();
+    Eigen::Matrix4f cam_rot_m4 = Eigen::Matrix4f::Identity();
     cam_rot_m4.minor(3,3) = m_camera_rotation.toRotationMatrix();
 
     glMatrixMode(GL_MODELVIEW);
@@ -206,13 +206,13 @@ void SE_Screen::paintGL()
     glMultMatrixf(cam_rot_m4.data());
     glPushMatrix();
 
-    Matrix4f char_rot_m4 = Matrix4f::Identity();
+    Eigen::Matrix4f char_rot_m4 = Eigen::Matrix4f::Identity();
     char_rot_m4.minor(3,3) = m_character_rotation.toRotationMatrix();
     glMultMatrixf(char_rot_m4.data());
     draw_character();
     glPopMatrix();
 
-    Matrix4f view_rot_m4 = Matrix4f::Identity();
+    Eigen::Matrix4f view_rot_m4 = Eigen::Matrix4f::Identity();
     view_rot_m4.minor(3,3) = m_view_quaternion.toRotationMatrix();
 
     glMultMatrixf(view_rot_m4.data());
@@ -334,7 +334,7 @@ void SE_Screen::mouseMoveEvent (sf::Window * inApp, const int &inX, const int &i
 
         if(move_x != 0) // turn right / left
         {
-            Quaternionf eiq_rotvec(AngleAxisf( toRad(move_x * m_rotation_speed * m_elapsed), Vector3f(0,1,0) ));
+            Eigen::Quaternionf eiq_rotvec( Eigen::AngleAxisf( se_misc::toRad(move_x * m_rotation_speed * m_elapsed), Eigen::Vector3f(0,1,0) ));
             m_camera_rotation = m_camera_rotation * eiq_rotvec;
             m_camera_rotation.normalize();
         }
@@ -342,7 +342,7 @@ void SE_Screen::mouseMoveEvent (sf::Window * inApp, const int &inX, const int &i
         int move_y = inY - m_mouse_old_pos.second;
         if(move_y != 0) // look up / down
         {
-            Quaternionf eiq_rotvec(AngleAxisf( toRad(move_y * m_rotation_speed * m_elapsed), Vector3f(1,0,0) ));
+            Eigen::Quaternionf eiq_rotvec( Eigen::AngleAxisf( se_misc::toRad(move_y * m_rotation_speed * m_elapsed), Eigen::Vector3f(1,0,0) ));
             m_camera_rotation = eiq_rotvec * m_camera_rotation;
             m_camera_rotation.normalize();
         }
@@ -364,17 +364,17 @@ void SE_Screen::mouseMoveEvent (sf::Window * inApp, const int &inX, const int &i
 ////////////////////////////////////////////////////////////////////////////////
 void SE_Screen::process_keyboard()
 {
-    Quaternionf cam_lookat_quat(AngleAxisf( toRad(-90), Vector3f(1,0,0)));
+    Eigen::Quaternionf cam_lookat_quat( Eigen::AngleAxisf( se_misc::toRad(-90), Eigen::Vector3f(1,0,0)));
     cam_lookat_quat.normalize();
 
-    Quaternionf new_lookat_quat = m_camera_rotation.conjugate() * cam_lookat_quat * m_camera_rotation;
+    Eigen::Quaternionf new_lookat_quat = m_camera_rotation.conjugate() * cam_lookat_quat * m_camera_rotation;
     new_lookat_quat.normalize();
 
-    Vector3f dir_vec = new_lookat_quat.vec();
+    Eigen::Vector3f dir_vec = new_lookat_quat.vec();
     dir_vec.normalize();
 
     // compute the right vec from vector product between dir and up
-    Vector3f right_vec = dir_vec.cross(Vector3f(0,1,0));
+    Eigen::Vector3f right_vec = dir_vec.cross( Eigen::Vector3f(0,1,0));
 
     for( std::map<sf::Key::Code, bool>::iterator it = m_pressed_keys.begin(); it != m_pressed_keys.end(); ++it)
     {
@@ -390,25 +390,25 @@ void SE_Screen::process_keyboard()
                     break;
                 case sf::Key::Left :
                     {
-                        Quaternionf glq_rotvec(AngleAxisf( toRad( m_rotation_speed * m_elapsed ), Vector3f(0,0,1)));
+                        Eigen::Quaternionf glq_rotvec( Eigen::AngleAxisf( se_misc::toRad( m_rotation_speed * m_elapsed ), Eigen::Vector3f(0,0,1)));
                         m_character_rotation = m_character_rotation * glq_rotvec;
                     }
                     break;
                 case sf::Key::Right :
                     {
-                        Quaternionf glq_rotvec(AngleAxisf( toRad(-m_rotation_speed * m_elapsed ), Vector3f(0,0,1)));
+                        Eigen::Quaternionf glq_rotvec( Eigen::AngleAxisf( se_misc::toRad(-m_rotation_speed * m_elapsed ), Eigen::Vector3f(0,0,1)));
                         m_character_rotation = m_character_rotation * glq_rotvec;
                     }
                     break;
                 case sf::Key::Up :
                     {
-                        Quaternionf glq_rotvec(AngleAxisf( toRad( m_rotation_speed * m_elapsed ), Vector3f(1,0,0)));
+                        Eigen::Quaternionf glq_rotvec( Eigen::AngleAxisf( se_misc::toRad( m_rotation_speed * m_elapsed ), Eigen::Vector3f(1,0,0)));
                         m_view_quaternion = glq_rotvec * m_view_quaternion;
                     }
                     break;
                 case sf::Key::Down :
                     {
-                        Quaternionf glq_rotvec(AngleAxisf( toRad(-m_rotation_speed * m_elapsed ), Vector3f(1,0,0)));
+                        Eigen::Quaternionf glq_rotvec( Eigen::AngleAxisf( se_misc::toRad(-m_rotation_speed * m_elapsed ), Eigen::Vector3f(1,0,0)));
                         m_view_quaternion = glq_rotvec * m_view_quaternion;
                     }
                     break;

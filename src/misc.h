@@ -2,7 +2,14 @@
 #include <glibmm.h>
 #include <string>
 
-float toRad( const float inDeg );
+#include <Eigen/Geometry>
 
-void loadFileToString( const Glib::ustring & inFileName,
-                             Glib::ustring & outFileSource);
+namespace se_misc
+{
+    float toRad( const float inDeg );
+
+    void  loadFileToString( const Glib::ustring & inFileName,
+                                  Glib::ustring & outFileSource);
+
+    void  computeW( Eigen::Quaternionf & ioQuat );
+}

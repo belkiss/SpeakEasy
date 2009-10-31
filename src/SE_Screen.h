@@ -28,14 +28,14 @@ class SE_Screen
         void mouseMoveEvent (sf::Window * inApp, const int &inX, const int &inY);
 
     private: // members
-        sf::Clock m_clock;
-        float     m_elapsed;
-        float     m_anim_elapsed;
+        sf::Clock          m_clock;
+        float              m_elapsed;
+        float              m_anim_elapsed;
 
-        float m_speed;
-        float m_rotation_speed;
+        float              m_speed;
+        float              m_rotation_speed;
 
-        uSE_GLVector   m_camera_position;
+        uSE_GLVector       m_camera_position;
 
         Eigen::Quaternionf m_camera_rotation;
         Eigen::Quaternionf m_view_quaternion;
@@ -43,27 +43,27 @@ class SE_Screen
         uSE_GLVector       m_character_position;
         Eigen::Quaternionf m_character_rotation;
 
-        SE_Generator m_generator;
+        SE_Generator       m_generator;
 
-        GLuint m_vbonbindices;
-        GLuint m_vbovix;
-        GLuint m_vboiix;
+        GLuint             m_vbonbindices;
+        GLuint             m_vbovix;
+        GLuint             m_vboiix;
 
         // shader members
-        GLuint m_programID;
+        GLuint             m_programID;
 
-        GLuint m_vertexShaderID;
-        GLuint m_geometryShaderID;
-        GLuint m_pixelShaderID;
+        GLuint             m_vertexShaderID;
+        GLuint             m_geometryShaderID;
+        GLuint             m_pixelShaderID;
 
         std::map < sf::Key::Code, bool > m_pressed_keys;
 
-        bool m_cursor_moved_by_us;
+        bool               m_cursor_moved_by_us;
         std::pair<int,int> m_mouse_old_pos;
 
-        uSE_MD5Model m_character_model;
-        int          m_frame_walk;
-        int          m_frame_stand;
+        uSE_MD5Model       m_character_model;
+        int                m_frame_walk;
+        int                m_frame_stand;
 
     private: // methods
         void    draw();

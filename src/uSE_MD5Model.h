@@ -13,8 +13,8 @@ class uSE_MD5Model
         virtual ~uSE_MD5Model();
 
     private://members
-        std::vector<uSE_Mesh>  m_meshes;
-        std::vector<uSE_Joint> m_joints;
+        std::vector<uSE_Mesh>      m_meshes;
+        std::vector<uSE_Joint>     m_joints;
 
         std::vector<uSE_Animation> m_animations;
 
@@ -31,12 +31,12 @@ class uSE_MD5Model
     public:
         void generateVerticesIndicesPose();
 
-        unsigned int get_nb_meshes       () { return m_meshes.size(); }
-        unsigned int get_nb_pose_vertices() { return m_pose_vertices.size(); }
-        unsigned int get_nb_pose_indices () { return m_pose_indices.size(); }
+        unsigned int get_nb_meshes       ();
+        unsigned int get_nb_pose_vertices();
+        unsigned int get_nb_pose_indices ();
 
-        const std::vector<GLfloat> & get_pose_vertices() { return m_pose_vertices; }
-        const std::vector<GLuint>  & get_pose_indices () { return m_pose_indices; }
+        const std::vector<GLfloat> & get_pose_vertices();
+        const std::vector<GLuint>  & get_pose_indices ();
     ////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////////////////////////////////////////////////
@@ -46,7 +46,7 @@ class uSE_MD5Model
         std::map<int, std::vector<GLuint>  > m_frames_indices;
 
     public:
-        int  getNbFramesFromAnim( const unsigned int inAnim ) { return m_animations.at(inAnim).getNbFrames(); }
+        int  getNbFramesFromAnim( const unsigned int inAnim );
         void generateVerticesIndicesFromAnimAtFrame( const unsigned int inAnim, const unsigned int inFrame );
 };
 

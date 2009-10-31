@@ -13,6 +13,6 @@ class uSE_BoundBox
         uSE_GLVector m_max;
 
     public://methods
-        uSE_GLVector getMin() { return m_min; }
-        uSE_GLVector getMax() { return m_max; }
+        uSE_GLVector getMin();
+        uSE_GLVector getMax();
 };

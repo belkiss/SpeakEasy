@@ -3,34 +3,34 @@
 #include "uSE_GLVector.h"
 
 #include <Eigen/Geometry>
-using namespace Eigen;
 
 class uSE_Joint
 {
     public:
         uSE_Joint();
-        uSE_Joint(  const std::string & inName,
-                    const int         & inParentIndex,
-                    const Vector3f    & inPosition,
-                    const Quaternionf & inOrientation);
+        uSE_Joint( const std::string&        inName,
+                   const int&                inParentIndex,
+                   const Eigen::Vector3f&    inPosition,
+                   const Eigen::Quaternionf& inOrientation);
 
         virtual ~uSE_Joint();
 
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+
     private://members
-        std::string    m_name;
-        int            m_parent_index;
-        Vector3f       m_position;
-        Quaternionf    m_orientation;
+        std::string        m_name;
+        int                m_parent_index;
+        Eigen::Vector3f    m_position;
+        Eigen::Quaternionf m_orientation;
 
     public://methods
-        void setName( const std::string & inName ) { m_name = inName; }
-        void setParentIndex ( const int inParentIndex ) { m_parent_index = inParentIndex; }
-        void setPosition ( const Vector3f & inPosition) { m_position = inPosition; }
-        void setOrientation ( const Quaternionf & inOrientation ) { m_orientation = inOrientation; }
+        void               setName       ( const std::string&        inName );
+        void               setParentIndex( const int                 inParentIndex );
+        void               setPosition   ( const Eigen::Vector3f&    inPosition );
+        void               setOrientation( const Eigen::Quaternionf& inOrientation );
 
-        std::string    getName() { return m_name; }
-        int            getParentIndex() { return m_parent_index; }
-        Vector3f       getPosition() { return m_position; }
-        Quaternionf    getOrientation() { return m_orientation; }
+        std::string        getName       ();
+        int                getParentIndex();
+        Eigen::Vector3f    getPosition   ();
+        Eigen::Quaternionf getOrientation();
 };

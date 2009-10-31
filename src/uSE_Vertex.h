@@ -4,7 +4,11 @@ class uSE_Vertex
 {
     public:
         uSE_Vertex();
-        uSE_Vertex( const float inS, const float inT, const int inStartWeightIndex, const int inCountWeight);
+        uSE_Vertex( const float inS,
+                    const float inT,
+                    const int   inStartWeightIndex,
+                    const int   inCountWeight);
+
         virtual ~uSE_Vertex();
 
     private://members
@@ -15,9 +19,9 @@ class uSE_Vertex
         int   m_countweight;
 
     public://methods
-        float getSCoord() { return m_s; }
-        float getTCoord() { return m_t; }
+        float getSCoord();
+        float getTCoord();
 
-        int   getStartWeightIndex() { return m_startweight_index; }
-        int   getCountWeight() { return m_countweight; }
+        int   getStartWeightIndex();
+        int   getCountWeight();
 };

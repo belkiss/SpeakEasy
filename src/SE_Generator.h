@@ -27,19 +27,19 @@ class SE_Generator
 
     private: //members
         // ground
-        unsigned int m_VBOGroundVerticesIndex;
-        unsigned int m_VBOGroundIndicesIndex;
+        unsigned int         m_VBOGroundVerticesIndex;
+        unsigned int         m_VBOGroundIndicesIndex;
 
-        unsigned int m_groundSideElementsNb;
-        unsigned int m_groundSideSize;
-        unsigned int m_groundIndicesNb;
+        unsigned int         m_groundSideElementsNb;
+        unsigned int         m_groundSideSize;
+        unsigned int         m_groundIndicesNb;
 
         std::vector<GLfloat> m_ground_vertices;
         std::vector<GLuint>  m_ground_indices;
 
         // buildings
-        unsigned int m_VBOBuildingsVerticesIndex;
-        unsigned int m_VBOBuildingsIndicesIndex;
+        unsigned int         m_VBOBuildingsVerticesIndex;
+        unsigned int         m_VBOBuildingsIndicesIndex;
 
         std::vector<GLfloat> m_buildings_vertices;
         std::vector<GLuint>  m_buildings_indices;
