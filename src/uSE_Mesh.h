@@ -5,7 +5,6 @@
 #include <GL/gl.h>
 #include <vector>
 #include "uSE_Triangle.h"
-#include "uSE_GLVector.h"
 #include <string>
 #include "uSE_Vertex.h"
 #include "uSE_Weight.h"

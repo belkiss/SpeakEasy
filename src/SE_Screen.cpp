@@ -202,7 +202,7 @@ void SE_Screen::paintGL()
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glTranslatef(m_character_position.getX(),m_character_position.getY(),m_character_position.getZ());
+    glTranslatef(m_character_position.x(),m_character_position.y(),m_character_position.z());
     glMultMatrixf(cam_rot_m4.data());
     glPushMatrix();
 
@@ -216,7 +216,7 @@ void SE_Screen::paintGL()
     view_rot_m4.minor(3,3) = m_view_quaternion.toRotationMatrix();
 
     glMultMatrixf(view_rot_m4.data());
-    glTranslatef(m_camera_position.getX(),m_camera_position.getY(),m_camera_position.getZ());
+    glTranslatef(m_camera_position.x(),m_camera_position.y(),m_camera_position.z());
     draw();
 }
 
@@ -414,32 +414,32 @@ void SE_Screen::process_keyboard()
                     break;
                 case sf::Key::Z :
                     {
-                        m_camera_position = uSE_GLVector(m_camera_position.getX()+dir_vec.z()*m_speed * m_elapsed, m_camera_position.getY()+dir_vec.x()*m_speed * m_elapsed, m_camera_position.getZ());
+                        m_camera_position = Eigen::Vector3f(m_camera_position.x()+dir_vec.z()*m_speed * m_elapsed, m_camera_position.y()+dir_vec.x()*m_speed * m_elapsed, m_camera_position.z());
                     }
                     break;
                 case sf::Key::S :
                     {
-                        m_camera_position = uSE_GLVector(m_camera_position.getX()-dir_vec.z()*m_speed * m_elapsed, m_camera_position.getY()-dir_vec.x()*m_speed * m_elapsed, m_camera_position.getZ());
+                        m_camera_position = Eigen::Vector3f(m_camera_position.x()-dir_vec.z()*m_speed * m_elapsed, m_camera_position.y()-dir_vec.x()*m_speed * m_elapsed, m_camera_position.z());
                     }
                     break;
                 case sf::Key::Q :
                     {
-                        m_camera_position = uSE_GLVector(m_camera_position.getX()-right_vec.z()*m_speed * m_elapsed, m_camera_position.getY()-right_vec.x()*m_speed * m_elapsed, m_camera_position.getZ());
+                        m_camera_position = Eigen::Vector3f(m_camera_position.x()-right_vec.z()*m_speed * m_elapsed, m_camera_position.y()-right_vec.x()*m_speed * m_elapsed, m_camera_position.z());
                     }
                     break;
                 case sf::Key::D :
                     {
-                        m_camera_position = uSE_GLVector(m_camera_position.getX()+right_vec.z()*m_speed * m_elapsed, m_camera_position.getY()+right_vec.x()*m_speed * m_elapsed, m_camera_position.getZ());
+                        m_camera_position = Eigen::Vector3f(m_camera_position.x()+right_vec.z()*m_speed * m_elapsed, m_camera_position.y()+right_vec.x()*m_speed * m_elapsed, m_camera_position.z());
                     }
                     break;
                 case sf::Key::LControl :
                     {
-                        m_camera_position = uSE_GLVector(m_camera_position.getX(), m_camera_position.getY(), m_camera_position.getZ() + m_speed * m_elapsed);
+                        m_camera_position = Eigen::Vector3f(m_camera_position.x(), m_camera_position.y(), m_camera_position.z() + m_speed * m_elapsed);
                     }
                     break;
                 case sf::Key::Space :
                     {
-                        m_camera_position = uSE_GLVector(m_camera_position.getX(), m_camera_position.getY(), m_camera_position.getZ() - m_speed * m_elapsed);
+                        m_camera_position = Eigen::Vector3f(m_camera_position.x(), m_camera_position.y(), m_camera_position.z() - m_speed * m_elapsed);
                     }
                     break;
                 default :

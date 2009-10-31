@@ -1,18 +1,22 @@
 #pragma once
-#include "uSE_GLVector.h"
+#include <Eigen/Core>
 
 class uSE_BoundBox
 {
     public:
         uSE_BoundBox();
-        uSE_BoundBox( const uSE_GLVector & inMin, const uSE_GLVector & inMax );
+        uSE_BoundBox( const Eigen::Vector3f& inMin,
+                      const Eigen::Vector3f& inMax );
+
         virtual ~uSE_BoundBox();
 
+        EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+
     private://members
-        uSE_GLVector m_min;
-        uSE_GLVector m_max;
+        Eigen::Vector3f m_min;
+        Eigen::Vector3f m_max;
 
     public://methods
-        uSE_GLVector getMin();
-        uSE_GLVector getMax();
+        Eigen::Vector3f getMin();
+        Eigen::Vector3f getMax();
 };

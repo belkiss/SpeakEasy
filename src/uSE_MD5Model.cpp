@@ -332,8 +332,8 @@ void uSE_MD5Model::parsemd5anim( const std::string& inFilename )
                 md5anim_file >>bracket>>tmp_min_x>>tmp_min_y>>tmp_min_z>>bracket
                              >>bracket>>tmp_max_x>>tmp_max_y>>tmp_max_z>>bracket;
 
-                uSE_GLVector tmp_min(tmp_min_x, tmp_min_y, tmp_min_z);
-                uSE_GLVector tmp_max(tmp_max_x, tmp_max_y, tmp_max_z);
+                Eigen::Vector3f tmp_min(tmp_min_x, tmp_min_y, tmp_min_z);
+                Eigen::Vector3f tmp_max(tmp_max_x, tmp_max_y, tmp_max_z);
 
                 uSE_BoundBox current(tmp_min, tmp_max);
                 curr_animation.addBoundBox(current);

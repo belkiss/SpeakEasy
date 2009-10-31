@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-#include "uSE_GLVector.h"
 
 #include <Eigen/Geometry>
 

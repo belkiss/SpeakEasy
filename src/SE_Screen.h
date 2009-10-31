@@ -18,6 +18,8 @@ class SE_Screen
         SE_Screen();
         virtual ~SE_Screen();
 
+        EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+
         void initializeGL();
         void resizeGL    (int width, int height);
         void paintGL     ();
@@ -35,12 +37,12 @@ class SE_Screen
         float              m_speed;
         float              m_rotation_speed;
 
-        uSE_GLVector       m_camera_position;
+        Eigen::Vector3f    m_camera_position;
 
         Eigen::Quaternionf m_camera_rotation;
         Eigen::Quaternionf m_view_quaternion;
 
-        uSE_GLVector       m_character_position;
+        Eigen::Vector3f    m_character_position;
         Eigen::Quaternionf m_character_rotation;
 
         SE_Generator       m_generator;

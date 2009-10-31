@@ -12,7 +12,6 @@ SET(SpeakEasy_src
     uSE_Weight.cpp
     uSE_Vertex.cpp
     uSE_BoundBox.cpp
-    uSE_GLVector.cpp
     misc.cpp
     main.cpp
 )

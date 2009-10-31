@@ -1,5 +1,4 @@
 #pragma once
-#include "uSE_GLVector.h"
 #include <Eigen/Core>
 
 class uSE_Weight
@@ -9,7 +8,10 @@ class uSE_Weight
         uSE_Weight( const int&             inDependingJoint,
                     const float&           inBiasFactor,
                     const Eigen::Vector3f& inPosition );
+
         virtual ~uSE_Weight();
+
+        EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
     private: //members
         int             m_depending_joint;
