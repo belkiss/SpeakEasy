@@ -1,4 +1,5 @@
 #ifdef _WIN32
+#define NOMINMAX
 #include "GLee.h"
 #endif
 
@@ -10,7 +11,6 @@
 #include <sstream>
 #include "config.h"
 #include <GL/glu.h>
-#include <glibmm.h>
 
 #include "misc.h"
 
@@ -86,22 +86,22 @@ void SE_Screen::initializeGL()
 
     ////////////////////////////////////////////////////////////////////////////
     // Load vertex shader
-    Glib::ustring vertexShaderSource;
-    se_misc::loadFileToString(Glib::ustring::compose("%1/%2",SHADERS_DIR,"vs_simple.glsl"),
+    std::string vertexShaderSource;
+	se_misc::loadFileToString(std::string(SHADERS_DIR) + std::string("/vs_simple.glsl"),
                               vertexShaderSource);
     ////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////////////////////////////////////////////////
     // Load geometry shader
-    Glib::ustring geometryShaderSource;
-    se_misc::loadFileToString(Glib::ustring::compose("%1/%2",SHADERS_DIR,"gs_simple.glsl"),
+    std::string geometryShaderSource;
+	se_misc::loadFileToString(std::string(SHADERS_DIR) + std::string("/gs_simple.glsl"),
                               geometryShaderSource);
     ////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////////////////////////////////////////////////
     // Load pixel shader
-    Glib::ustring pixelShaderSource;
-    se_misc::loadFileToString(Glib::ustring::compose("%1/%2",SHADERS_DIR,"ps_simple.glsl"),
+    std::string pixelShaderSource;
+	se_misc::loadFileToString(std::string(SHADERS_DIR) + std::string("/ps_simple.glsl"),
                               pixelShaderSource);
     ////////////////////////////////////////////////////////////////////////////
 

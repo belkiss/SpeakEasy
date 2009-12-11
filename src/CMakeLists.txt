@@ -1,5 +1,11 @@
 INCLUDE_DIRECTORIES($(SpeakEasy_SOURCE_DIR)/src)
 
+IF(WIN32)
+    SET(GLEE_src
+        GLee.c
+    )
+ENDIF(WIN32)
+
 SET(SpeakEasy_src
     SE_Generator.cpp
     SE_Screen.cpp
@@ -13,7 +19,14 @@ SET(SpeakEasy_src
     uSE_Vertex.cpp
     uSE_BoundBox.cpp
     misc.cpp
+    ${GLEE_src}
     main.cpp
+)
+
+# executable declaration
+ADD_EXECUTABLE(
+    speakeasy
+    ${SpeakEasy_src}
 )
 
 IF(UNIX)
@@ -81,13 +94,6 @@ CONFIGURE_FILE(
 INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR}
                     ${SFML_INCLUDE_DIR}
                     ${EIGEN2_INCLUDE_DIR}
-                    ${GLIBMM_INCLUDE_DIRS}
-)
-
-# executable declaration
-ADD_EXECUTABLE(
-    speakeasy
-    ${SpeakEasy_src}
 )
 
 # linker setup
@@ -96,7 +102,6 @@ TARGET_LINK_LIBRARIES(
     ${OPENGL_LIBRARIES}
     ${OPENGL_glu_LIBRARY}
     ${SFML_LIBRARY}
-    ${GLIBMM_LIBRARIES}
 )
 
 INSTALL(TARGETS speakeasy DESTINATION "bin")

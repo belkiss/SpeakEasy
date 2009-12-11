@@ -98,22 +98,22 @@ void SE_Generator::generateBuildings()
                 // ground
                 m_buildings_vertices.push_back(m_ground_vertices.at(((i         * (m_groundSideElementsNb + 1)) + j)    *3 + 0));
                 m_buildings_vertices.push_back(m_ground_vertices.at(((i         * (m_groundSideElementsNb + 1)) + j)    *3 + 1));
-                m_buildings_vertices.push_back(0);
+                m_buildings_vertices.push_back(0.f);
 
                 m_buildings_vertices.push_back(m_ground_vertices.at(((i         * (m_groundSideElementsNb + 1)) + j + 1)*3 + 0));
                 m_buildings_vertices.push_back(m_ground_vertices.at(((i         * (m_groundSideElementsNb + 1)) + j + 1)*3 + 1));
-                m_buildings_vertices.push_back(0);
+                m_buildings_vertices.push_back(0.f);
 
                 m_buildings_vertices.push_back(m_ground_vertices.at(((( i + 1 ) * (m_groundSideElementsNb + 1)) + j + 1)*3 + 0));
                 m_buildings_vertices.push_back(m_ground_vertices.at(((( i + 1 ) * (m_groundSideElementsNb + 1)) + j + 1)*3 + 1));
-                m_buildings_vertices.push_back(0);
+                m_buildings_vertices.push_back(0.f);
 
                 m_buildings_vertices.push_back(m_ground_vertices.at(((( i + 1 ) * (m_groundSideElementsNb + 1)) + j)    *3 + 0));
                 m_buildings_vertices.push_back(m_ground_vertices.at(((( i + 1 ) * (m_groundSideElementsNb + 1)) + j)    *3 + 1));
-                m_buildings_vertices.push_back(0);
+                m_buildings_vertices.push_back(0.f);
 
                 // roof
-                int height = sf::Randomizer::Random(20, 60);
+                float height = (float)sf::Randomizer::Random(20, 60);
                 m_buildings_vertices.push_back(m_ground_vertices.at(((i         * (m_groundSideElementsNb + 1)) + j)    *3 + 0));
                 m_buildings_vertices.push_back(m_ground_vertices.at(((i         * (m_groundSideElementsNb + 1)) + j)    *3 + 1));
                 m_buildings_vertices.push_back(height);

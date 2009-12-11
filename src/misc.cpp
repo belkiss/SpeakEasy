@@ -18,8 +18,8 @@ float se_misc::toRad( const float inDeg )
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-void se_misc::loadFileToString( const Glib::ustring & inFileName,
-                                      Glib::ustring & outFileSource)
+void se_misc::loadFileToString( const std::string & inFileName,
+                                      std::string & outFileSource)
 {
     ////////////////////////////////////////////////////////////////////////////
     std::ifstream fileStream(inFileName.c_str(), std::ios::binary);

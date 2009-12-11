@@ -1,4 +1,8 @@
 #pragma once
+#ifdef _WIN32
+#define NOMINMAX
+#endif
+
 // #define EIGEN_USE_NEW_STDVECTOR
 #include <Eigen/StdVector>
 #include "uSE_Mesh.h"

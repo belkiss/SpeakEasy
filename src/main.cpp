@@ -1,6 +1,8 @@
 #ifdef _WIN32
+#define NOMINMAX
 #include <windows.h>
 #endif
+
 #include <iostream>
 #include "SE_Screen.h"
 #include <SFML/Window.hpp>

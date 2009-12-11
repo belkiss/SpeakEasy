@@ -9,6 +9,14 @@
 # Copyright (c) 2008, 2009 Gael Guennebaud, <g.gael@free.fr>
 # Redistribution and use is allowed according to the terms of the BSD license.
 
+IF(WIN32)
+FIND_PATH(EIGEN2_INCLUDE_DIR Eigen
+	C:/Program\ Files/Microsoft\ Visual\ Studio\ 10.0/VC/include/eigen2
+	DOC "Directory where the eigen headers are located"
+	)
+ENDIF(WIN32)
+
+IF(UNIX)
 if(NOT EIGEN2_MIN_VERSION)
   if(NOT Eigen2_FIND_VERSION_MAJOR)
     set(Eigen2_FIND_VERSION_MAJOR 2)
@@ -72,4 +80,4 @@ find_package_handle_standard_args(Eigen2 DEFAULT_MSG EIGEN2_INCLUDE_DIR EIGEN2_V
 mark_as_advanced(EIGEN2_INCLUDE_DIR)
 
 endif(EIGEN2_INCLUDE_DIR)
-
+ENDIF(UNIX)

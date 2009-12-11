@@ -9,12 +9,15 @@
 # module, but with modifications to recognize OS X frameworks and
 # additional Unix paths (FreeBSD, etc).
 
-# Uncomment here to port to windows
-#IF(WIN32)
-#    SET(SFML_LIBS sfml-system-d sfml-window-d)
-#     ADD_DEFINITIONS(-DSFML_DYNAMIC)
-#ENDIF(WIN32)
+IF(WIN32)
+    SET(SFML_LIBRARY
+        sfml-system-d
+        sfml-window-d
+        )
+    ADD_DEFINITIONS(-DSFML_DYNAMIC)
+ENDIF(WIN32)
 
+IF(UNIX)
 SET(SFML_COMPONENTS
     System
     Audio
@@ -82,3 +85,4 @@ ENDIF(SFML_SYSTEM_LIBRARY AND SFML_INCLUDE_DIR)
 
 INCLUDE(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(SFML DEFAULT_MSG SFML_INCLUDE_DIR)
+ENDIF(UNIX)
