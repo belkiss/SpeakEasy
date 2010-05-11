@@ -3,14 +3,21 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-uSE_Vertex::uSE_Vertex()
+uSE_Vertex::uSE_Vertex():
+    m_s(0),
+    m_t(0),
+    m_startweight_index(0),
+    m_countweight(0)
 {
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-uSE_Vertex::uSE_Vertex( const float inS, const float inT, const int inStartWeightIndex, const int inCountWeight):
+uSE_Vertex::uSE_Vertex( const float inS,
+                        const float inT,
+                        const int   inStartWeightIndex,
+                        const int   inCountWeight):
     m_s(inS),
     m_t(inT),
     m_startweight_index(inStartWeightIndex),

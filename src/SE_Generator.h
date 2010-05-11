@@ -7,6 +7,8 @@
 #include <vector>
 #include <GL/gl.h>
 
+#include "SE_Ground.h"
+
 class SE_Generator
 {
     public:
@@ -43,5 +45,7 @@ class SE_Generator
 
         std::vector<GLfloat> m_buildings_vertices;
         std::vector<GLuint>  m_buildings_indices;
+
+        SE_Ground           *m_pGeneratedGround;
 };
 

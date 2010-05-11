@@ -13,15 +13,18 @@
 SE_Generator::SE_Generator():
     m_VBOGroundVerticesIndex(0),
     m_VBOGroundIndicesIndex(0),
-    m_groundSideElementsNb(50),
-    m_groundSideSize(50),
+    m_groundSideElementsNb(1024),
+    m_groundSideSize(1000),
     m_groundIndicesNb(0),
     m_VBOBuildingsVerticesIndex(0),
-    m_VBOBuildingsIndicesIndex(0)
+    m_VBOBuildingsIndicesIndex(0),
+    m_pGeneratedGround(0)
 {
     // set the seed for the random number generator
     unsigned int seed = 10;
     sf::Randomizer::SetSeed(seed);
+
+    m_pGeneratedGround = new SE_Ground(10, rand() %5, rand() %5, rand() %5, rand() %5);
 }
 
 
@@ -29,6 +32,7 @@ SE_Generator::SE_Generator():
 ////////////////////////////////////////////////////////////////////////////////
 SE_Generator::~SE_Generator()
 {
+    delete m_pGeneratedGround; m_pGeneratedGround = 0;
 }
 
 
@@ -36,25 +40,33 @@ SE_Generator::~SE_Generator()
 ////////////////////////////////////////////////////////////////////////////////
 void SE_Generator::generateGround()
 {
-    float step = 10;//(float)m_groundSideSize / m_groundSideElementsNb;
+    float step = (float)m_groundSideSize / m_groundSideElementsNb;
 
     m_groundIndicesNb = m_groundSideElementsNb * m_groundSideElementsNb * 6;
 
     m_ground_vertices.reserve((m_groundSideElementsNb + 1) * (m_groundSideElementsNb + 1) * 3);
     m_ground_indices .reserve(m_groundIndicesNb);
 
+    std::vector<std::vector<float> > z = m_pGeneratedGround->get_z();
+
+    float max = 0.f;
+    float min = 0.f;
     for(unsigned int i = 0; i <= m_groundSideElementsNb; i++)
     {
         for(unsigned int j = 0; j <= m_groundSideElementsNb; j++)
         {
             m_ground_vertices.push_back( i*step );// x
             m_ground_vertices.push_back( j*step );// y
-            float tmp = sf::Randomizer::Random(-10.f, 2.f);
+
             // the test is here to create planes
-            m_ground_vertices.push_back( tmp > 0 ? tmp : 0 );// z
+            max = std::max(z[j][i], max);
+            min = std::min(z[j][i], min);
+
+            m_ground_vertices.push_back( std::max(0.f,z[j][i]) );// z
         }
     }
-
+    std::cout<<" Max height " << max << std::endl;
+    std::cout<<" min height " << min << std::endl;
     for(unsigned int i = 0; i < m_groundSideElementsNb; i++)
     {
         for(unsigned int j = 0; j < m_groundSideElementsNb; j++)
@@ -90,45 +102,59 @@ void SE_Generator::generateBuildings()
     {
         for(unsigned int j = 0; j < m_groundSideElementsNb; j+=2)
         {
-            if( m_ground_vertices.at(((i         * (m_groundSideElementsNb + 1)) + j)    *3 + 2) == 0 &&
-                m_ground_vertices.at(((i         * (m_groundSideElementsNb + 1)) + j + 1)*3 + 2) == 0 &&
-                m_ground_vertices.at(((( i + 1 ) * (m_groundSideElementsNb + 1)) + j + 1)*3 + 2) == 0 &&
-                m_ground_vertices.at(((( i + 1 ) * (m_groundSideElementsNb + 1)) + j)    *3 + 2) == 0)
+            GLfloat height_max = std::max(
+                                    std::max(m_ground_vertices.at(((i         * (m_groundSideElementsNb + 1)) + j)    *3 + 2),
+                                             m_ground_vertices.at(((i         * (m_groundSideElementsNb + 1)) + j + 1)*3 + 2)),
+                                    std::max(m_ground_vertices.at(((( i + 1 ) * (m_groundSideElementsNb + 1)) + j + 1)*3 + 2),
+                                             m_ground_vertices.at(((( i + 1 ) * (m_groundSideElementsNb + 1)) + j)    *3 + 2))
+                                             );
+
+            GLfloat height_min = std::min(
+                                    std::min(m_ground_vertices.at(((i         * (m_groundSideElementsNb + 1)) + j)    *3 + 2),
+                                             m_ground_vertices.at(((i         * (m_groundSideElementsNb + 1)) + j + 1)*3 + 2)),
+                                    std::min(m_ground_vertices.at(((( i + 1 ) * (m_groundSideElementsNb + 1)) + j + 1)*3 + 2),
+                                             m_ground_vertices.at(((( i + 1 ) * (m_groundSideElementsNb + 1)) + j)    *3 + 2))
+                                             );
+
+            GLfloat treshold = 0.02f;
+            float height = (float)sf::Randomizer::Random(1.f, 3.f);
+            if((height_max - height_min) <  treshold && height >= 2.3)
             {
+                height += (float)sf::Randomizer::Random(-1.f, 1.f);
+
                 // ground
                 m_buildings_vertices.push_back(m_ground_vertices.at(((i         * (m_groundSideElementsNb + 1)) + j)    *3 + 0));
                 m_buildings_vertices.push_back(m_ground_vertices.at(((i         * (m_groundSideElementsNb + 1)) + j)    *3 + 1));
-                m_buildings_vertices.push_back(0.f);
+                m_buildings_vertices.push_back(height_min);
 
                 m_buildings_vertices.push_back(m_ground_vertices.at(((i         * (m_groundSideElementsNb + 1)) + j + 1)*3 + 0));
                 m_buildings_vertices.push_back(m_ground_vertices.at(((i         * (m_groundSideElementsNb + 1)) + j + 1)*3 + 1));
-                m_buildings_vertices.push_back(0.f);
+                m_buildings_vertices.push_back(height_min);
 
                 m_buildings_vertices.push_back(m_ground_vertices.at(((( i + 1 ) * (m_groundSideElementsNb + 1)) + j + 1)*3 + 0));
                 m_buildings_vertices.push_back(m_ground_vertices.at(((( i + 1 ) * (m_groundSideElementsNb + 1)) + j + 1)*3 + 1));
-                m_buildings_vertices.push_back(0.f);
+                m_buildings_vertices.push_back(height_min);
 
                 m_buildings_vertices.push_back(m_ground_vertices.at(((( i + 1 ) * (m_groundSideElementsNb + 1)) + j)    *3 + 0));
                 m_buildings_vertices.push_back(m_ground_vertices.at(((( i + 1 ) * (m_groundSideElementsNb + 1)) + j)    *3 + 1));
-                m_buildings_vertices.push_back(0.f);
+                m_buildings_vertices.push_back(height_min);
 
                 // roof
-                float height = (float)sf::Randomizer::Random(20, 60);
                 m_buildings_vertices.push_back(m_ground_vertices.at(((i         * (m_groundSideElementsNb + 1)) + j)    *3 + 0));
                 m_buildings_vertices.push_back(m_ground_vertices.at(((i         * (m_groundSideElementsNb + 1)) + j)    *3 + 1));
-                m_buildings_vertices.push_back(height);
+                m_buildings_vertices.push_back(height_min+height);
 
                 m_buildings_vertices.push_back(m_ground_vertices.at(((i         * (m_groundSideElementsNb + 1)) + j + 1)*3 + 0));
                 m_buildings_vertices.push_back(m_ground_vertices.at(((i         * (m_groundSideElementsNb + 1)) + j + 1)*3 + 1));
-                m_buildings_vertices.push_back(height);
+                m_buildings_vertices.push_back(height_min+height);
 
                 m_buildings_vertices.push_back(m_ground_vertices.at(((( i + 1 ) * (m_groundSideElementsNb + 1)) + j + 1)*3 + 0));
                 m_buildings_vertices.push_back(m_ground_vertices.at(((( i + 1 ) * (m_groundSideElementsNb + 1)) + j + 1)*3 + 1));
-                m_buildings_vertices.push_back(height);
+                m_buildings_vertices.push_back(height_min+height);
 
                 m_buildings_vertices.push_back(m_ground_vertices.at(((( i + 1 ) * (m_groundSideElementsNb + 1)) + j)    *3 + 0));
                 m_buildings_vertices.push_back(m_ground_vertices.at(((( i + 1 ) * (m_groundSideElementsNb + 1)) + j)    *3 + 1));
-                m_buildings_vertices.push_back(height);
+                m_buildings_vertices.push_back(height_min+height);
 
                 unsigned int nb_previous_vertices = m_buildings_vertices.size() / 3;
                 m_buildings_indices.push_back(nb_previous_vertices + 0);
@@ -199,7 +225,7 @@ void SE_Generator::subdivideGround()
 {
     m_groundSideElementsNb++;
 
-    float step = 10;//(float)m_groundSideSize / m_groundSideElementsNb;
+    float step = (float)m_groundSideSize / m_groundSideElementsNb;
 
     std::vector<GLfloat> vl_vertices;
     std::vector<GLuint> vl_indices;

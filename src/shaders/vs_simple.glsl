@@ -23,16 +23,16 @@ void main(void)
     }
     else if(draw_what == 1) // ground
     {
-        outVertexColor_vs = vec4(inVertexPosition.z*100.f/255.f,
-                                 inVertexPosition.z*100.f/255.f,
-                                 inVertexPosition.z*100.f/255.f,
+        outVertexColor_vs = vec4(0,
+                                 inVertexPosition.z/28.f,
+                                 0,
                                  1.0);
     }
     else // buildings
     {
-        outVertexColor_vs = vec4(inVertexPosition.z/20.f*85.f/255.f,
-                                 0,
-                                 0,
+        outVertexColor_vs = vec4(inVertexPosition.z/16.f,
+                                 inVertexPosition.z/16.f,
+                                 inVertexPosition.z/16.f,
                                  1);
     }
 }

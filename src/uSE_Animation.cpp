@@ -3,7 +3,11 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-uSE_Animation::uSE_Animation()
+uSE_Animation::uSE_Animation():
+    m_animation_name(""),
+    m_nb_frames(0),
+    m_framerate_fps(0),
+    m_nb_animated_components(0)
 {
 }
 
@@ -11,7 +15,10 @@ uSE_Animation::uSE_Animation()
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 uSE_Animation::uSE_Animation( const std::string& inAnimationName ):
-    m_animation_name(inAnimationName)
+    m_animation_name(inAnimationName),
+    m_nb_frames(0),
+    m_framerate_fps(0),
+    m_nb_animated_components(0)
 {
 }
 

@@ -7,6 +7,7 @@ IF(WIN32)
 ENDIF(WIN32)
 
 SET(SpeakEasy_src
+    SE_Ground.cpp
     SE_Generator.cpp
     SE_Screen.cpp
     uSE_MD5Model.cpp

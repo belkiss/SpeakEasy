@@ -24,7 +24,7 @@ SE_Screen::SE_Screen():
     m_anim_elapsed(0.f),
     m_speed(10.f),
     m_rotation_speed(5),
-    m_camera_position(-5,-1,0),// relative to world position
+    m_camera_position(-5,-1,-30),// relative to world position
     m_character_position(0,-0.2,-1),
     m_vbonbindices(0),
     m_vbovix(0),
@@ -38,9 +38,8 @@ SE_Screen::SE_Screen():
     m_frame_walk(0),
     m_frame_stand(0)
 {
-    m_camera_rotation.setIdentity();
-
     // TODO : put that in init
+    m_camera_rotation    = Eigen::Quaternionf(Eigen::AngleAxisf( se_misc::toRad(45),  Eigen::Vector3f(0,1,0)));
     m_view_quaternion    = Eigen::Quaternionf(Eigen::AngleAxisf( se_misc::toRad(-90), Eigen::Vector3f(1,0,0)));
     m_character_rotation = Eigen::Quaternionf(Eigen::AngleAxisf( se_misc::toRad(-90), Eigen::Vector3f(1,0,0)));
 }
@@ -87,21 +86,21 @@ void SE_Screen::initializeGL()
     ////////////////////////////////////////////////////////////////////////////
     // Load vertex shader
     std::string vertexShaderSource;
-	se_misc::loadFileToString(std::string(SHADERS_DIR) + std::string("/vs_simple.glsl"),
+    se_misc::loadFileToString(std::string(SHADERS_DIR) + std::string("/vs_simple.glsl"),
                               vertexShaderSource);
     ////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////////////////////////////////////////////////
     // Load geometry shader
     std::string geometryShaderSource;
-	se_misc::loadFileToString(std::string(SHADERS_DIR) + std::string("/gs_simple.glsl"),
+    se_misc::loadFileToString(std::string(SHADERS_DIR) + std::string("/gs_simple.glsl"),
                               geometryShaderSource);
     ////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////////////////////////////////////////////////
     // Load pixel shader
     std::string pixelShaderSource;
-	se_misc::loadFileToString(std::string(SHADERS_DIR) + std::string("/ps_simple.glsl"),
+    se_misc::loadFileToString(std::string(SHADERS_DIR) + std::string("/ps_simple.glsl"),
                               pixelShaderSource);
     ////////////////////////////////////////////////////////////////////////////
 
@@ -176,7 +175,7 @@ void SE_Screen::resizeGL(int inWidth, int inHeight)
         gluPerspective( 45.0f, (GLfloat) inWidth / inHeight, 0.001f, 10000.f);
 
     glMatrixMode(GL_MODELVIEW);
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // GL_FILL to fully paint the triangles, GL_LINE to draw only borders
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // GL_FILL to fully paint the triangles, GL_LINE to draw only borders
         glLoadIdentity();
 }
 
