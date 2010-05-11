@@ -25,12 +25,12 @@ class SE_Ground
         void initialize(float _x1y1, float _x2y1, float _x1y2, float _x2y2);
         void computeheights(unsigned int depth, int _x1, int _y1, int _x2, int _y2, float _attenuation);
 
-        std::vector< std::vector<float> > get_z(){return z;}
+        std::vector< std::vector<float> > get_z(){return m_z;}
 
     private:
-        unsigned int p2;
-        unsigned int width;
-        unsigned int height;
+        unsigned int m_p2;
+        unsigned int m_width;
+        unsigned int m_height;
 
-        std::vector< std::vector<float> > z;
+        std::vector< std::vector<float> > m_z;
 };
