@@ -6,9 +6,16 @@
 #include <iostream>
 #include "SE_Screen.h"
 #include <SFML/Window.hpp>
+#include <pantheios/pantheios.hpp>
+
+
+// Define the stock front-end process identity, so that it links when using fe.N, fe.simple, etc.
+PANTHEIOS_EXTERN_C const PAN_CHAR_T PANTHEIOS_FE_PROCESS_IDENTITY[] = PANTHEIOS_LITERAL_STRING(__FILE__);
 
 int main()
 {
+    pantheios::log_NOTICE("SpeakEasy main");
+
     sf::WindowSettings settings;
     settings.DepthBits         = 24; // set 24 bits Z-buffer
     settings.StencilBits       = 8;  // set 8 bits stencil-buffer

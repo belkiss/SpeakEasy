@@ -95,6 +95,8 @@ CONFIGURE_FILE(
 INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR}
                     ${SFML_INCLUDE_DIR}
                     ${EIGEN2_INCLUDE_DIR}
+                    ${STLSOFT_INCLUDE_DIR}
+                    ${PANTHEIOS_INCLUDE_DIR}
 )
 
 # linker setup
@@ -103,6 +105,7 @@ TARGET_LINK_LIBRARIES(
     ${OPENGL_LIBRARIES}
     ${OPENGL_glu_LIBRARY}
     ${SFML_LIBRARY}
+    ${PANTHEIOS_LIBRARY}
 )
 
 INSTALL(TARGETS speakeasy DESTINATION "bin")
