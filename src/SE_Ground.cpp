@@ -7,7 +7,7 @@ const float attenuation = 50;
 SE_Ground::SE_Ground( unsigned int _p2, float _x1y1, float _x2y1, float _x1y2, float _x2y2 ) :
     m_p2(_p2)
 {
-    m_height = m_width = pow(2.f,float( m_p2));
+    m_height = m_width = (unsigned int)pow(2.f, float(m_p2));
     initialize(_x1y1, _x2y1, _x1y2, _x2y2);
     computeheights(m_p2, 0, 0, m_width, m_height, attenuation);
 }

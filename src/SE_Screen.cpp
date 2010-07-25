@@ -24,8 +24,8 @@ SE_Screen::SE_Screen():
     m_anim_elapsed(0.f),
     m_speed(10.f),
     m_rotation_speed(5),
-    m_camera_position(-5,-1,-30),// relative to world position
-    m_character_position(0,-0.2,-1),
+    m_camera_position(-5, -1, -30),// relative to world position
+    m_character_position(0, -0.2, -1),
     m_vbonbindices(0),
     m_vbovix(0),
     m_vboiix(0),
@@ -34,7 +34,7 @@ SE_Screen::SE_Screen():
     m_geometryShaderID(0),
     m_pixelShaderID(0),
     m_cursor_moved_by_us(true),
-    m_mouse_old_pos(320,240), // init with width/2 and height/2
+    m_mouse_old_pos(320, 240), // init with width/2 and height/2
     m_frame_walk(0),
     m_frame_stand(0)
 {
