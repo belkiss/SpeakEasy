@@ -1,4 +1,5 @@
 #ifdef _WIN32
+#define NOMINMAX
 #include "GLee.h"
 #endif
 #include "SE_Generator.h"
@@ -24,7 +25,11 @@ SE_Generator::SE_Generator():
     unsigned int seed = 10;
     sf::Randomizer::SetSeed(seed);
 
-    m_pGeneratedGround = new SE_Ground(10, rand() %5, rand() %5, rand() %5, rand() %5);
+    m_pGeneratedGround = new SE_Ground(10,
+                                       (unsigned int)(rand() %5),
+                                       (unsigned int)(rand() %5),
+                                       (unsigned int)(rand() %5),
+                                       (unsigned int)(rand() %5));
 }
 
 
