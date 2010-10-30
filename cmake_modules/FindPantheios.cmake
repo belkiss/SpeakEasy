@@ -35,15 +35,21 @@ IF(PANTHEIOS_INCLUDE_DIR)
     STRING(REGEX REPLACE ".*#define[ ]+PANTHEIOS_VER_MINOR[ ]+([0-9]+).*" "\\1" PANTHEIOS_VER_MINOR "${_pantheios_h_CONTENT}")
     STRING(REGEX REPLACE ".*#define[ ]+PANTHEIOS_VER_REVISION[ ]+([0-9]+).*" "\\1" PANTHEIOS_VER_REVISION "${_pantheios_h_CONTENT}")
 
-    # ugly hack to get the library directory
-    SET(PANTHEIOS_LIBRARY_DIR ${PANTHEIOS_INCLUDE_DIR}/../lib)
+    # set common places to find pantheios libs
+    SET(PANTHEIOS_LIBRARY_SEARCH_DIR
+        ${PANTHEIOS_INCLUDE_DIR}/../lib # first place to look
+        /usr/local/lib/pantheios
+        /usr/lib/pantheios
+        /usr/local/lib
+        /usr/lib
+       )
 
     # Look for the libraries.
-    FIND_LIBRARY(PANTHEIOS_CORE_LIBRARY     NAMES pantheios.1.core.gcc44.mt.debug        PATHS ${PANTHEIOS_LIBRARY_DIR})
-    FIND_LIBRARY(PANTHEIOS_UTIL_LIBRARY     NAMES pantheios.1.util.gcc44.mt.debug        PATHS ${PANTHEIOS_LIBRARY_DIR})
-    FIND_LIBRARY(PANTHEIOS_FE_LIBRARY       NAMES pantheios.1.fe.all.gcc44.mt.debug      PATHS ${PANTHEIOS_LIBRARY_DIR})
-    FIND_LIBRARY(PANTHEIOS_BE_FILE_LIBRARY  NAMES pantheios.1.be.fprintf.gcc44.mt.debug  PATHS ${PANTHEIOS_LIBRARY_DIR})
-    FIND_LIBRARY(PANTHEIOS_BEC_FILE_LIBRARY NAMES pantheios.1.bec.fprintf.gcc44.mt.debug PATHS ${PANTHEIOS_LIBRARY_DIR})
+    FIND_LIBRARY(PANTHEIOS_CORE_LIBRARY     NAMES pantheios.1.core.gcc44.mt.debug        PATHS ${PANTHEIOS_LIBRARY_SEARCH_DIR})
+    FIND_LIBRARY(PANTHEIOS_UTIL_LIBRARY     NAMES pantheios.1.util.gcc44.mt.debug        PATHS ${PANTHEIOS_LIBRARY_SEARCH_DIR})
+    FIND_LIBRARY(PANTHEIOS_FE_LIBRARY       NAMES pantheios.1.fe.all.gcc44.mt.debug      PATHS ${PANTHEIOS_LIBRARY_SEARCH_DIR})
+    FIND_LIBRARY(PANTHEIOS_BE_FILE_LIBRARY  NAMES pantheios.1.be.fprintf.gcc44.mt.debug  PATHS ${PANTHEIOS_LIBRARY_SEARCH_DIR})
+    FIND_LIBRARY(PANTHEIOS_BEC_FILE_LIBRARY NAMES pantheios.1.bec.fprintf.gcc44.mt.debug PATHS ${PANTHEIOS_LIBRARY_SEARCH_DIR})
 
     LIST(APPEND PANTHEIOS_LIBRARY ${PANTHEIOS_CORE_LIBRARY})
     LIST(APPEND PANTHEIOS_LIBRARY ${PANTHEIOS_UTIL_LIBRARY})
