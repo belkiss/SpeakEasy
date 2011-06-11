@@ -193,7 +193,7 @@ void SE_Screen::paintGL()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     Eigen::Matrix4f cam_rot_m4 = Eigen::Matrix4f::Identity();
-    cam_rot_m4.minor(3,3) = m_camera_rotation.toRotationMatrix();
+    cam_rot_m4.block<3,3>(0, 0) = m_camera_rotation.toRotationMatrix();
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -202,13 +202,13 @@ void SE_Screen::paintGL()
     glPushMatrix();
 
     Eigen::Matrix4f char_rot_m4 = Eigen::Matrix4f::Identity();
-    char_rot_m4.minor(3,3) = m_character_rotation.toRotationMatrix();
+    char_rot_m4.block<3,3>(0, 0) = m_character_rotation.toRotationMatrix();
     glMultMatrixf(char_rot_m4.data());
     draw_character();
     glPopMatrix();
 
     Eigen::Matrix4f view_rot_m4 = Eigen::Matrix4f::Identity();
-    view_rot_m4.minor(3,3) = m_view_quaternion.toRotationMatrix();
+    view_rot_m4.block<3,3>(0, 0) = m_view_quaternion.toRotationMatrix();
 
     glMultMatrixf(view_rot_m4.data());
     glTranslatef(m_camera_position.x(),m_camera_position.y(),m_camera_position.z());
