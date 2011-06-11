@@ -4,7 +4,7 @@
 #else
 #define GL_GLEXT_PROTOTYPES
 #endif
-#include <vector>
+
 #include <GL/gl.h>
 
 #include "SE_Ground.h"

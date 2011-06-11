@@ -1,6 +1,4 @@
 #pragma once
-//#include <glibmm.h>
-#include <string>
 
 #include <Eigen/Geometry>
 

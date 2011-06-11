@@ -1,6 +1,5 @@
 #pragma once
 
-#include <string>
 #include <Eigen/StdVector>
 #include "uSE_AnimJoint.h"
 #include "uSE_BoundBox.h"
