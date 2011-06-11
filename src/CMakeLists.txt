@@ -94,7 +94,7 @@ CONFIGURE_FILE(
 
 INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR}
                     ${SFML_INCLUDE_DIR}
-                    ${EIGEN2_INCLUDE_DIR}
+                    ${EIGEN3_INCLUDE_DIRS}
                     ${STLSOFT_INCLUDE_DIR}
                     ${PANTHEIOS_INCLUDE_DIR}
 )

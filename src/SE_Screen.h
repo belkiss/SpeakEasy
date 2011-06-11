@@ -3,9 +3,7 @@
 #define GL_GLEXT_PROTOTYPES
 #endif
 #include "uSE_MD5Model.h"
-#include <map>
 
-#include <Eigen/Geometry>
 #include "SE_Generator.h"
 #include <SFML/Window/Event.hpp>
 #include <SFML/System/Clock.hpp>
