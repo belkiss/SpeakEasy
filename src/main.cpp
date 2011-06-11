@@ -3,9 +3,7 @@
 #include <windows.h>
 #endif
 
-#include <iostream>
 #include "SE_Screen.h"
-#include <SFML/Window.hpp>
 #include <pantheios/pantheios.hpp>
 
 
@@ -16,13 +14,13 @@ int main()
 {
     pantheios::log_NOTICE("SpeakEasy main");
 
-    sf::WindowSettings settings;
+    sf::ContextSettings settings;
     settings.DepthBits         = 24; // set 24 bits Z-buffer
     settings.StencilBits       = 8;  // set 8 bits stencil-buffer
 //     settings.AntialiasingLevel = 2;  // set 2x antialiasing
 
     sf::Window app(sf::VideoMode(640, 480, 32), "SpeakEasy, v0.2.1", sf::Style::Resize | sf::Style::Close, settings);
-    app.SetFramerateLimit(60);
+    app.SetFramerateLimit(10);
     app.ShowMouseCursor(false);
 
     SE_Screen vl_screen;
@@ -33,7 +31,7 @@ int main()
     {
         // Process events
         sf::Event event;
-        while (app.GetEvent(event))
+        while (app.PollEvent(event))
         {
             // Close window : exit
             if (event.Type == sf::Event::Closed)

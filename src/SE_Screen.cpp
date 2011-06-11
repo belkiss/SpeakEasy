@@ -1,6 +1,5 @@
 #ifdef _WIN32
 #define NOMINMAX
-#include "GLee.h"
 #endif
 
 #include "SE_Screen.h"
