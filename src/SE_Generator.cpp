@@ -1,13 +1,10 @@
 #ifdef _WIN32
 #define NOMINMAX
-#include "GLee.h"
 #endif
-#include "SE_Generator.h"
 
+#include "SE_Generator.h"
 #include <iostream>
 #include <cstdlib>
-#include <SFML/System/Randomizer.hpp>
-
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -23,7 +20,6 @@ SE_Generator::SE_Generator():
 {
     // set the seed for the random number generator
     unsigned int seed = 10;
-    sf::Randomizer::SetSeed(seed);
 
     m_pGeneratedGround = new SE_Ground(10,
                                        (unsigned int)(rand() %5),
@@ -122,10 +118,10 @@ void SE_Generator::generateBuildings()
                                              );
 
             GLfloat treshold = 0.02f;
-            float height = (float)sf::Randomizer::Random(1.f, 3.f);
+            float height = (float)3;
             if((height_max - height_min) <  treshold && height >= 2.3)
             {
-                height += (float)sf::Randomizer::Random(-1.f, 1.f);
+                height += (float)2;
 
                 // ground
                 m_buildings_vertices.push_back(m_ground_vertices.at(((i         * (m_groundSideElementsNb + 1)) + j)    *3 + 0));
@@ -246,7 +242,7 @@ void SE_Generator::subdivideGround()
         {
             vl_vertices.push_back( i*step );// x
             vl_vertices.push_back( j*step );// y
-            float tmp = sf::Randomizer::Random(-10.f, 2.f);
+            float tmp = rand() % 10;
             // the test is here to create planes
             vl_vertices.push_back( tmp > 0 ? tmp : 0 );// z
         }
