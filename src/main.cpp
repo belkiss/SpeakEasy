@@ -13,7 +13,7 @@ int main()
 //     settings.AntialiasingLevel = 2;  // set 2x antialiasing
 
     sf::Window app(sf::VideoMode(640, 480, 32), "SpeakEasy, v0.2.1", sf::Style::Resize | sf::Style::Close, settings);
-    app.SetFramerateLimit(10);
+    app.SetFramerateLimit(60);
     app.ShowMouseCursor(false);
 
     SE_Screen vl_screen;
