@@ -4,10 +4,6 @@
 #endif
 
 #include "SE_Screen.h"
-#include <iostream>
-#include <cassert>
-#include <vector>
-#include <fstream>
 #include <sstream>
 #include "config.h"
 #include <GL/glu.h>

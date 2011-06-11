@@ -3,10 +3,10 @@
 #define NOMINMAX
 #include <windows.h>
 #endif
+
 #include <GL/gl.h>
 #include <vector>
 #include "uSE_Triangle.h"
-#include <string>
 #include "uSE_Vertex.h"
 #include "uSE_Weight.h"
 
