@@ -17,40 +17,27 @@
  */
 
 /**
- * \mainpage SpeakEasy documentation
- * \file    main.cpp
- * \brief   SpeakEasy main
+ * \file    SE_CGUIInterface.h
+ * \brief   Abstract class to wrap GUI libraries
  *
  * \author  Lambert CLARA <lambert.clara@yahoo.fr>
- * \date    Created : 2011-8-19 21:14:47
- * \date    Updated : 2011-8-19 21:14:47
+ * \date    Created : 2011-8-23 21:31:12
+ * \date    Updated : 2011-8-23 21:31:12
  */
 
-#include "SE_CGUIManager.h"
-#include "SE_CLogManager.h"
-#include "SE_CMemoryManager.h"
+#ifndef SE_CGUIINTERFACE_H
+#define SE_CGUIINTERFACE_H
 
-SE_CLogManager      g_LogManager;
-SE_CMemoryManager   g_MemoryManager;
-SE_CGUIManager      g_GUIManager;
-
-int main()
+class SE_CGUIInterface
 {
-    // Start up engine systems in the correct order
-    g_LogManager.startUp(ELL_DEBUG);
-    g_MemoryManager.startUp();
-    g_GUIManager.startUp();
+    public:
+        SE_CGUIInterface();
+        virtual ~SE_CGUIInterface();
 
-    unsigned int i = 10000;
-    while(--i)
-    {
-        g_GUIManager.doWork();
-    }
+        virtual bool init();
+        virtual bool openWindow();
+        virtual void swapBuffers() = 0;
+        virtual bool close();
+};
 
-    // Shut everything down, in reverse order
-    g_GUIManager.shutDown();
-    g_MemoryManager.shutDown();
-    g_LogManager.shutDown();
-
-    return 0;
-}
+#endif // SE_CGUIINTERFACE_H

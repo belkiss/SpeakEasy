@@ -1,26 +1,11 @@
-INCLUDE_DIRECTORIES($(SpeakEasy_SOURCE_DIR)/src)
-
-IF(WIN32)
-    SET(GLEE_src
-        GLee.c
-    )
-ENDIF(WIN32)
 
 SET(SpeakEasy_src
-    SE_Ground.cpp
-    SE_Generator.cpp
-    SE_Screen.cpp
-    uSE_MD5Model.cpp
-    uSE_Mesh.cpp
-    uSE_Animation.cpp
-    uSE_Joint.cpp
-    uSE_AnimJoint.cpp
-    uSE_Triangle.cpp
-    uSE_Weight.cpp
-    uSE_Vertex.cpp
-    uSE_BoundBox.cpp
-    misc.cpp
-    ${GLEE_src}
+    SE_CGUIGLFW.cpp
+    SE_CGUIManager.cpp
+    SE_CGUIInterface.cpp
+    SE_CLogManager.cpp
+    SE_CMemoryManager.cpp
+    SE_CStackAllocator.cpp
     main.cpp
 )
 
@@ -30,82 +15,10 @@ ADD_EXECUTABLE(
     ${SpeakEasy_src}
 )
 
-IF(UNIX)
-    # create symlink for shaders directory
-    EXECUTE_PROCESS(COMMAND
-                    ${CMAKE_COMMAND} -E create_symlink
-                    ${CMAKE_SOURCE_DIR}/src/shaders
-                    ${CMAKE_BINARY_DIR}/shaders
-    )
-    # create symlink for data/md5 directory
-    EXECUTE_PROCESS(COMMAND
-                    ${CMAKE_COMMAND} -E create_symlink
-                    ${CMAKE_SOURCE_DIR}/data
-                    ${CMAKE_BINARY_DIR}/data
-    )
-ENDIF(UNIX)
-
-IF(WIN32)
-    # copy shaders directory
-    EXECUTE_PROCESS(
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_SOURCE_DIR}/src/shaders
-        ${CMAKE_BINARY_DIR}/shaders
-    )
-    # copy data/md5 directory
-    EXECUTE_PROCESS(
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_SOURCE_DIR}/data
-        ${CMAKE_BINARY_DIR}/data
-    )
-
-    # Use the highest warning level for visual studio.
-    SET(CMAKE_CXX_WARNING_LEVEL 4)
-    IF(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
-        STRING(REGEX REPLACE "/W[0-4]" "/W4"
-               CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-    ELSE(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
-        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
-    ENDIF(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
-    SET_TARGET_PROPERTIES(speakeasy PROPERTIES
-                          LINK_FLAGS_DEBUG                   "/SUBSYSTEM:CONSOLE"
-                          COMPILE_DEFINITIONS_DEBUG          "_CONSOLE"
-                          LINK_FLAGS_RELWITHDEBINFO          "/SUBSYSTEM:CONSOLE"
-                          COMPILE_DEFINITIONS_RELWITHDEBINFO "_CONSOLE"
-                          LINK_FLAGS_RELEASE                 "/SUBSYSTEM:WINDOWS"
-                          LINK_FLAGS_MINSIZEREL              "/SUBSYSTEM:WINDOWS"
-    )
-ENDIF(WIN32)
-
-IF (NOT SHADERS_DIR)
-    SET(SHADERS_DIR ${CMAKE_BINARY_DIR}/shaders)
-ENDIF(NOT SHADERS_DIR)
-MESSAGE(STATUS "Shaders located in ${SHADERS_DIR}")
-
-IF (NOT MD5_MODELS_DIR)
-    SET(MD5_MODELS_DIR ${CMAKE_BINARY_DIR}/data/md5)
-ENDIF(NOT MD5_MODELS_DIR)
-MESSAGE(STATUS "MD5 files located in ${MD5_MODELS_DIR}")
-
-CONFIGURE_FILE(
-    ${CMAKE_SOURCE_DIR}/config.h.cmake
-    ${CMAKE_BINARY_DIR}/config.h
-)
-
-INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR}
-                    ${SFML_INCLUDE_DIR}
-                    ${EIGEN3_INCLUDE_DIRS}
-                    ${STLSOFT_INCLUDE_DIR}
-                    ${PANTHEIOS_INCLUDE_DIR}
-)
-
 # linker setup
 TARGET_LINK_LIBRARIES(
     speakeasy
-    ${OPENGL_LIBRARIES}
-    ${OPENGL_glu_LIBRARY}
-    ${SFML_LIBRARY}
-    ${PANTHEIOS_LIBRARY}
+    ${GLFW_LIBRARY}
 )
 
 INSTALL(TARGETS speakeasy DESTINATION "bin")

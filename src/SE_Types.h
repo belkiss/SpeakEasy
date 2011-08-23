@@ -17,40 +17,62 @@
  */
 
 /**
- * \mainpage SpeakEasy documentation
- * \file    main.cpp
- * \brief   SpeakEasy main
+ * \file    SE_Types.h
+ * \brief   Declare base types
  *
  * \author  Lambert CLARA <lambert.clara@yahoo.fr>
- * \date    Created : 2011-8-19 21:14:47
- * \date    Updated : 2011-8-19 21:14:47
+ * \date    Created : 2011-8-19 21:26:12
+ * \date    Updated : 2011-8-19 21:26:12
  */
 
-#include "SE_CGUIManager.h"
-#include "SE_CLogManager.h"
-#include "SE_CMemoryManager.h"
+#ifndef SE_TYPES_H
+#define SE_TYPES_H
 
-SE_CLogManager      g_LogManager;
-SE_CMemoryManager   g_MemoryManager;
-SE_CGUIManager      g_GUIManager;
+#include <stdint.h>
 
-int main()
-{
-    // Start up engine systems in the correct order
-    g_LogManager.startUp(ELL_DEBUG);
-    g_MemoryManager.startUp();
-    g_GUIManager.startUp();
+/**
+ * @brief 32-bits IEEE-754 floating-point value
+ **/
+typedef float F32;
 
-    unsigned int i = 10000;
-    while(--i)
-    {
-        g_GUIManager.doWork();
-    }
+/**
+ * @brief unsigned 8-bits integer
+ **/
+typedef uint8_t U8;
 
-    // Shut everything down, in reverse order
-    g_GUIManager.shutDown();
-    g_MemoryManager.shutDown();
-    g_LogManager.shutDown();
+/**
+ * @brief signed 8-bits integer
+ **/
+typedef int8_t  I8;
 
-    return 0;
-}
+/**
+ * @brief unsigned 16-bits integer
+ **/
+typedef uint16_t U16;
+
+/**
+ * @brief signed 16-bits integer
+ **/
+typedef int16_t  I16;
+
+/**
+ * @brief unsigned 32-bits integer
+ **/
+typedef uint32_t U32;
+
+/**
+ * @brief signed 32-bits integer
+ **/
+typedef int32_t  I32;
+
+/**
+ * @brief unsigned 64-bits integer
+ **/
+typedef uint64_t U64;
+
+/**
+ * @brief signed 64-bits integer
+ **/
+typedef int64_t  I64;
+
+#endif  // SE_TYPES_H

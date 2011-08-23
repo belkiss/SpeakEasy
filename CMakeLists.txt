@@ -3,35 +3,70 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
 PROJECT(SpeakEasy)
 
+LIST(APPEND INFO_MESSAGE "Build SpeakEasy")
+
 # see full compilation lines
-SET(CMAKE_VERBOSE_MAKEFILE 0)
+# SET(CMAKE_VERBOSE_MAKEFILE 1)
 
 # add color on CMake output
 SET(CMAKE_COLOR_MAKEFILE ON)
 
-# set the destination of the executable, the CMAKE_BUILD_TYPE is set at launch of cmake executable
-# set(EXECUTABLE_OUTPUT_PATH build/${CMAKE_BUILD_TYPE})
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+# set the destination of the executable
+SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
 # tell cmake to check for custom modules
 SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules")
 
 SET(CMAKE_BUILD_TYPE Debug)
 
-FIND_PACKAGE(OpenGL    REQUIRED)
-FIND_PACKAGE(SFML      REQUIRED COMPONENTS System Window)
-FIND_PACKAGE(PkgConfig REQUIRED)
-FIND_PACKAGE(Stlsoft   REQUIRED)
-FIND_PACKAGE(Pantheios REQUIRED)
+# Build options
+OPTION(BUILD_TESTS "Build Tests" ON)
 
-pkg_check_modules(EIGEN3 REQUIRED eigen3)
+FIND_PACKAGE(GLFW REQUIRED)
+
+# add a target to generate API documentation with Doxygen
+FIND_PACKAGE(Doxygen) # OPTIONAL
+
+IF(DOXYGEN_FOUND)
+    LIST(APPEND INFO_MESSAGE " - Doxygen target")
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in
+                   ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
+    ADD_CUSTOM_TARGET(doc
+                      ${DOXYGEN_EXECUTABLE}
+                      ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+                      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+                      COMMENT "Generating API documentation with Doxygen" VERBATIM
+    )
+ENDIF()
 
 IF(WIN32)
     SET(CMAKE_CXX_WARNING_LEVEL 4)
-ENDIF(WIN32)
+ENDIF()
 
 IF(UNIX)
-	ADD_DEFINITIONS( -Wall -Wextra -D_GLIBCXX_PROFILE -D_GLIBCXX_PROFILE_MAX_WARN_COUNT=1000 )
-ENDIF(UNIX)
+    ADD_DEFINITIONS(-Wall
+                    -Wextra
+                    -W
+                    -Wshadow
+                    -Wunused-variable
+                    -Wunused-parameter
+                    -Wunused-function
+                    -Wunused
+                    -Wno-system-headers
+                    -Wno-deprecated
+                    -Woverloaded-virtual
+                    -Wwrite-strings
+                    -D_GLIBCXX_PROFILE -D_GLIBCXX_PROFILE_MAX_WARN_COUNT=1000)
+ENDIF()
 
 ADD_SUBDIRECTORY(src)
+
+# Tests
+IF(BUILD_TESTS)
+    LIST(APPEND INFO_MESSAGE " - Unit Tests")
+    ENABLE_TESTING()
+    ADD_SUBDIRECTORY(tests)
+ENDIF()
+
+MESSAGE(STATUS ${INFO_MESSAGE})
+

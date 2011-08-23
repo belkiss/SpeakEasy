@@ -17,40 +17,25 @@
  */
 
 /**
- * \mainpage SpeakEasy documentation
- * \file    main.cpp
- * \brief   SpeakEasy main
+ * \file    SE_CMemoryManager.h
+ * \brief   Memory manager
  *
  * \author  Lambert CLARA <lambert.clara@yahoo.fr>
- * \date    Created : 2011-8-19 21:14:47
- * \date    Updated : 2011-8-19 21:14:47
+ * \date    Created : 2011-8-22 01:21:00
+ * \date    Updated : 2011-8-22 01:21:00
  */
 
-#include "SE_CGUIManager.h"
-#include "SE_CLogManager.h"
-#include "SE_CMemoryManager.h"
+#ifndef SE_CMEMORYMANAGER_H
+#define SE_CMEMORYMANAGER_H
 
-SE_CLogManager      g_LogManager;
-SE_CMemoryManager   g_MemoryManager;
-SE_CGUIManager      g_GUIManager;
-
-int main()
+class SE_CMemoryManager
 {
-    // Start up engine systems in the correct order
-    g_LogManager.startUp(ELL_DEBUG);
-    g_MemoryManager.startUp();
-    g_GUIManager.startUp();
+    public:
+        SE_CMemoryManager();
+        virtual ~SE_CMemoryManager();
 
-    unsigned int i = 10000;
-    while(--i)
-    {
-        g_GUIManager.doWork();
-    }
+        void startUp();
+        void shutDown();
+};
 
-    // Shut everything down, in reverse order
-    g_GUIManager.shutDown();
-    g_MemoryManager.shutDown();
-    g_LogManager.shutDown();
-
-    return 0;
-}
+#endif // SE_CMEMORYMANAGER_H
