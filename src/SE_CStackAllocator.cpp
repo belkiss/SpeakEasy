@@ -22,7 +22,6 @@
  *
  * \author  Lambert CLARA <lambert.clara@yahoo.fr>
  * \date    Created : 2011-8-19 21:13:54
- * \date    Updated : 2011-8-19 21:13:54
  */
 
 

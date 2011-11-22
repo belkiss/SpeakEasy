@@ -22,7 +22,6 @@
  *
  * \author  Lambert CLARA <lambert.clara@yahoo.fr>
  * \date    Created : 2011-8-22 01:21:19
- * \date    Updated : 2011-8-22 01:21:19
  */
 
 #include "SE_CMemoryManager.h"

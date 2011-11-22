@@ -22,7 +22,6 @@
  *
  * \author  Lambert CLARA <lambert.clara@yahoo.fr>
  * \date    Created : 2011-8-19 21:10:43
- * \date    Updated : 2011-8-19 21:10:43
  */
 
 #ifndef SE_CSTACKALLOCATOR_H

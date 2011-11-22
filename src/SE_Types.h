@@ -22,7 +22,6 @@
  *
  * \author  Lambert CLARA <lambert.clara@yahoo.fr>
  * \date    Created : 2011-8-19 21:26:12
- * \date    Updated : 2011-8-19 21:26:12
  */
 
 #ifndef SE_TYPES_H

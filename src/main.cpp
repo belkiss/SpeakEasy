@@ -23,8 +23,9 @@
  *
  * \author  Lambert CLARA <lambert.clara@yahoo.fr>
  * \date    Created : 2011-8-19 21:14:47
- * \date    Updated : 2011-8-19 21:14:47
  */
+
+#include <cstdlib>
 
 #include "SE_CGUIManager.h"
 #include "SE_CLogManager.h"
@@ -52,5 +53,5 @@ int main()
     g_MemoryManager.shutDown();
     g_LogManager.shutDown();
 
-    return 0;
+    return EXIT_SUCCESS;
 }

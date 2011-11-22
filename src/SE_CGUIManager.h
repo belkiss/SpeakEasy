@@ -22,7 +22,6 @@
  *
  * \author  Lambert CLARA <lambert.clara@yahoo.fr>
  * \date    Created : 2011-8-23 21:20:16
- * \date    Updated : 2011-8-23 21:20:16
  */
 
 #ifndef SE_CGUIMANAGER_H

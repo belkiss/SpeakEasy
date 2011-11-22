@@ -22,7 +22,6 @@
  *
  * \author  Lambert CLARA <lambert.clara@yahoo.fr>
  * \date    Created : 2011-8-23 21:31:43
- * \date    Updated : 2011-8-23 21:31:43
  */
 
 #include "SE_CGUIInterface.h"

@@ -22,7 +22,6 @@
  *
  * \author  Lambert CLARA <lambert.clara@yahoo.fr>
  * \date    Created : 2011-8-21 22:52:05
- * \date    Updated : 2011-8-21 22:52:05
  */
 
 #ifndef SE_CLOGMANAGER_H

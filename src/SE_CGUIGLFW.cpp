@@ -22,7 +22,6 @@
  *
  * \author  Lambert CLARA <lambert.clara@yahoo.fr>
  * \date    Created : 2011-8-23 21:35:09
- * \date    Updated : 2011-8-23 21:35:09
  */
 
 #include "SE_CGUIGLFW.h"
