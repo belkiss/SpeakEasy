@@ -23,6 +23,17 @@ MACRO(DBG_MSG _MSG)
   MESSAGE(STATUS "${CMAKE_CURRENT_LIST_FILE}(${CMAKE_CURRENT_LIST_LINE}): ${_MSG}")
 ENDMACRO(DBG_MSG)
 
+IF(WIN32)
+    IF(MSVC10)
+        GET_FILENAME_COMPONENT(VS_DIR [HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\VisualStudio\\10.0\\Setup\\VS;ProductDir] REALPATH CACHE)
+    ELSEIF(MSVC90)
+        GET_FILENAME_COMPONENT(VS_DIR [HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\VisualStudio\\9.0\\Setup\\VS;ProductDir] REALPATH CACHE)
+    ELSEIF(MSVC80)
+        GET_FILENAME_COMPONENT(VS_DIR [HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\VisualStudio\\8.0\\Setup\\VS;ProductDir] REALPATH CACHE)
+    ENDIF()
+    MESSAGE(STATUS "Found MS in " ${VS_DIR})
+ENDIF()
+
 # find the GLFW include directory
 FIND_PATH(GLFW_INCLUDE_DIR  GL/glfw.h GL/glfw3.h
                             DOC "Path to GLFW header."
@@ -43,6 +54,7 @@ FIND_PATH(GLFW_INCLUDE_DIR  GL/glfw.h GL/glfw3.h
                             /opt/local/  # DarwinPorts
                             /opt/csw/    # Blastwave
                             /opt/
+                            ${VS_DIR}/VC/include
                             ${GLFWDIR}
                             $ENV{GLFWDIR}
 )
@@ -105,6 +117,7 @@ FIND_LIBRARY(GLFW_LIBRARY   NAMES glfw
                             /sw
                             $ENV{GLFWDIR}/support/msvc80/Debug
                             $ENV{GLFWDIR}/support/msvc80/Release
+                            ${VS_DIR}/VC/lib
                             ${GLFWDIR}
                             $ENV{GLFWDIR}
 )
