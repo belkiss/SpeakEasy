@@ -18,6 +18,8 @@ ADD_EXECUTABLE(
 # linker setup
 TARGET_LINK_LIBRARIES(
     speakeasy
+	${OPENGL_LIBRARIES}
+	${OPENGL_glu_LIBRARY}
     ${GLFW_LIBRARY}
 )
 

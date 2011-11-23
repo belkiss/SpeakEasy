@@ -24,7 +24,8 @@ SET(CMAKE_BUILD_TYPE Debug)
 OPTION(BUILD_TESTS "Build Tests"         ON)
 OPTION(BUILD_DOC   "Build Documentation" ON)
 
-FIND_PACKAGE(GLFW REQUIRED)
+FIND_PACKAGE(OpenGL REQUIRED)
+FIND_PACKAGE(GLFW   REQUIRED)
 
 ################################################################################
 # Doc
