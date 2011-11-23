@@ -30,7 +30,7 @@ FIND_PACKAGE(GLFW REQUIRED)
 # Doc
 IF(BUILD_DOC)
     # add a target to generate API documentation with Doxygen
-    FIND_PACKAGE(Doxygen REQUIRED)
+    FIND_PACKAGE(Doxygen)
 
     IF(DOXYGEN_FOUND)
         LIST(APPEND STARS_MESSAGE "*****************")
