@@ -67,6 +67,9 @@ class SE_CLogManager
 
     private:
         U8 m_currentLogLevel;
+
+        // explicit padding
+        U8 _pad[3];
 };
 
 ////////////////////////////////////////////////////////////////////////////////
