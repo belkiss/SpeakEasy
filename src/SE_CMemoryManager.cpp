@@ -33,7 +33,7 @@ extern SE_CLogManager g_LogManager;
 ////////////////////////////////////////////////////////////////////////////////
 SE_CMemoryManager::SE_CMemoryManager()
 {
-    g_LogManager.log(ELL_DEBUG, "SE_CMemoryManager constructed");
+    g_LogManager.log(kInformation, "SE_CMemoryManager constructed");
 }
 
 
@@ -41,7 +41,7 @@ SE_CMemoryManager::SE_CMemoryManager()
 ////////////////////////////////////////////////////////////////////////////////
 SE_CMemoryManager::~SE_CMemoryManager()
 {
-    g_LogManager.log(ELL_DEBUG, "SE_CMemoryManager destroyed");
+    g_LogManager.log(kInformation, "SE_CMemoryManager destroyed");
 }
 
 
@@ -49,7 +49,7 @@ SE_CMemoryManager::~SE_CMemoryManager()
 ////////////////////////////////////////////////////////////////////////////////
 void SE_CMemoryManager::startUp()
 {
-    g_LogManager.log(ELL_DEBUG, "SE_CMemoryManager successfully started");
+    g_LogManager.log(kInformation, "SE_CMemoryManager successfully started");
 }
 
 
@@ -57,5 +57,5 @@ void SE_CMemoryManager::startUp()
 ////////////////////////////////////////////////////////////////////////////////
 void SE_CMemoryManager::shutDown()
 {
-    g_LogManager.log(ELL_DEBUG, "SE_CMemoryManager successfully shut downed");
+    g_LogManager.log(kInformation, "SE_CMemoryManager successfully shut downed");
 }

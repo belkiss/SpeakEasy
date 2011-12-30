@@ -38,7 +38,7 @@ SE_CGUIManager      g_GUIManager;
 int main()
 {
     // Start up engine systems in the correct order
-    g_LogManager.startUp(ELL_DEBUG);
+    g_LogManager.startUp(kDebug);
     g_MemoryManager.startUp();
     g_GUIManager.startUp();
 

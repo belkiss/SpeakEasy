@@ -28,59 +28,124 @@
 #define SE_CLOGMANAGER_H
 
 #include <iostream>
+#include <sstream>
+
 #include "SE_Types.h"
 
-//! Possible log levels.
-//! When used has filter ELL_DEBUG means => log everything and ELL_NONE means => log (nearly) nothing.
-//! When used to print logging information ELL_DEBUG will have lowest priority while ELL_NONE
-//! messages are never filtered and always printed.
-enum ELOG_LEVEL
+/**
+ * @brief Log levels
+ **/
+enum ELogLevels
 {
-    //! Used for printing information helpful in debugging
-    ELL_DEBUG,
+    /// No category, always displayed
+    kNone,
 
-    //! Useful information to print. For example hardware infos or something started/stopped.
-    ELL_INFORMATION,
+    /// Used for printing information helpful in debugging
+    kDebug,
 
-    //! Warnings that something isn't as expected and can cause oddities
-    ELL_WARNING,
+    /// Useful information to print. For example hardware infos or something started/stopped.
+    kInformation,
 
-    //! Something did go wrong.
-    ELL_ERROR,
+    /// Warnings that something isn't as expected and can cause oddities
+    kWarning,
 
-    //! Logs with ELL_NONE will never be filtered.
-    //! And used as filter it will remove all logging except ELL_NONE messages.
-    ELL_NONE
+    /// Something did go wrong.
+    kError
 };
 
 class SE_CLogManager
 {
     public:
-        SE_CLogManager();
+        SE_CLogManager(std::ostream& inOutStream = std::clog);
         virtual ~SE_CLogManager();
 
         void startUp(const U8 inLogLevel);
         void shutDown();
 
-        template <class T>
-        void log(const U8 inLevel, const T &inLog);
+        template <typename... Types>
+        void log(const U8 inLevel, const Types&... inLogs);
 
     private:
-        U8 m_currentLogLevel;
+        template <typename T, typename... Args>
+        void appendLogs(std::ostringstream &outStringStream, const T& inLog, const Args&... inLogs);
+
+        inline void appendLogs(std::ostringstream &outStringStream);
+
+
+    private:
+        std::ostream& m_outputStream;
+        U8            m_currentLogLevel;
 
         // explicit padding
-        U8 _pad[3];
+        U8 _pad[7];
 };
+
+
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-template <class T>
-void SE_CLogManager::log(const U8 inLevel, const T &inLog)
+template <typename... Types>
+void SE_CLogManager::log(const U8 inLevel, const Types&... inLogs)
 {
-    if(inLevel <= m_currentLogLevel)
+    // kNone is 0
+    if(!inLevel || inLevel >= m_currentLogLevel)
     {
-        std::cout << (int)inLevel << ": " << inLog << std::endl;
+        std::ostringstream displayStream;
+        switch(inLevel)
+        {
+            case kNone:
+                {
+                    displayStream << "   kNone    ";
+                }
+                break;
+            case kDebug:
+                {
+                    displayStream << "   kDebug   ";
+                }
+                break;
+            case kInformation:
+                {
+                    displayStream << "kInformation";
+                }
+                break;
+            case kWarning:
+                {
+                    displayStream << "  kWarning  ";
+                }
+                break;
+            case kError:
+                {
+                    displayStream << "   kError   ";
+                }
+                break;
+            default:
+                {
+                    displayStream << "  Unknown ! ";
+                }
+                break;
+        }
+        appendLogs(displayStream, inLogs...);
     }
+};
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+template <typename T, typename... Args>
+void SE_CLogManager::appendLogs(std::ostringstream &outStringStream,
+                                const T& inLog,
+                                const Args&... inLogs)
+{
+    outStringStream << " " << inLog;
+    appendLogs(outStringStream, inLogs...);
 }
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+inline void SE_CLogManager::appendLogs(std::ostringstream &outStringStream)
+{
+    m_outputStream << outStringStream.str() << std::endl;
+};
 
 #endif // SE_CLOGMANAGER_H

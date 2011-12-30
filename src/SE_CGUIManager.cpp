@@ -33,9 +33,10 @@ extern SE_CLogManager g_LogManager;
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-SE_CGUIManager::SE_CGUIManager()
+SE_CGUIManager::SE_CGUIManager():
+    m_pGUISystem(nullptr)
 {
-    g_LogManager.log(ELL_DEBUG, "SE_CGUIManager constructed");
+    g_LogManager.log(kInformation, "SE_CGUIManager constructed");
 }
 
 
@@ -43,7 +44,9 @@ SE_CGUIManager::SE_CGUIManager()
 ////////////////////////////////////////////////////////////////////////////////
 SE_CGUIManager::~SE_CGUIManager()
 {
-    g_LogManager.log(ELL_DEBUG, "SE_CGUIManager destroyed");
+    delete m_pGUISystem;
+    m_pGUISystem = nullptr;
+    g_LogManager.log(kInformation, "SE_CGUIManager destroyed");
 }
 
 
@@ -51,14 +54,14 @@ SE_CGUIManager::~SE_CGUIManager()
 ////////////////////////////////////////////////////////////////////////////////
 void SE_CGUIManager::startUp()
 {
-    g_LogManager.log(ELL_DEBUG, "SE_CGUIManager successfully started");
+    g_LogManager.log(kInformation, "SE_CGUIManager successfully started");
     m_pGUISystem = new SE_CGUIGLFW();
     if(m_pGUISystem->init())
     {
-        g_LogManager.log(ELL_DEBUG, "SE_CGUIGLFW successfully initialized");
+        g_LogManager.log(kInformation, "GUI System successfully initialized");
         if(m_pGUISystem->openWindow())
         {
-            g_LogManager.log(ELL_DEBUG, "SE_CGUIGLFW window successfully opened");
+            g_LogManager.log(kInformation, "GUI System window successfully opened");
         }
     }
 }
@@ -69,7 +72,7 @@ void SE_CGUIManager::startUp()
 void SE_CGUIManager::shutDown()
 {
     m_pGUISystem->close();
-    g_LogManager.log(ELL_DEBUG, "SE_CGUIManager successfully shut downed");
+    g_LogManager.log(kInformation, "SE_CGUIManager successfully shut downed");
 }
 
 

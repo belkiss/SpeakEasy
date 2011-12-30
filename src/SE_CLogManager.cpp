@@ -28,10 +28,12 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-SE_CLogManager::SE_CLogManager()
+SE_CLogManager::SE_CLogManager(std::ostream& inOutStream):
+    m_outputStream(inOutStream),
+    m_currentLogLevel(kNone)
 {
     // Do nothing
-    log(ELL_DEBUG, "SE_CLogManager constructed");
+    log(kInformation, "SE_CLogManager constructed");
 }
 
 
@@ -40,7 +42,7 @@ SE_CLogManager::SE_CLogManager()
 SE_CLogManager::~SE_CLogManager()
 {
     // Do nothing
-    log(ELL_DEBUG, "SE_CLogManager destroyed");
+    log(kInformation, "SE_CLogManager destroyed");
 }
 
 
@@ -49,7 +51,8 @@ SE_CLogManager::~SE_CLogManager()
 void SE_CLogManager::startUp(const U8 inLogLevel)
 {
     m_currentLogLevel = inLogLevel;
-    log(ELL_DEBUG, "SE_CLogManager successfully started");
+    log(kInformation, "SE_CLogManager successfully started with logLevel set to", static_cast<U32>(inLogLevel));
+
 }
 
 
@@ -57,5 +60,5 @@ void SE_CLogManager::startUp(const U8 inLogLevel)
 ////////////////////////////////////////////////////////////////////////////////
 void SE_CLogManager::shutDown()
 {
-    log(ELL_DEBUG, "SE_CLogManager successfully shut downed");
+    log(kInformation, "SE_CLogManager successfully shut downed");
 }

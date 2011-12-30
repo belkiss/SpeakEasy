@@ -25,11 +25,15 @@
  */
 
 #include "SE_CGUIGLFW.h"
+#include "SE_CLogManager.h"
+
+extern SE_CLogManager g_LogManager;
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 SE_CGUIGLFW::SE_CGUIGLFW()
 {
+    g_LogManager.log(kInformation, "SE_CGUIGLFW constructed");
 }
 
 
@@ -37,6 +41,7 @@ SE_CGUIGLFW::SE_CGUIGLFW()
 ////////////////////////////////////////////////////////////////////////////////
 SE_CGUIGLFW::~SE_CGUIGLFW()
 {
+    g_LogManager.log(kInformation, "SE_CGUIGLFW destroyed");
 }
 
 
@@ -44,7 +49,8 @@ SE_CGUIGLFW::~SE_CGUIGLFW()
 ////////////////////////////////////////////////////////////////////////////////
 bool SE_CGUIGLFW::init()
 {
-    return glfwInit();
+    U32 initStatus = glfwInit();
+    return initStatus == GL_TRUE;
 }
 
 
@@ -52,8 +58,11 @@ bool SE_CGUIGLFW::init()
 ////////////////////////////////////////////////////////////////////////////////
 bool SE_CGUIGLFW::openWindow()
 {
-    m_GLFWWindow = glfwOpenWindow(300, 300, GLFW_WINDOWED, "SpeakEasy", NULL);
-    return m_GLFWWindow;
+    m_GLFWWindow = glfwOpenWindow(300, 300, // window dim (width, height) in px
+                                  GLFW_WINDOWED,
+                                  "SpeakEasy",
+                                  nullptr);
+    return m_GLFWWindow != nullptr;
 }
 
 

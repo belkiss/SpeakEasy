@@ -18,7 +18,8 @@ SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 # tell cmake to check for custom modules
 SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules")
 
-SET(CMAKE_BUILD_TYPE Debug)
+# Enable c++11
+ADD_DEFINITIONS("-std=c++0x")
 
 # Build options
 OPTION(BUILD_TESTS "Build Tests"         ON)
@@ -58,16 +59,10 @@ IF(UNIX)
     ADD_DEFINITIONS(-Wall
                     -Wextra
                     -W
+                    -Wpadded
                     -Wshadow
-                    -Wunused-variable
-                    -Wunused-parameter
-                    -Wunused-function
-                    -Wunused
-                    -Wno-system-headers
-                    -Wno-deprecated
                     -Woverloaded-virtual
-                    -Wwrite-strings
-                    -D_GLIBCXX_PROFILE -D_GLIBCXX_PROFILE_MAX_WARN_COUNT=1000)
+                    -Wwrite-strings)
 ENDIF()
 ################################################################################
 
