@@ -18,8 +18,22 @@ SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 # tell cmake to check for custom modules
 SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules")
 
-# Enable c++11
-ADD_DEFINITIONS("-std=c++0x")
+################################################################################
+# Check if compiler supports c++11 variadic templates
+INCLUDE(CheckCXXSourceCompiles)
+
+CHECK_CXX_SOURCE_COMPILES("
+    template<typename... Types>
+    void log(const Types&...){}
+    int main() {
+        return 0;
+    }
+    " VARIADIC_TEMPLATES_SUPPORTED)
+
+IF(!VARIADIC_TEMPLATES_SUPPORTED)
+    MESSAGE(FATAL_ERROR "Variadic templates are not supported by your compiler, try another one")
+ENDIF()
+################################################################################
 
 # Build options
 OPTION(BUILD_TESTS "Build Tests"         ON)
@@ -56,6 +70,9 @@ IF(WIN32)
 ENDIF()
 
 IF(UNIX)
+    # Enable c++11
+    ADD_DEFINITIONS(-std=c++0x)
+    # Enable a LOT of warnings
     ADD_DEFINITIONS(-Wall
                     -Wextra
                     -W
