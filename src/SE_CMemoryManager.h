@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2011  Lambert CLARA <lambert.clara@yahoo.fr>
+ * Copyright (C) 2011-2012  Lambert CLARA <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -30,8 +30,8 @@
 class SE_CMemoryManager
 {
     public:
-        SE_CMemoryManager();
-        virtual ~SE_CMemoryManager();
+        SE_CMemoryManager() = default;
+        ~SE_CMemoryManager() = default;
 
         void startUp();
         void shutDown();

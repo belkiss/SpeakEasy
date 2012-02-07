@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2011  Lambert CLARA <lambert.clara@yahoo.fr>
+ * Copyright (C) 2011-2012  Lambert CLARA <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -27,29 +27,11 @@
 #include "SE_CMemoryManager.h"
 #include "SE_CLogManager.h"
 
-extern SE_CLogManager g_LogManager;
-
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-SE_CMemoryManager::SE_CMemoryManager()
-{
-    g_LogManager.log(kInformation, "SE_CMemoryManager constructed");
-}
-
-
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-SE_CMemoryManager::~SE_CMemoryManager()
-{
-    g_LogManager.log(kInformation, "SE_CMemoryManager destroyed");
-}
-
-
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 void SE_CMemoryManager::startUp()
 {
-    g_LogManager.log(kInformation, "SE_CMemoryManager successfully started");
+    SE_CLogManager::getInstance()->log(kInformation, "SE_CMemoryManager successfully started");
 }
 
 
@@ -57,5 +39,5 @@ void SE_CMemoryManager::startUp()
 ////////////////////////////////////////////////////////////////////////////////
 void SE_CMemoryManager::shutDown()
 {
-    g_LogManager.log(kInformation, "SE_CMemoryManager successfully shut downed");
+    SE_CLogManager::getInstance()->log(kInformation, "SE_CMemoryManager successfully shut downed");
 }

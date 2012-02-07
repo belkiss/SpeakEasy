@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2011  Lambert CLARA <lambert.clara@yahoo.fr>
+ * Copyright (C) 2011-2012  Lambert CLARA <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -26,13 +26,23 @@
 
 #include "SE_CLogManager.h"
 
+#include <cassert>
+
+// define the static member
+SE_CLogManager *SE_CLogManager::m_pInstance = nullptr;
+
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 SE_CLogManager::SE_CLogManager(std::ostream& inOutStream):
     m_outputStream(inOutStream),
     m_currentLogLevel(kNone)
 {
-    // Do nothing
+    // because this class is singleton, m_pInstance MUST be nullptr here
+    assert(!m_pInstance);
+
+    // set the static instance to this
+    m_pInstance = this;
+
     log(kInformation, "SE_CLogManager constructed");
 }
 
@@ -43,6 +53,7 @@ SE_CLogManager::~SE_CLogManager()
 {
     // Do nothing
     log(kInformation, "SE_CLogManager destroyed");
+    m_pInstance = nullptr;
 }
 
 

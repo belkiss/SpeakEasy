@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2011  Lambert CLARA <lambert.clara@yahoo.fr>
+ * Copyright (C) 2011-2012  Lambert CLARA <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -29,24 +29,11 @@
 #include "SE_CGUIGLFW.h"
 #include "SE_CLogManager.h"
 
-extern SE_CLogManager g_LogManager;
-
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 SE_CGUIManager::SE_CGUIManager():
     m_pGUISystem(nullptr)
 {
-    g_LogManager.log(kInformation, "SE_CGUIManager constructed");
-}
-
-
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-SE_CGUIManager::~SE_CGUIManager()
-{
-    delete m_pGUISystem;
-    m_pGUISystem = nullptr;
-    g_LogManager.log(kInformation, "SE_CGUIManager destroyed");
 }
 
 
@@ -54,14 +41,14 @@ SE_CGUIManager::~SE_CGUIManager()
 ////////////////////////////////////////////////////////////////////////////////
 void SE_CGUIManager::startUp()
 {
-    g_LogManager.log(kInformation, "SE_CGUIManager successfully started");
+    SE_CLogManager::getInstance()->log(kInformation, "SE_CGUIManager successfully started");
     m_pGUISystem = new SE_CGUIGLFW();
     if(m_pGUISystem->init())
     {
-        g_LogManager.log(kInformation, "GUI System successfully initialized");
+        SE_CLogManager::getInstance()->log(kInformation, "GUI System successfully initialized");
         if(m_pGUISystem->openWindow())
         {
-            g_LogManager.log(kInformation, "GUI System window successfully opened");
+            SE_CLogManager::getInstance()->log(kInformation, "GUI System window successfully opened");
         }
     }
 }
@@ -72,7 +59,9 @@ void SE_CGUIManager::startUp()
 void SE_CGUIManager::shutDown()
 {
     m_pGUISystem->close();
-    g_LogManager.log(kInformation, "SE_CGUIManager successfully shut downed");
+    delete m_pGUISystem;
+    m_pGUISystem = nullptr;
+    SE_CLogManager::getInstance()->log(kInformation, "SE_CGUIManager successfully shut downed");
 }
 
 

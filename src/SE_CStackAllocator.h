@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2011  Lambert CLARA <lambert.clara@yahoo.fr>
+ * Copyright (C) 2011-2012  Lambert CLARA <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -47,7 +47,11 @@ class SE_CStackAllocator
          **/
         explicit SE_CStackAllocator(const U32 inStackSizeInBytes);
 
-        virtual ~SE_CStackAllocator();
+        /**
+         * @brief Destructor, no need for virtual
+         *
+         **/
+        ~SE_CStackAllocator();
 
         /**
          * @brief Allocates a new block of the given size from stack top.

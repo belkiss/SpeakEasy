@@ -31,9 +31,9 @@
 #include "SE_CLogManager.h"
 #include "SE_CMemoryManager.h"
 
-SE_CLogManager      g_LogManager;
-SE_CMemoryManager   g_MemoryManager;
-SE_CGUIManager      g_GUIManager;
+static SE_CLogManager      g_LogManager;
+static SE_CMemoryManager   g_MemoryManager;
+static SE_CGUIManager      g_GUIManager;
 
 int main()
 {

@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2011  Lambert CLARA <lambert.clara@yahoo.fr>
+ * Copyright (C) 2011-2012  Lambert CLARA <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -53,17 +53,47 @@ enum ELogLevels
     kError
 };
 
+/**
+ * @brief This log management class MUST be used as singleton
+ **/
 class SE_CLogManager
 {
     public:
+        /**
+         * @brief Creates a log manager that will output on the given stream
+         *
+         * @param inOutStream The wanted output stream, Defaults to std::clog.
+         **/
         SE_CLogManager(std::ostream& inOutStream = std::clog);
-        virtual ~SE_CLogManager();
 
+        /**
+         * @brief Destroys the log manager, no need for virtual
+         *
+         **/
+        ~SE_CLogManager();
+
+        /**
+         * @brief Starts up the manager at the given log level
+         *
+         * @param inLogLevel The wanted log level
+         * @return void
+         **/
         void startUp(const U8 inLogLevel);
+
         void shutDown();
 
+        /**
+         * @brief Log something to the output stream
+         *
+         * @param inLevel The level of the log
+         * @param inLogs The data to output
+         * @return void
+         **/
         template <typename... Types>
         void log(const U8 inLevel, const Types&... inLogs);
+
+    public: // static methods
+        static SE_CLogManager* getInstance() {return m_pInstance;}
 
     private:
         template <typename T, typename... Args>
@@ -78,6 +108,9 @@ class SE_CLogManager
 
         // explicit padding
         U8 _pad[7];
+
+    private: // static members
+        static SE_CLogManager *m_pInstance;
 };
 
 

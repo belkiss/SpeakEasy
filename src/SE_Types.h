@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2011  Lambert CLARA <lambert.clara@yahoo.fr>
+ * Copyright (C) 2011-2012  Lambert CLARA <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -27,7 +27,7 @@
 #ifndef SE_TYPES_H
 #define SE_TYPES_H
 
-#include <stdint.h>
+#include <cstdint>
 
 /**
  * @brief 32-bits IEEE-754 floating-point value

@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2011  Lambert CLARA <lambert.clara@yahoo.fr>
+ * Copyright (C) 2011-2012  Lambert CLARA <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -27,13 +27,11 @@
 #include "SE_CGUIGLFW.h"
 #include "SE_CLogManager.h"
 
-extern SE_CLogManager g_LogManager;
-
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 SE_CGUIGLFW::SE_CGUIGLFW()
 {
-    g_LogManager.log(kInformation, "SE_CGUIGLFW constructed");
+    SE_CLogManager::getInstance()->log(kInformation, "SE_CGUIGLFW constructed");
 }
 
 
@@ -41,7 +39,7 @@ SE_CGUIGLFW::SE_CGUIGLFW()
 ////////////////////////////////////////////////////////////////////////////////
 SE_CGUIGLFW::~SE_CGUIGLFW()
 {
-    g_LogManager.log(kInformation, "SE_CGUIGLFW destroyed");
+    SE_CLogManager::getInstance()->log(kInformation, "SE_CGUIGLFW destroyed");
 }
 
 

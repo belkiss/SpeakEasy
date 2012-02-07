@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2011  Lambert CLARA <lambert.clara@yahoo.fr>
+ * Copyright (C) 2011-2012  Lambert CLARA <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -35,12 +35,12 @@ class SE_CGUIGLFW : public SE_CGUIInterface
 {
     public:
         SE_CGUIGLFW();
-        virtual ~SE_CGUIGLFW();
+        ~SE_CGUIGLFW();
 
-        virtual bool init();
-        virtual bool openWindow();
-        virtual void swapBuffers();
-        virtual bool close();
+        bool init();
+        bool openWindow();
+        void swapBuffers();
+        bool close();
 
     private:
         GLFWwindow m_GLFWWindow;
