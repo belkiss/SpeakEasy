@@ -47,7 +47,7 @@ SE_CGUIGLFW::~SE_CGUIGLFW()
 ////////////////////////////////////////////////////////////////////////////////
 bool SE_CGUIGLFW::init()
 {
-    U32 initStatus = glfwInit();
+    I32 initStatus = glfwInit();
     return initStatus == GL_TRUE;
 }
 
