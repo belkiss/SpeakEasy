@@ -24,7 +24,9 @@ MACRO(DBG_MSG _MSG)
 ENDMACRO(DBG_MSG)
 
 IF(WIN32)
-    IF(MSVC10)
+    IF(MSVC11)
+        GET_FILENAME_COMPONENT(VS_DIR [HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\VisualStudio\\11.0\\Setup\\VS;ProductDir] REALPATH CACHE)
+    ELSEIF(MSVC10)
         GET_FILENAME_COMPONENT(VS_DIR [HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\VisualStudio\\10.0\\Setup\\VS;ProductDir] REALPATH CACHE)
     ELSEIF(MSVC90)
         GET_FILENAME_COMPONENT(VS_DIR [HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\VisualStudio\\9.0\\Setup\\VS;ProductDir] REALPATH CACHE)
@@ -100,7 +102,7 @@ if(GLFW_INCLUDE_DIR)
 #     endif()
 endif()
 
-FIND_LIBRARY(GLFW_LIBRARY   NAMES glfw
+FIND_LIBRARY(GLFW_LIBRARY   glfw
                             PATHS
                             ~/Library/Frameworks
                             /Library/Frameworks
