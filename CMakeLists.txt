@@ -16,7 +16,7 @@ SET(CMAKE_COLOR_MAKEFILE ON)
 SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
 # tell cmake to check for custom modules
-SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules")
+SET(CMAKE_MODULE_PATH "${SpeakEasy_SOURCE_DIR}/cmake_modules")
 
 ################################################################################
 # Check if compiler supports c++11 variadic templates
@@ -30,9 +30,17 @@ CHECK_CXX_SOURCE_COMPILES("
     }
     " VARIADIC_TEMPLATES_SUPPORTED)
 
-IF(!VARIADIC_TEMPLATES_SUPPORTED)
-    MESSAGE(FATAL_ERROR "Variadic templates are not supported by your compiler, try another one")
+IF(NOT VARIADIC_TEMPLATES_SUPPORTED)
+    # TODO: use CMakeDetermineCompilerId instead of CMAKE_GENERATOR to find out the compiler's id
+    MESSAGE(AUTHOR_WARNING "Variadic templates are not supported by ${CMAKE_GENERATOR},"
+                           " the code will use va_lists instead")
 ENDIF()
+################################################################################
+
+################################################################################
+# generate a header file to inform the code of the variadic templates setting
+CONFIGURE_FILE(${SpeakEasy_SOURCE_DIR}/src/config.h.cmake
+               ${SpeakEasy_BINARY_DIR}/src/config.h)
 ################################################################################
 
 # Build options
@@ -52,7 +60,7 @@ IF(BUILD_DOC)
         LIST(APPEND STARS_MESSAGE "*****************")
         LIST(APPEND INFO_MESSAGE  " - Doxygen target")
         CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in
-                    ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
+                       ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
         ADD_CUSTOM_TARGET(doc
                         ${DOXYGEN_EXECUTABLE}
                         ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
@@ -65,8 +73,15 @@ ENDIF()
 
 ################################################################################
 # Enable max compiler debugging output
-IF(WIN32)
+IF(MSVC)
     SET(CMAKE_CXX_WARNING_LEVEL 4)
+    # Force it, because most of the time the above line is not enough
+    IF(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
+        STRING(REGEX REPLACE "/W[0-4]" "/W4"
+               CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    ELSE(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
+    ENDIF(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
 ENDIF()
 
 IF(UNIX)

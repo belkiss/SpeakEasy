@@ -82,6 +82,7 @@ class SE_CLogManager
 
         void shutDown();
 
+#ifdef VARIADIC_TEMPLATES_SUPPORTED
         /**
          * @brief Log something to the output stream
          *
@@ -92,15 +93,20 @@ class SE_CLogManager
         template <typename... Types>
         void log(const U8 inLevel, const Types&... inLogs);
 
-    public: // static methods
-        static SE_CLogManager* getInstance() {return m_pInstance;}
-
     private:
         template <typename T, typename... Args>
         void appendLogs(std::ostringstream &outStringStream, const T& inLog, const Args&... inLogs);
 
         inline void appendLogs(std::ostringstream &outStringStream);
+#else
+        void log(const U8 /*inLevel*/, ...)
+        {
 
+        }
+#endif
+
+    public: // static methods
+        static SE_CLogManager* getInstance() {return m_pInstance;}
 
     private:
         std::ostream& m_outputStream;
@@ -114,7 +120,7 @@ class SE_CLogManager
 };
 
 
-
+#ifdef VARIADIC_TEMPLATES_SUPPORTED
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 template <typename... Types>
@@ -180,5 +186,6 @@ inline void SE_CLogManager::appendLogs(std::ostringstream &outStringStream)
 {
     m_outputStream << outStringStream.str() << std::endl;
 };
+#endif // VARIADIC_TEMPLATES_SUPPORTED
 
 #endif // SE_CLOGMANAGER_H
