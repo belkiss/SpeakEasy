@@ -32,7 +32,7 @@ class SE_CGUIManager
 {
     public:
         SE_CGUIManager();
-        ~SE_CGUIManager() = default;
+        ~SE_CGUIManager(){};
 
         void startUp();
         void shutDown();

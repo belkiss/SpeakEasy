@@ -30,8 +30,8 @@
 class SE_CMemoryManager
 {
     public:
-        SE_CMemoryManager() = default;
-        ~SE_CMemoryManager() = default;
+        SE_CMemoryManager(){};
+        ~SE_CMemoryManager(){};
 
         void startUp();
         void shutDown();
