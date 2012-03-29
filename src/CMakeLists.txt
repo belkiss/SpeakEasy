@@ -1,3 +1,4 @@
+INCLUDE_DIRECTORIES(${SpeakEasy_BINARY_DIR}/src)
 
 SET(SpeakEasy_src
     SE_CGUIGLFW.cpp
@@ -9,7 +10,7 @@ SET(SpeakEasy_src
     main.cpp
 )
 
-# list headers (used for VS)
+# list headers (used for MSVC)
 SET(SpeakEasy_headers
     SE_CGUIGLFW.h
     SE_CGUIManager.h

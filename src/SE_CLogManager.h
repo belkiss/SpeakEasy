@@ -30,6 +30,7 @@
 #include <iostream>
 #include <sstream>
 
+#include "config.h"
 #include "SE_Types.h"
 
 /**
