@@ -48,6 +48,7 @@ SE_CGUIGLFW::~SE_CGUIGLFW()
 bool SE_CGUIGLFW::init()
 {
     I32 initStatus = glfwInit();
+    SE_CLogManager::getInstance()->log(kDebug, "initializing glfw version ", glfwGetVersionString());
     return initStatus == GL_TRUE;
 }
 
