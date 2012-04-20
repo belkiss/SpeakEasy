@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2011-2012  Lambert CLARA <lambert.clara@yahoo.fr>
+ * Copyright (C) 2011-2012  Lambert Clara <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -17,11 +17,11 @@
  */
 
 /**
- * \file    SE_CStackAllocator.h
- * \brief   Stack Allocator class definition
+ * @file    SE_CStackAllocator.h
+ * @brief   Stack Allocator class definition
  *
- * \author  Lambert CLARA <lambert.clara@yahoo.fr>
- * \date    Created : 2011-8-19 21:10:43
+ * @author  Lambert Clara <lambert.clara@yahoo.fr>
+ * @date    Created : 2011-8-19 21:10:43
  */
 
 #ifndef SE_CSTACKALLOCATOR_H

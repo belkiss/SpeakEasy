@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2011-2012  Lambert CLARA <lambert.clara@yahoo.fr>
+ * Copyright (C) 2011-2012  Lambert Clara <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -17,11 +17,11 @@
  */
 
 /**
- * \file    SE_CGUIManager.h
- * \brief   2D GUI Manager
+ * @file    SE_CGUIManager.h
+ * @brief   2D GUI Manager
  *
- * \author  Lambert CLARA <lambert.clara@yahoo.fr>
- * \date    Created : 2011-8-23 21:20:16
+ * @author  Lambert Clara <lambert.clara@yahoo.fr>
+ * @date    Created : 2011-8-23 21:20:16
  */
 
 #ifndef SE_CGUIMANAGER_H

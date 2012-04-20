@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2011-2012  Lambert CLARA <lambert.clara@yahoo.fr>
+ * Copyright (C) 2011-2012  Lambert Clara <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -17,11 +17,11 @@
  */
 
 /**
- * \file    SE_CMemoryManager.h
- * \brief   Memory manager
+ * @file    SE_CMemoryManager.h
+ * @brief   Memory manager
  *
- * \author  Lambert CLARA <lambert.clara@yahoo.fr>
- * \date    Created : 2011-8-22 01:21:00
+ * @author  Lambert Clara <lambert.clara@yahoo.fr>
+ * @date    Created : 2011-8-22 01:21:00
  */
 
 #ifndef SE_CMEMORYMANAGER_H

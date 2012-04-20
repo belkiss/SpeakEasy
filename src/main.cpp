@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2011  Lambert CLARA <lambert.clara@yahoo.fr>
+ * Copyright (C) 2011  Lambert Clara <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -17,12 +17,12 @@
  */
 
 /**
- * \mainpage SpeakEasy documentation
- * \file    main.cpp
- * \brief   SpeakEasy main
+ * @mainpage SpeakEasy documentation
+ * @file    main.cpp
+ * @brief   SpeakEasy main
  *
- * \author  Lambert CLARA <lambert.clara@yahoo.fr>
- * \date    Created : 2011-8-19 21:14:47
+ * @author  Lambert Clara <lambert.clara@yahoo.fr>
+ * @date    Created : 2011-8-19 21:14:47
  */
 
 #include <cstdlib>

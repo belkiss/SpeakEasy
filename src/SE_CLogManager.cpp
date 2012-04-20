@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2011-2012  Lambert CLARA <lambert.clara@yahoo.fr>
+ * Copyright (C) 2011-2012  Lambert Clara <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -17,11 +17,11 @@
  */
 
 /**
- * \file    SE_CLogManager.cpp
- * \brief   Logging class
+ * @file    SE_CLogManager.cpp
+ * @brief   Logging class
  *
- * \author  Lambert CLARA <lambert.clara@yahoo.fr>
- * \date    Created : 2011-8-21 22:52:31
+ * @author  Lambert Clara <lambert.clara@yahoo.fr>
+ * @date    Created : 2011-8-21 22:52:31
  */
 
 #include "SE_CLogManager.h"

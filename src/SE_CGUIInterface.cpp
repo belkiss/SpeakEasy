@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2011  Lambert CLARA <lambert.clara@yahoo.fr>
+ * Copyright (C) 2011  Lambert Clara <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -17,11 +17,11 @@
  */
 
 /**
- * \file    SE_CGUIInterface.cpp
- * \brief   Abstract class to wrap GUI libraries
+ * @file    SE_CGUIInterface.cpp
+ * @brief   Abstract class to wrap GUI libraries
  *
- * \author  Lambert CLARA <lambert.clara@yahoo.fr>
- * \date    Created : 2011-8-23 21:31:43
+ * @author  Lambert Clara <lambert.clara@yahoo.fr>
+ * @date    Created : 2011-8-23 21:31:43
  */
 
 #include "SE_CGUIInterface.h"
