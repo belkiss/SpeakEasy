@@ -31,9 +31,11 @@ CHECK_CXX_SOURCE_COMPILES("
     " VARIADIC_TEMPLATES_SUPPORTED)
 
 IF(NOT VARIADIC_TEMPLATES_SUPPORTED)
-    # TODO: use CMakeDetermineCompilerId instead of CMAKE_GENERATOR to find out the compiler's id
-    MESSAGE(AUTHOR_WARNING "Variadic templates are not supported by ${CMAKE_GENERATOR},"
-                           " the code will use va_lists instead")
+    # TODO: use CMakeDetermineCompilerId instead of CMAKE_GENERATOR
+    # to find out the compiler's id
+    MESSAGE(AUTHOR_WARNING
+            "Variadic templates are not supported by ${CMAKE_GENERATOR},"
+            " the code will use va_lists instead")
 ENDIF()
 ################################################################################
 
@@ -62,11 +64,10 @@ IF(BUILD_DOC)
         CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in
                        ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
         ADD_CUSTOM_TARGET(doc
-                        ${DOXYGEN_EXECUTABLE}
-                        ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
-                        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-                        COMMENT "Generating API documentation with Doxygen" VERBATIM
-        )
+                          ${DOXYGEN_EXECUTABLE}
+                          ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+                          WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+                          COMMENT "Generating API documentation with Doxygen" VERBATIM)
     ENDIF()
 ENDIF()
 ################################################################################
@@ -79,9 +80,9 @@ IF(MSVC)
     IF(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
         STRING(REGEX REPLACE "/W[0-4]" "/W4"
                CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-    ELSE(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
+    ELSE()
         SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
-    ENDIF(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
+    ENDIF()
 ENDIF()
 
 IF(UNIX)
@@ -109,9 +110,10 @@ SET(CPACK_PACKAGE_VERSION_PATCH "1")
 SET(CPACK_SOURCE_GENERATOR "TBZ2")
 
 SET(CPACK_SOURCE_PACKAGE_FILE_NAME
-  "${CMAKE_PROJECT_NAME}-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
+    "${CMAKE_PROJECT_NAME}-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 
-SET(CPACK_SOURCE_IGNORE_FILES "/build/;~$;/.git;kdev;${CPACK_SOURCE_IGNORE_FILES}")
+SET(CPACK_SOURCE_IGNORE_FILES
+    "/build/;~$;/.git;kdev;${CPACK_SOURCE_IGNORE_FILES}")
 
 # Must be included *AFTER* setting its properties
 INCLUDE(CPack)

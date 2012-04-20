@@ -18,11 +18,6 @@
 # Created by Olivier Delannoy. This was influenced by
 # FindOpenAL.cmake module. MACOSX is not yet handled correctly
 
-# Macro to print some message to stdout, useful for debugging purpose.
-MACRO(DBG_MSG _MSG)
-  MESSAGE(STATUS "${CMAKE_CURRENT_LIST_FILE}(${CMAKE_CURRENT_LIST_LINE}): ${_MSG}")
-ENDMACRO(DBG_MSG)
-
 IF(WIN32)
     IF(MSVC11)
         GET_FILENAME_COMPONENT(VS_DIR [HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\VisualStudio\\11.0\\Setup\\VS;ProductDir] REALPATH CACHE)
@@ -63,20 +58,20 @@ FIND_PATH(GLFW_INCLUDE_DIR  GL/glfw.h GL/glfw3.h
 
 IF(NOT GLFW_INCLUDE_DIR)
     MESSAGE(SEND_ERROR "glfw.h not found")
-ELSE(NOT GLFW_INCLUDE_DIR)
+ELSE()
     IF(EXISTS ${GLFW_INCLUDE_DIR}/GL/glfw.h)
         SET(GLFW_INCLUDE_FILE "glfw.h")
-    ELSE(EXISTS ${GLFW_INCLUDE_DIR}/GL/glfw.h)
+    ELSE()
         IF(EXISTS ${GLFW_INCLUDE_DIR}/GL/glfw3.h)
             SET(GLFW_INCLUDE_FILE "glfw3.h")
-        ENDIF(EXISTS ${GLFW_INCLUDE_DIR}/GL/glfw3.h)
-    ENDIF(EXISTS ${GLFW_INCLUDE_DIR}/GL/glfw.h)
-ENDIF(NOT GLFW_INCLUDE_DIR)
+        ENDIF()
+    ENDIF()
+ENDIF()
 
 # check the version number
-set(GLFW_VERSION_OK TRUE)
+SET(GLFW_VERSION_OK TRUE)
 # GLFW_FIND_VERSION AND
-if(GLFW_INCLUDE_DIR)
+IF(GLFW_INCLUDE_DIR)
     # extract the major and minor version numbers from GL/glfw.h
     FILE(STRINGS "${GLFW_INCLUDE_DIR}/GL/${GLFW_INCLUDE_FILE}" GLFW_H REGEX "^.*API version: .*$")
 
@@ -100,7 +95,7 @@ if(GLFW_INCLUDE_DIR)
 #             set(GLFW_VERSION_OK FALSE)
 #         endif()
 #     endif()
-endif()
+ENDIF()
 
 FIND_LIBRARY(GLFW_LIBRARY   glfw
                             PATHS
@@ -126,18 +121,18 @@ FIND_LIBRARY(GLFW_LIBRARY   glfw
 
 IF(NOT GLFW_LIBRARY)
     MESSAGE(SEND_ERROR "libglfw not found")
-ENDIF(NOT GLFW_LIBRARY)
+ENDIF()
 
 IF(GLFW_INCLUDE_DIR AND GLFW_LIBRARY)
-   SET(GLFW_FOUND TRUE)
-ENDIF(GLFW_INCLUDE_DIR AND GLFW_LIBRARY)
+    SET(GLFW_FOUND TRUE)
+ENDIF()
 
 IF(GLFW_FOUND)
-   IF (NOT GLFW_FIND_QUIETLY)
-      MESSAGE(STATUS "Found GLFW version ${GLFW_VERSION_MAJOR}.${GLFW_VERSION_MINOR}")
-   ENDIF (NOT GLFW_FIND_QUIETLY)
-ELSE(GLFW_FOUND)
-   IF (GLFW_FIND_REQUIRED)
-      MESSAGE(FATAL_ERROR "Could not find GLFW")
-   ENDIF (GLFW_FIND_REQUIRED)
-ENDIF(GLFW_FOUND)
+    IF(NOT GLFW_FIND_QUIETLY)
+        MESSAGE(STATUS "Found GLFW version ${GLFW_VERSION_MAJOR}.${GLFW_VERSION_MINOR}")
+    ENDIF()
+ELSE()
+    IF(GLFW_FIND_REQUIRED)
+        MESSAGE(FATAL_ERROR "Could not find GLFW")
+    ENDIF()
+ENDIF()
