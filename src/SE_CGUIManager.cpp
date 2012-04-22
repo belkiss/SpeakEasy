@@ -21,7 +21,7 @@
  * @brief   2D GUI Manager
  *
  * @author  Lambert Clara <lambert.clara@yahoo.fr>
- * @date    Created : 2011-8-23 21:20:35
+ * @date    Created : 2011-08-23
  */
 
 #include "SE_CGUIManager.h"

@@ -21,13 +21,12 @@
  * @brief   2D GUI Manager
  *
  * @author  Lambert Clara <lambert.clara@yahoo.fr>
- * @date    Created : 2011-8-23 21:20:16
+ * @date    Created : 2011-08-23
  */
 
 #ifndef SE_CGUIMANAGER_H
 #define SE_CGUIMANAGER_H
 
-class SE_CGUIInterface;
 class SE_CGUIManager
 {
     public:
@@ -40,7 +39,7 @@ class SE_CGUIManager
         void doWork();
 
     private:
-        SE_CGUIInterface *m_pGUISystem;
+        class SE_CGUIInterface *m_pGUISystem;
 };
 
 #endif // SE_CGUIMANAGER_H

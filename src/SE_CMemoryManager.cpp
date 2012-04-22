@@ -21,7 +21,7 @@
  * @brief   Memory manager
  *
  * @author  Lambert Clara <lambert.clara@yahoo.fr>
- * @date    Created : 2011-8-22 01:21:19
+ * @date    Created : 2011-08-22
  */
 
 #include "SE_CMemoryManager.h"

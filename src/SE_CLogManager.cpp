@@ -21,10 +21,12 @@
  * @brief   Logging class
  *
  * @author  Lambert Clara <lambert.clara@yahoo.fr>
- * @date    Created : 2011-8-21 22:52:31
+ * @date    Created : 2011-08-21
  */
 
 #include "SE_CLogManager.h"
+
+#include "SE_ConsoleColors.h"
 
 #include <cassert>
 
@@ -37,7 +39,8 @@ SE_CLogManager::SE_CLogManager(std::ostream& inOutStream):
     m_outputStream(inOutStream),
     m_currentLogLevel(kNone)
 {
-    // because this class is singleton, m_pInstance MUST be nullptr here
+    // because this class is meant to be used as singleton,
+    // m_pInstance MUST be nullptr here
     assert(!m_pInstance);
 
     // set the static instance to this
@@ -73,3 +76,47 @@ void SE_CLogManager::shutDown()
 {
     log(kInformation, "SE_CLogManager successfully shut downed");
 }
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+void SE_CLogManager::logLevelToSStream(const U8 inLevel,
+                                       std::ostringstream &ioStringStream)
+{
+    ioStringStream << COL_BEGIN;
+    switch(inLevel)
+    {
+        case kNone:
+            {
+                ioStringStream << WHITE << "   kNone    ";
+            }
+            break;
+        case kDebug:
+            {
+                ioStringStream << BLUE << "   kDebug   ";
+            }
+            break;
+        case kInformation:
+            {
+                ioStringStream << GREEN << "kInformation";
+            }
+            break;
+        case kWarning:
+            {
+                ioStringStream << YELLOW << "  kWarning  ";
+            }
+            break;
+        case kError:
+            {
+                ioStringStream << RED << "   kError   ";
+            }
+            break;
+        default:
+            {
+                ioStringStream << WHITE << "  Unknown ! ";
+            }
+            break;
+    }
+    ioStringStream << COL_END;
+}
+

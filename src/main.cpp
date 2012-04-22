@@ -22,7 +22,7 @@
  * @brief   SpeakEasy main
  *
  * @author  Lambert Clara <lambert.clara@yahoo.fr>
- * @date    Created : 2011-8-19 21:14:47
+ * @date    Created : 2011-08-19
  */
 
 #include <cstdlib>

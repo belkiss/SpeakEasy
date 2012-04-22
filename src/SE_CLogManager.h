@@ -21,7 +21,7 @@
  * @brief   Logging class
  *
  * @author  Lambert Clara <lambert.clara@yahoo.fr>
- * @date    Created : 2011-8-21 22:52:05
+ * @date    Created : 2011-08-21
  */
 
 #ifndef SE_CLOGMANAGER_H
@@ -84,12 +84,12 @@ class SE_CLogManager
         void shutDown();
 
 #ifdef VARIADIC_TEMPLATES_SUPPORTED
+    public:
         /**
          * @brief Log something to the output stream
          *
          * @param inLevel The level of the log
          * @param inLogs The data to output
-         * @return void
          **/
         template <typename... Types>
         void log(const U8 inLevel, const Types&... inLogs);
@@ -98,13 +98,34 @@ class SE_CLogManager
         template <typename T, typename... Args>
         void appendLogs(std::ostringstream &outStringStream, const T& inLog, const Args&... inLogs);
 
-        inline void appendLogs(std::ostringstream &outStringStream);
 #else
-        void log(const U8 /*inLevel*/, ...)
-        {
+    public:
+        /**
+         * @brief Log something to the output stream
+         * @note We need as many functions as the max number of log data we want
+         *
+         * @param inLevel The level of the log
+         * @param inLog The data to output
+        **/
+        template <typename T>
+        void log(const U8 inLevel, const T &inLog);
 
-        }
+        /**
+         * @brief Log something to the output stream
+         * @note We need as many functions as the max number of log data we want
+         *
+         * @param inLevel The level of the log
+         * @param inLog1 First data to output
+         * @param inLog2 Second data to output
+        **/
+        template <typename T, typename U>
+        void log(const U8 inLevel, const T &inLog1, const U &inLog2);
 #endif
+
+    private:
+        void logLevelToSStream(const U8 inLevel, std::ostringstream &ioStringStream);
+
+        inline void appendLogs(std::ostringstream &outStringStream);
 
     public: // static methods
         static SE_CLogManager* getInstance() {return m_pInstance;}
@@ -131,39 +152,7 @@ void SE_CLogManager::log(const U8 inLevel, const Types&... inLogs)
     if(!inLevel || inLevel >= m_currentLogLevel)
     {
         std::ostringstream displayStream;
-        switch(inLevel)
-        {
-            case kNone:
-                {
-                    displayStream << "   kNone    ";
-                }
-                break;
-            case kDebug:
-                {
-                    displayStream << "   kDebug   ";
-                }
-                break;
-            case kInformation:
-                {
-                    displayStream << "kInformation";
-                }
-                break;
-            case kWarning:
-                {
-                    displayStream << "  kWarning  ";
-                }
-                break;
-            case kError:
-                {
-                    displayStream << "   kError   ";
-                }
-                break;
-            default:
-                {
-                    displayStream << "  Unknown ! ";
-                }
-                break;
-        }
+        logLevelToSStream(inLevel, displayStream);
         appendLogs(displayStream, inLogs...);
     }
 };
@@ -180,6 +169,37 @@ void SE_CLogManager::appendLogs(std::ostringstream &outStringStream,
     appendLogs(outStringStream, inLogs...);
 }
 
+#else // VARIADIC_TEMPLATES_SUPPORTED
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+template <typename T>
+void SE_CLogManager::log(const U8 inLevel, const T &inLog)
+{
+    // kNone is 0
+    if(!inLevel || inLevel >= m_currentLogLevel)
+    {
+        std::ostringstream displayStream;
+        logLevelToSStream(inLevel, displayStream);
+        displayStream << " " << inLog;
+        m_outputStream << displayStream.str() << std::endl;
+    }
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+template <typename T, typename U>
+void SE_CLogManager::log(const U8 inLevel, const T &inLog1, const U &inLog2)
+{
+    // kNone is 0
+    if(!inLevel || inLevel >= m_currentLogLevel)
+    {
+        std::ostringstream displayStream;
+        displayStream << inLog1 << " " << inLog2;
+        log(inLevel, displayStream.str());
+    }
+}
+#endif // VARIADIC_TEMPLATES_SUPPORTED
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -187,6 +207,6 @@ inline void SE_CLogManager::appendLogs(std::ostringstream &outStringStream)
 {
     m_outputStream << outStringStream.str() << std::endl;
 };
-#endif // VARIADIC_TEMPLATES_SUPPORTED
+
 
 #endif // SE_CLOGMANAGER_H

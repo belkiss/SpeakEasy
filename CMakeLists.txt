@@ -35,7 +35,7 @@ IF(NOT VARIADIC_TEMPLATES_SUPPORTED)
     # to find out the compiler's id
     MESSAGE(AUTHOR_WARNING
             "Variadic templates are not supported by ${CMAKE_GENERATOR},"
-            " the code will use va_lists instead")
+            " the code will use regular templates instead")
 ENDIF()
 ################################################################################
 

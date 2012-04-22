@@ -21,7 +21,7 @@
  * @brief   Stack Allocator class implementation
  *
  * @author  Lambert Clara <lambert.clara@yahoo.fr>
- * @date    Created : 2011-8-19 21:13:54
+ * @date    Created : 2011-08-19
  */
 
 #include "SE_CStackAllocator.h"

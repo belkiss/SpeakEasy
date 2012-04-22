@@ -21,7 +21,7 @@
  * @brief   Declare base types
  *
  * @author  Lambert Clara <lambert.clara@yahoo.fr>
- * @date    Created : 2011-8-19 21:26:12
+ * @date    Created : 2011-08-19
  */
 
 #ifndef SE_TYPES_H

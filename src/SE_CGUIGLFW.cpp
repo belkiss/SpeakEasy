@@ -21,7 +21,7 @@
  * @brief   Wrapper for GLFW library
  *
  * @author  Lambert Clara <lambert.clara@yahoo.fr>
- * @date    Created : 2011-8-23 21:35:09
+ * @date    Created : 2011-08-23
  */
 
 #include "SE_CGUIGLFW.h"

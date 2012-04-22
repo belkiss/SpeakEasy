@@ -21,7 +21,7 @@
  * @brief   Abstract class to wrap GUI libraries
  *
  * @author  Lambert Clara <lambert.clara@yahoo.fr>
- * @date    Created : 2011-8-23 21:31:12
+ * @date    Created : 2011-08-23
  */
 
 #ifndef SE_CGUIINTERFACE_H

@@ -21,7 +21,7 @@
  * @brief   Memory manager
  *
  * @author  Lambert Clara <lambert.clara@yahoo.fr>
- * @date    Created : 2011-8-22 01:21:00
+ * @date    Created : 2011-08-22
  */
 
 #ifndef SE_CMEMORYMANAGER_H

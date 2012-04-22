@@ -21,7 +21,7 @@
  * @brief   Stack Allocator class definition
  *
  * @author  Lambert Clara <lambert.clara@yahoo.fr>
- * @date    Created : 2011-8-19 21:10:43
+ * @date    Created : 2011-08-19
  */
 
 #ifndef SE_CSTACKALLOCATOR_H
