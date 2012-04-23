@@ -31,27 +31,40 @@
 #include "SE_CLogManager.h"
 #include "SE_CMemoryManager.h"
 
-static SE_CLogManager      g_LogManager;
-static SE_CMemoryManager   g_MemoryManager;
-static SE_CGUIManager      g_GUIManager;
+#include "SE_CClock.h"
+
+static SE_CLogManager      gs_LogManager;
+static SE_CMemoryManager   gs_MemoryManager;
+static SE_CGUIManager      gs_GUIManager;
 
 int main()
 {
-    // Start up engine systems in the correct order
-    g_LogManager.startUp(kDebug);
-    g_MemoryManager.startUp();
-    g_GUIManager.startUp();
+    SE_CClock::init();
 
-    unsigned int i = 10000;
-    while(--i)
+    // Prime the pump by reading the current time
+    U64 tBegin = SE_CClock::readHiResTimer();
+
+    // Start up engine systems in the correct order
+    gs_LogManager.startUp(kDebug);
+    gs_MemoryManager.startUp();
+    gs_GUIManager.startUp();
+
+    while(true) // main game loop
     {
-        g_GUIManager.doWork();
+        gs_GUIManager.doWork();
+        // Read the current time again, and calculate the delta
+        U64 tEnd = SE_CClock::readHiResTimer();
+
+        SE_CLogManager::getInstance()->log(kDebug, (F32)SE_CClock::getHiResTimerFrequency()/(F32)(tEnd - tBegin));
+
+        // Use tEnd as the new tBegin for the next frame
+        tBegin = tEnd;
     }
 
     // Shut everything down, in reverse order
-    g_GUIManager.shutDown();
-    g_MemoryManager.shutDown();
-    g_LogManager.shutDown();
+    gs_GUIManager.shutDown();
+    gs_MemoryManager.shutDown();
+    gs_LogManager.shutDown();
 
     return EXIT_SUCCESS;
 }

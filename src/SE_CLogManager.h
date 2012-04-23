@@ -31,6 +31,7 @@
 #include <sstream>
 
 #include "config.h"
+#include "SE_CClock.h"
 #include "SE_Types.h"
 
 /**
@@ -128,7 +129,7 @@ class SE_CLogManager
         inline void appendLogs(std::ostringstream &outStringStream);
 
     public: // static methods
-        static SE_CLogManager* getInstance() {return m_pInstance;}
+        static SE_CLogManager* getInstance() {return ms_pInstance;}
 
     private:
         std::ostream& m_outputStream;
@@ -138,7 +139,7 @@ class SE_CLogManager
         U8 _pad[7];
 
     private: // static members
-        static SE_CLogManager *m_pInstance;
+        static SE_CLogManager *ms_pInstance;
 };
 
 
@@ -179,6 +180,8 @@ void SE_CLogManager::log(const U8 inLevel, const T &inLog)
     if(!inLevel || inLevel >= m_currentLogLevel)
     {
         std::ostringstream displayStream;
+        SE_CClock::localtimeToSStream(displayStream);
+        displayStream << " ";
         logLevelToSStream(inLevel, displayStream);
         displayStream << " " << inLog;
         m_outputStream << displayStream.str() << std::endl;

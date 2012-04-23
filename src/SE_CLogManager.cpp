@@ -31,7 +31,7 @@
 #include <cassert>
 
 // define the static member
-SE_CLogManager *SE_CLogManager::m_pInstance = nullptr;
+SE_CLogManager *SE_CLogManager::ms_pInstance = nullptr;
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -41,10 +41,10 @@ SE_CLogManager::SE_CLogManager(std::ostream& inOutStream):
 {
     // because this class is meant to be used as singleton,
     // m_pInstance MUST be nullptr here
-    assert(!m_pInstance);
+    assert(!ms_pInstance);
 
     // set the static instance to this
-    m_pInstance = this;
+    ms_pInstance = this;
 
     log(kInformation, "SE_CLogManager constructed");
 }
@@ -56,7 +56,7 @@ SE_CLogManager::~SE_CLogManager()
 {
     // Do nothing
     log(kInformation, "SE_CLogManager destroyed");
-    m_pInstance = nullptr;
+    ms_pInstance = nullptr;
 }
 
 
