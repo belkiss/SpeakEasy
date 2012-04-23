@@ -38,7 +38,7 @@ void SE_CClock::localtimeToSStream(std::ostringstream &ioStringStream)
 {
     SYSTEMTIME systemTime;
     GetLocalTime(&systemTime);
-    systemTime.wHour = 2;
+
     // Format like this : YYYYMMDD_HH:MM:SS.MSS
     ioStringStream << std::setfill('0')
                    << systemTime.wYear
