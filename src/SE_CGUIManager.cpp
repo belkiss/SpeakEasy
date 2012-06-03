@@ -27,6 +27,7 @@
 #include "SE_CGUIManager.h"
 
 #include "SE_CGUIGLFW.h"
+//#include "SE_CGUISFML.h"
 #include "SE_CLogManager.h"
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -43,6 +44,7 @@ void SE_CGUIManager::startUp()
 {
     SE_CLogManager::getInstance()->log(kInformation, "SE_CGUIManager successfully started");
     m_pGUISystem = new SE_CGUIGLFW();
+    //m_pGUISystem = new SE_CGUISFML();
     if(m_pGUISystem->init())
     {
         SE_CLogManager::getInstance()->log(kInformation, "GUI System successfully initialized");
@@ -67,7 +69,8 @@ void SE_CGUIManager::shutDown()
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-void SE_CGUIManager::doWork()
+bool SE_CGUIManager::doWork()
 {
     m_pGUISystem->swapBuffers();
+    return !m_pGUISystem->quitPressed();
 }

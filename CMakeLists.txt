@@ -40,21 +40,38 @@ ENDIF()
 ################################################################################
 
 ################################################################################
-# generate a header file to inform the code of the variadic templates setting
+# Build options
+OPTION(BUILD_TESTS         "Build Tests"         ON)
+OPTION(BUILD_DOCUMENTATION "Build Documentation" ON)
+
+FIND_PACKAGE(OpenGL REQUIRED)
+
+# Either GLFW or SFML2 is possible, but one of them is mandatory
+FIND_PACKAGE(GLFW)
+FIND_PACKAGE(SFML 2 COMPONENTS window)
+
+IF(GLFW_FOUND)
+    LIST(APPEND STARS_MESSAGE "*************")
+    LIST(APPEND INFO_MESSAGE  " - Using GLFW")
+    SET(USE_GLFW 1)
+ELSEIF(SFML_FOUND)
+    LIST(APPEND STARS_MESSAGE "*************")
+    LIST(APPEND INFO_MESSAGE  " - Using SFML")
+    SET(USE_SFML2 1)
+ELSE()
+    MESSAGE(FATAL_ERROR "GLFW or SFML2 is required to build SpeakEasy")
+ENDIF()
+################################################################################
+
+################################################################################
+# generate a header file to inform the code of various settings
 CONFIGURE_FILE(${SpeakEasy_SOURCE_DIR}/src/config.h.cmake
                ${SpeakEasy_BINARY_DIR}/src/config.h)
 ################################################################################
 
-# Build options
-OPTION(BUILD_TESTS "Build Tests"         ON)
-OPTION(BUILD_DOC   "Build Documentation" ON)
-
-FIND_PACKAGE(OpenGL REQUIRED)
-FIND_PACKAGE(GLFW   REQUIRED)
-
 ################################################################################
-# Doc
-IF(BUILD_DOC)
+# Documentation
+IF(BUILD_DOCUMENTATION)
     # add a target to generate API documentation with Doxygen
     FIND_PACKAGE(Doxygen)
 
@@ -67,14 +84,14 @@ IF(BUILD_DOC)
                           ${DOXYGEN_EXECUTABLE}
                           ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
                           WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-                          COMMENT "Generating API documentation with Doxygen" VERBATIM)
+                          COMMENT "Generating documentation with Doxygen" VERBATIM)
     ENDIF()
 ENDIF()
 ################################################################################
 
 ################################################################################
 # Enable max compiler debugging output
-IF(MSVC)
+IF(MSVC) # Visual Studio
     SET(CMAKE_CXX_WARNING_LEVEL 4)
     # Force it, because most of the time the above line is not enough
     IF(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")

@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2011-2012  Lambert Clara <lambert.clara@yahoo.fr>
+ * Copyright (C) 2012  Lambert Clara <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -17,25 +17,27 @@
  */
 
 /**
- * @file    SE_CGUIGLFW.h
- * @brief   Wrapper for GLFW library
+ * @file    SE_CGUISFML.h
+ * @brief   Wrapper for SFML library
  *
  * @author  Lambert Clara <lambert.clara@yahoo.fr>
- * @date    Created : 2011-08-23
+ * @date    Created : 2012-04-23
  */
 
-#ifndef SE_CGUIGLFW_H
-#define SE_CGUIGLFW_H
+#ifndef SE_CGUISFML_H
+#define SE_CGUISFML_H
 
-#include <GL/glfw3.h>
+#include "config.h"
+#ifdef USE_SFML2
 
+#include <SFML/Window.hpp>
 #include "SE_CGUIInterface.h"
 
-class SE_CGUIGLFW : public SE_CGUIInterface
+class SE_CGUISFML : public SE_CGUIInterface
 {
     public:
-        SE_CGUIGLFW();
-        ~SE_CGUIGLFW();
+        SE_CGUISFML();
+        ~SE_CGUISFML();
 
         bool init();
         bool openWindow();
@@ -43,8 +45,10 @@ class SE_CGUIGLFW : public SE_CGUIInterface
         void swapBuffers();
         bool close();
 
-    private:
-        GLFWwindow m_GLFWWindow;
+        sf::Window *m_pSFMLWindow;
+        sf::Event   m_event;
 };
 
-#endif // SE_CGUIGLFW_H
+#endif // USE_SFML2
+
+#endif // SE_CGUISFML_H

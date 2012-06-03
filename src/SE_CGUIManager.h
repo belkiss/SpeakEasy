@@ -36,7 +36,7 @@ class SE_CGUIManager
         void startUp();
         void shutDown();
 
-        void doWork();
+        bool doWork();
 
     private:
         class SE_CGUIInterface *m_pGUISystem;

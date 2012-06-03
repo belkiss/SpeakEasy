@@ -25,6 +25,11 @@
  * @date    Created : 2011-08-19
  */
 
+// activate debug console output on WIN32 and debug target
+#if defined(WIN32) && ! defined(NDEBUG)
+#    pragma comment(linker, "/SUBSYSTEM:CONSOLE")
+#endif
+
 #include <cstdlib>
 
 #include "SE_CGUIManager.h"
@@ -37,8 +42,23 @@ static SE_CLogManager      gs_LogManager;
 static SE_CMemoryManager   gs_MemoryManager;
 static SE_CGUIManager      gs_GUIManager;
 
+// RenderManager
+// AudioManager
+// InputManager
+// ErrorManager
+// ResourceManager
+// PhysicsManager
+// SceneManager
+
+
 int main()
 {
+#ifdef WIN32
+    // get the 
+    HINSTANCE const hInstance = GetModuleHandle(nullptr);
+    int const       nCmdShow  = SW_SHOWDEFAULT; // TODO: remove the apparent usage.
+#endif
+
     SE_CClock::init();
 
     // Prime the pump by reading the current time
@@ -49,9 +69,11 @@ int main()
     gs_MemoryManager.startUp();
     gs_GUIManager.startUp();
 
-    while(true) // main game loop
+    SE_CLogManager::getInstance()->log(kDebug, "SpeakEasy subsystems successfully started");
+
+    for(;;) // main game loop
     {
-        gs_GUIManager.doWork();
+        bool keepRunning = gs_GUIManager.doWork();
         // Read the current time again, and calculate the delta
         U64 tEnd = SE_CClock::readHiResTimer();
 
@@ -59,6 +81,11 @@ int main()
 
         // Use tEnd as the new tBegin for the next frame
         tBegin = tEnd;
+
+        if(!keepRunning)
+        {
+            break;
+        }
     }
 
     // Shut everything down, in reverse order

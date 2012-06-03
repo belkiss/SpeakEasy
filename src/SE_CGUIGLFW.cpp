@@ -57,10 +57,20 @@ bool SE_CGUIGLFW::init()
 ////////////////////////////////////////////////////////////////////////////////
 bool SE_CGUIGLFW::openWindow()
 {
-    m_GLFWWindow = glfwOpenWindow(300, 300, // window dim (width, height) in px
+    m_GLFWWindow = glfwOpenWindow(300, 300, // window dimensions (width, height) in pixels
                                   GLFW_WINDOWED,
                                   "SpeakEasy",
                                   nullptr);
+
+    // Ensure that we can capture the escape key being pressed below
+    glfwSetInputMode(m_GLFWWindow, GLFW_STICKY_KEYS, GL_TRUE);
+
+    // Enable vertical sync (on cards that supports it)
+    //glfwSwapInterval(1);
+
+    // Disable vertical sync
+    glfwSwapInterval(0);
+
     return m_GLFWWindow != nullptr;
 }
 
@@ -70,6 +80,7 @@ bool SE_CGUIGLFW::openWindow()
 void SE_CGUIGLFW::swapBuffers()
 {
     glfwSwapBuffers();
+    glfwPollEvents();
 }
 
 
@@ -79,4 +90,13 @@ bool SE_CGUIGLFW::close()
 {
     glfwTerminate();
     return true;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+bool SE_CGUIGLFW::quitPressed()
+{
+    SE_CLogManager::getInstance()->log(kDebug, "glfwGetKey(m_GLFWWindow, GLFW_KEY_ESCAPE) => ", glfwGetKey(m_GLFWWindow, GLFW_KEY_ESCAPE));
+    return glfwGetKey(m_GLFWWindow, GLFW_KEY_ESCAPE);
 }

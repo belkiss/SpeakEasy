@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2011-2012  Lambert Clara <lambert.clara@yahoo.fr>
+ * Copyright (C) 2012  Lambert Clara <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -17,34 +17,25 @@
  */
 
 /**
- * @file    SE_CGUIGLFW.h
- * @brief   Wrapper for GLFW library
+ * @file    SE_CInputManager.h
+ * @brief   Input devices manager
  *
  * @author  Lambert Clara <lambert.clara@yahoo.fr>
- * @date    Created : 2011-08-23
+ * @date    Created : 2012-04-23
  */
 
-#ifndef SE_CGUIGLFW_H
-#define SE_CGUIGLFW_H
+#ifndef SE_CINPUTMANAGER_H
+#define SE_CINPUTMANAGER_H
 
-#include <GL/glfw3.h>
-
-#include "SE_CGUIInterface.h"
-
-class SE_CGUIGLFW : public SE_CGUIInterface
+class SE_CInputManager
 {
     public:
-        SE_CGUIGLFW();
-        ~SE_CGUIGLFW();
+        SE_CInputManager();
+        ~SE_CInputManager();
 
-        bool init();
-        bool openWindow();
-        bool quitPressed();
-        void swapBuffers();
-        bool close();
-
-    private:
-        GLFWwindow m_GLFWWindow;
+        void startUp();
+        void shutDown();
 };
 
-#endif // SE_CGUIGLFW_H
+#endif // SE_CINPUTMANAGER_H
+
