@@ -72,14 +72,11 @@ class SE_CStackAllocator
          * @brief Rolls the stack back to a previous marker.
          *
          * @param inMarker the marker we want
-         * @return void
          **/
         void rewindToMarker(const Marker inMarker);
 
         /**
          * @brief Clears the entire stack (rolls the stack back to zero).
-         *
-         * @return void
          **/
         void clear();
 

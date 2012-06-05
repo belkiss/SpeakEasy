@@ -78,7 +78,6 @@ class SE_CLogManager
          * @brief Starts up the manager at the given log level
          *
          * @param inLogLevel The wanted log level
-         * @return void
          **/
         void startUp(const U8 inLogLevel);
 
