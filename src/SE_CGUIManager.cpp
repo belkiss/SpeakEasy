@@ -27,7 +27,7 @@
 #include "SE_CGUIManager.h"
 
 #include "SE_CGUIGLFW.h"
-//#include "SE_CGUISFML.h"
+#include "SE_CGUISFML.h"
 #include "SE_CLogManager.h"
 
 ////////////////////////////////////////////////////////////////////////////////

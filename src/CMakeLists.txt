@@ -3,7 +3,7 @@ INCLUDE_DIRECTORIES(${SpeakEasy_BINARY_DIR}/src)
 SET(SpeakEasy_src
     SE_CClock.cpp
     SE_CGUIGLFW.cpp
-    #SE_CGUISFML.cpp
+    SE_CGUISFML.cpp
     SE_CGUIManager.cpp
     SE_CGUIInterface.cpp
     SE_CLogManager.cpp
@@ -16,7 +16,7 @@ SET(SpeakEasy_src
 SET(SpeakEasy_headers
     SE_CClock.h
     SE_CGUIGLFW.h
-    #SE_CGUISFML.h
+    SE_CGUISFML.h
     SE_CGUIManager.h
     SE_CGUIInterface.h
     SE_CLogManager.h
@@ -48,7 +48,7 @@ TARGET_LINK_LIBRARIES(
     ${OPENGL_LIBRARIES}
     ${OPENGL_glu_LIBRARY}
     ${GLFW_LIBRARY}
-    #${SFML_LIBRARIES}
+    ${SFML_LIBRARIES}
 )
 
 INSTALL(TARGETS speakeasy DESTINATION "bin")
