@@ -26,6 +26,7 @@
 
 #include "SE_CClock.h"
 
+#include <ctime>
 #include <iomanip>
 #include <sstream>
 
@@ -36,6 +37,7 @@ F32 SE_CClock::ms_cyclesPerSecond = 0.f;
 ////////////////////////////////////////////////////////////////////////////////
 void SE_CClock::localtimeToSStream(std::ostringstream &ioStringStream)
 {
+#ifdef WIN32
     SYSTEMTIME systemTime;
     GetLocalTime(&systemTime);
 
@@ -49,4 +51,21 @@ void SE_CClock::localtimeToSStream(std::ostringstream &ioStringStream)
                    << std::setw(2) << systemTime.wSecond << "."
                    << std::setw(3)
                    << systemTime.wMilliseconds;
+#else
+    std::chrono::steady_clock::time_point systemTime = std::chrono::steady_clock::now();
+    std::time_t currentTime = std::chrono::system_clock::to_time_t(systemTime);
+    std::tm *pCurrentTime = std::localtime(&currentTime);
+
+    // Format like this : YYYY-MM-DD_HH:MM:SS
+    ioStringStream << std::setfill('0')
+                   << pCurrentTime->tm_year + 1900             << "-"
+                   << std::setw(2) << pCurrentTime->tm_mon + 1 << "-"
+                   << std::setw(2) << pCurrentTime->tm_mday    << "_"
+                   << std::setw(2) << pCurrentTime->tm_hour    << ":"
+                   << std::setw(2) << pCurrentTime->tm_min     << ":"
+                   << std::setw(2) << pCurrentTime->tm_sec     << "."
+                   << std::setw(3)
+                   << std::chrono::duration_cast<std::chrono::milliseconds>(systemTime.time_since_epoch()).count() -
+                      (1000*std::chrono::duration_cast<std::chrono::seconds>(systemTime.time_since_epoch()).count());
+#endif
 }

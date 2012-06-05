@@ -28,10 +28,13 @@
 #define SE_CCLOCK_H
 
 #include <cassert>
+#include <chrono> // TODO: wrap it with some ifdefs
 #include <ctime>
 #include <sstream>
 
+#ifdef WIN32
 #include <windows.h>
+#endif
 
 #include "SE_Types.h"
 
@@ -49,7 +52,9 @@ class SE_CClock
         // Call this when the game first starts up
         static void init()
         {
+#ifdef WIN32
             ms_cyclesPerSecond = (F32)readHiResTimerFrequency();
+#endif
         }
 
         // Return the current time in cycles. NOTE that we do not return
@@ -121,6 +126,7 @@ class SE_CClock
          *
          * @return I64 the timer frequency
         **/
+#ifdef WIN32
         static U64 readHiResTimer()
         {
             LARGE_INTEGER counter;
@@ -128,6 +134,12 @@ class SE_CClock
             assert(success);
             return counter.QuadPart;
         }
+#else
+        static std::chrono::system_clock::time_point readHiResTimer()
+        {
+            return std::chrono::high_resolution_clock::now();
+        }
+#endif
 
         /**
          * @brief Reads the frequency of the high resolution timer from the CPU
@@ -138,10 +150,13 @@ class SE_CClock
         **/
         static U64 readHiResTimerFrequency()
         {
+#ifdef WIN32
             LARGE_INTEGER frequency;
             BOOL success = QueryPerformanceFrequency(&frequency);
             assert(success);
             return frequency.QuadPart;
+#endif
+            return 0;
         }
 
         /**
@@ -172,6 +187,7 @@ class SE_CClock
         U64  m_timeCycles;
         F32  m_timeScale;
         bool m_isPaused;
+        U8   _pad[3]; // explicit padding
 
     private: // static members
         static F32 ms_cyclesPerSecond;

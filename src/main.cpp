@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2011  Lambert Clara <lambert.clara@yahoo.fr>
+ * Copyright (C) 2011-2012  Lambert Clara <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -31,6 +31,7 @@
 #endif
 
 #include <cstdlib>
+#include <thread>
 
 #include "SE_CGUIManager.h"
 #include "SE_CLogManager.h"
@@ -54,7 +55,7 @@ static SE_CGUIManager      gs_GUIManager;
 int main()
 {
 #ifdef WIN32
-    // get the 
+    // get the arguments usually set by WinMain
     HINSTANCE const hInstance = GetModuleHandle(nullptr);
     int const       nCmdShow  = SW_SHOWDEFAULT; // TODO: remove the apparent usage.
 #endif
@@ -62,7 +63,7 @@ int main()
     SE_CClock::init();
 
     // Prime the pump by reading the current time
-    U64 tBegin = SE_CClock::readHiResTimer();
+    auto tBegin = SE_CClock::readHiResTimer();
 
     // Start up engine systems in the correct order
     gs_LogManager.startUp(kDebug);
@@ -75,15 +76,28 @@ int main()
     {
         bool keepRunning = gs_GUIManager.doWork();
         // Read the current time again, and calculate the delta
-        U64 tEnd = SE_CClock::readHiResTimer();
+        auto tEnd = SE_CClock::readHiResTimer();
 
+#ifdef WIN32
         SE_CLogManager::getInstance()->log(kDebug, (F32)SE_CClock::getHiResTimerFrequency()/(F32)(tEnd - tBegin));
+#endif
+
+        // pause the main loop to get 60 fps
+        // TODO: test if we really need to, i.e. the time spent is indeed < 1/60
+        std::this_thread::sleep_for(std::chrono::microseconds(1*1000*1000/60) - (tEnd - tBegin));
+
+        tEnd = SE_CClock::readHiResTimer();
+
+        SE_CLogManager::getInstance()->log(kDebug,
+                                           std::chrono::duration_cast<std::chrono::microseconds>(tEnd - tBegin).count()/1000.f,
+                                           " ms");
 
         // Use tEnd as the new tBegin for the next frame
         tBegin = tEnd;
 
         if(!keepRunning)
         {
+            SE_CLogManager::getInstance()->log(kDebug, "Exiting...");
             break;
         }
     }
