@@ -28,7 +28,6 @@
 #define SE_CGUISFML_H
 
 #include "config.h"
-#ifdef USE_SFML2
 
 #include <SFML/Window.hpp>
 #include "SE_CGUIInterface.h"
@@ -48,7 +47,5 @@ class SE_CGUISFML : public SE_CGUIInterface
         sf::Window *m_pSFMLWindow;
         sf::Event   m_event;
 };
-
-#endif // USE_SFML2
 
 #endif // SE_CGUISFML_H
