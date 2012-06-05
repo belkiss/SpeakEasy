@@ -97,6 +97,5 @@ bool SE_CGUIGLFW::close()
 ////////////////////////////////////////////////////////////////////////////////
 bool SE_CGUIGLFW::quitPressed()
 {
-    SE_CLogManager::getInstance()->log(kDebug, "glfwGetKey(m_GLFWWindow, GLFW_KEY_ESCAPE) => ", glfwGetKey(m_GLFWWindow, GLFW_KEY_ESCAPE));
     return glfwGetKey(m_GLFWWindow, GLFW_KEY_ESCAPE);
 }
