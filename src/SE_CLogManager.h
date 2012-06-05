@@ -152,6 +152,8 @@ void SE_CLogManager::log(const U8 inLevel, const Types&... inLogs)
     if(!inLevel || inLevel >= m_currentLogLevel)
     {
         std::ostringstream displayStream;
+        SE_CClock::localtimeToSStream(displayStream);
+        displayStream << " ";
         logLevelToSStream(inLevel, displayStream);
         appendLogs(displayStream, inLogs...);
     }
