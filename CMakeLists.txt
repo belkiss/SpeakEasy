@@ -104,7 +104,7 @@ ENDIF()
 
 IF(UNIX)
     # Enable c++11
-    ADD_DEFINITIONS(-std=c++0x)
+    ADD_DEFINITIONS(-std=c++11)
     # Enable a LOT of warnings
     ADD_DEFINITIONS(-Wall
                     -Wextra
