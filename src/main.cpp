@@ -58,12 +58,14 @@ int main()
     // get the arguments usually set by WinMain
     HINSTANCE const hInstance = GetModuleHandle(nullptr);
     int const       nCmdShow  = SW_SHOWDEFAULT; // TODO: remove the apparent usage.
+    (void)hInstance;
+    (void)nCmdShow;
 #endif
 
     SE_CClock::init();
 
     // Prime the pump by reading the current time
-    auto tBegin = SE_CClock::readHiResTimer();
+    std::chrono::system_clock::time_point tBegin = SE_CClock::readHiResTimer();
 
     // Start up engine systems in the correct order
     gs_LogManager.startUp(kDebug);
@@ -76,11 +78,7 @@ int main()
     {
         bool keepRunning = gs_GUIManager.doWork();
         // Read the current time again, and calculate the delta
-        auto tEnd = SE_CClock::readHiResTimer();
-
-#ifdef WIN32
-        SE_CLogManager::getInstance()->log(kDebug, (F32)SE_CClock::getHiResTimerFrequency()/(F32)(tEnd - tBegin));
-#endif
+        std::chrono::system_clock::time_point tEnd = SE_CClock::readHiResTimer();
 
         // pause the main loop to get 60 fps
         // TODO: test if we really need to, i.e. the time spent is indeed < 1/60
