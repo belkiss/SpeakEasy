@@ -63,8 +63,19 @@ TARGET_LINK_LIBRARIES(
     ${Executable_name}
     ${OPENGL_LIBRARIES}
     ${OPENGL_glu_LIBRARY}
-    ${GLFW_LIBRARY}
-    ${SFML_LIBRARIES}
 )
+
+IF(USE_GLFW)
+    TARGET_LINK_LIBRARIES(
+        ${Executable_name}
+        ${GLFW_LIBRARY}
+    )
+ELSEIF(USE_SFML)
+    TARGET_LINK_LIBRARIES(
+        ${Executable_name}
+        ${SFML_LIBRARIES}
+    )
+ENDIF()
+
 
 INSTALL(TARGETS speakeasy DESTINATION "bin")
