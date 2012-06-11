@@ -32,7 +32,7 @@ IF(USE_GLFW)
     LIST(APPEND SpeakEasy_headers
          SE_CGUIGLFW.h
     )
-ELSEIF(USE_SFML)
+ELSEIF(USE_SFML2)
     LIST(APPEND SpeakEasy_src
          SE_CGUISFML.cpp
     )
@@ -72,7 +72,7 @@ IF(USE_GLFW)
         ${Executable_name}
         ${GLFW_LIBRARY}
     )
-ELSEIF(USE_SFML)
+ELSEIF(USE_SFML2)
     TARGET_LINK_LIBRARIES(
         ${Executable_name}
         ${SFML_LIBRARIES}

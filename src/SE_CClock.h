@@ -34,7 +34,7 @@
 
 #ifdef WIN32
 #include <windows.h>
-#endif
+#endif // WIN32
 
 #include "SE_Types.h"
 
@@ -174,4 +174,4 @@ class SE_CClock
         static F32 ms_cyclesPerSecond;
 };
 
-#endif  // SE_CCLOCK_H
+#endif // SE_CCLOCK_H
