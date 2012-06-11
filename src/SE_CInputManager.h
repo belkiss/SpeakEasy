@@ -27,14 +27,16 @@
 #ifndef SE_CINPUTMANAGER_H
 #define SE_CINPUTMANAGER_H
 
-class SE_CInputManager
+#include "SE_IBaseManager.h"
+
+class SE_CInputManager : public SE_IBaseManager
 {
     public:
         SE_CInputManager();
         ~SE_CInputManager();
 
-        void startUp();
-        void shutDown();
+        void startUp()  override;
+        void shutDown() override;
 };
 
 #endif // SE_CINPUTMANAGER_H

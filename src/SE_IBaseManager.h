@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2011-2012  Lambert Clara <lambert.clara@yahoo.fr>
+ * Copyright (C) 2012  Lambert Clara <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -17,26 +17,24 @@
  */
 
 /**
- * @file    SE_CMemoryManager.h
- * @brief   Memory manager
+ * @file    SE_IBaseManager.h
+ * @brief   Base interface for managers
  *
  * @author  Lambert Clara <lambert.clara@yahoo.fr>
- * @date    Created : 2011-08-22
+ * @date    Created : 2012-06-09
  */
 
-#ifndef SE_CMEMORYMANAGER_H
-#define SE_CMEMORYMANAGER_H
+#ifndef SE_IBASEMANAGER_H
+#define SE_IBASEMANAGER_H
 
-#include "SE_IBaseManager.h"
-
-class SE_CMemoryManager : public SE_IBaseManager
+class SE_IBaseManager
 {
     public:
-        SE_CMemoryManager(){};
-        ~SE_CMemoryManager(){};
+        SE_IBaseManager();
+        virtual ~SE_IBaseManager();
 
-        void startUp();
-        void shutDown();
+        virtual void startUp()  = 0;
+        virtual void shutDown() = 0;
 };
 
-#endif // SE_CMEMORYMANAGER_H
+#endif // SE_IBASEMANAGER_H

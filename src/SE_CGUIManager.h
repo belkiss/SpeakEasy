@@ -27,14 +27,16 @@
 #ifndef SE_CGUIMANAGER_H
 #define SE_CGUIMANAGER_H
 
-class SE_CGUIManager
+#include "SE_IBaseManager.h"
+
+class SE_CGUIManager : public SE_IBaseManager
 {
     public:
         SE_CGUIManager();
         ~SE_CGUIManager(){};
 
-        void startUp();
-        void shutDown();
+        void startUp()  override;
+        void shutDown() override;
 
         bool doWork();
 

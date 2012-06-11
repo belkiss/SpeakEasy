@@ -31,6 +31,7 @@
 #include <sstream>
 
 #include "config.h"
+#include "SE_IBaseManager.h"
 #include "SE_CClock.h"
 #include "SE_Types.h"
 
@@ -58,7 +59,7 @@ enum ELogLevels
 /**
  * @brief This log management class MUST be used as singleton
  **/
-class SE_CLogManager
+class SE_CLogManager : public SE_IBaseManager
 {
     public:
         /**
@@ -76,12 +77,13 @@ class SE_CLogManager
 
         /**
          * @brief Starts up the manager at the given log level
+         * @note The inherited method (without the parameter) is private
          *
          * @param inLogLevel The wanted log level
          **/
         void startUp(const U8 inLogLevel);
 
-        void shutDown();
+        void shutDown() override;
 
 #ifdef VARIADIC_TEMPLATES_SUPPORTED
     public:
@@ -124,6 +126,9 @@ class SE_CLogManager
 
     private:
         void logLevelToSStream(const U8 inLevel, std::ostringstream &ioStringStream);
+
+        // inherited startUp method, leave it empty
+        void startUp() override {}
 
         inline void appendLogs(std::ostringstream &outStringStream);
 

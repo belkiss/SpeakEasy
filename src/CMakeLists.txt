@@ -7,6 +7,7 @@ SET(SpeakEasy_src
     SE_CLogManager.cpp
     SE_CMemoryManager.cpp
     SE_CStackAllocator.cpp
+    SE_IBaseManager.cpp
     main.cpp
 )
 
@@ -18,6 +19,7 @@ SET(SpeakEasy_headers
     SE_CLogManager.h
     SE_CMemoryManager.h
     SE_CStackAllocator.h
+    SE_IBaseManager.h
     SE_Types.h
     config.h.cmake
     config.h # generated from the above file
