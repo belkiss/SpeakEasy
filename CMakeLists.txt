@@ -111,6 +111,10 @@ ENDIF()
 IF(UNIX)
     # Enable c++11
     ADD_DEFINITIONS(-std=c++11)
+    # Disable RTTI
+    ADD_DEFINITIONS(-fno-rtti)
+    # Disable Exceptions
+    ADD_DEFINITIONS(-fno-exceptions)
     # Enable a LOT of warnings
     ADD_DEFINITIONS(-Wall
                     -Wextra
