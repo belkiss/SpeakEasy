@@ -36,6 +36,7 @@ class SE_CGUIInterface
         virtual bool init();
         virtual bool openWindow();
         virtual void swapBuffers() = 0;
+        virtual bool windowClosed();
         virtual bool quitPressed();
         virtual bool close();
 };

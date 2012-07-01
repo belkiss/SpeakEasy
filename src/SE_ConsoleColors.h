@@ -73,7 +73,7 @@ inline std::ostream& COL_END(std::ostream &ioStr)
 ////////////////////////////////////////////////////////////////////////////////
 inline std::ostream& BLUE(std::ostream &ioStr)
 {
-    HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE); 
+    HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(hStdout, LightCyan);
     return ioStr;
 }
@@ -83,7 +83,7 @@ inline std::ostream& BLUE(std::ostream &ioStr)
 ////////////////////////////////////////////////////////////////////////////////
 inline std::ostream& RED(std::ostream &ioStr)
 {
-    HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE); 
+    HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(hStdout, Red);
     return ioStr;
 }
@@ -93,7 +93,7 @@ inline std::ostream& RED(std::ostream &ioStr)
 ////////////////////////////////////////////////////////////////////////////////
 inline std::ostream& GREEN(std::ostream &ioStr)
 {
-    HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE); 
+    HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(hStdout, LightGreen);
     return ioStr;
 }
@@ -103,7 +103,7 @@ inline std::ostream& GREEN(std::ostream &ioStr)
 ////////////////////////////////////////////////////////////////////////////////
 inline std::ostream& ORANGE(std::ostream &ioStr)
 {
-    HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE); 
+    HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(hStdout, Orange);
     return ioStr;
 }
@@ -113,7 +113,7 @@ inline std::ostream& ORANGE(std::ostream &ioStr)
 ////////////////////////////////////////////////////////////////////////////////
 inline std::ostream& YELLOW(std::ostream &ioStr)
 {
-    HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE); 
+    HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(hStdout, Yellow);
     return ioStr;
 }
@@ -123,7 +123,7 @@ inline std::ostream& YELLOW(std::ostream &ioStr)
 ////////////////////////////////////////////////////////////////////////////////
 inline std::ostream& WHITE(std::ostream &ioStr)
 {
-    HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE); 
+    HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(hStdout, White);
     return ioStr;
 }
