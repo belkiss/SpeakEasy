@@ -60,6 +60,9 @@ bool SE_CGUISFML::openWindow()
                                    "SpeakEasy",
                                    sf::Style::Default,
                                    sf::ContextSettings(32));
+
+    m_pSFMLWindow->setVerticalSyncEnabled(false);
+
     return m_pSFMLWindow != nullptr;
 }
 
