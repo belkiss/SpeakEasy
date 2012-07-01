@@ -36,14 +36,15 @@
 #include "SE_CGUIManager.h"
 #include "SE_CLogManager.h"
 #include "SE_CMemoryManager.h"
+#include "SE_CRenderManager.h"
 
 #include "SE_CClock.h"
 
 static SE_CLogManager      gs_LogManager;
 static SE_CMemoryManager   gs_MemoryManager;
 static SE_CGUIManager      gs_GUIManager;
+static SE_CRenderManager   gs_RenderManager;
 
-// RenderManager
 // AudioManager
 // InputManager
 // ErrorManager
@@ -66,41 +67,43 @@ int main()
 
     // Prime the pump by reading the current time
     std::chrono::system_clock::time_point tBegin = SE_CClock::readHiResTimer();
+    std::chrono::system_clock::time_point tEnd   = tBegin;
 
     // Start up engine systems in the correct order
     gs_LogManager.startUp(kDebug);
     gs_MemoryManager.startUp();
     gs_GUIManager.startUp();
+    gs_RenderManager.startUp();
 
     SE_CLogManager::getInstance()->log(kDebug, "SpeakEasy subsystems successfully started");
 
-    for(;;) // main game loop
+    F32 elapsedTime = 0.f;
+
+    bool keepRunning = true;
+    while(keepRunning) // main game loop
     {
-        bool keepRunning = gs_GUIManager.doWork();
         // Read the current time again, and calculate the delta
-        std::chrono::system_clock::time_point tEnd = SE_CClock::readHiResTimer();
-
-        // pause the main loop to get 60 fps
-        // TODO: test if we really need to, i.e. the time spent is indeed < 1/60
-        std::this_thread::sleep_for(std::chrono::microseconds(1*1000*1000/60) - (tEnd - tBegin));
-
         tEnd = SE_CClock::readHiResTimer();
 
-        SE_CLogManager::getInstance()->log(kDebug,
-                                           std::chrono::duration_cast<std::chrono::microseconds>(tEnd - tBegin).count()/1000.f,
-                                           " ms");
-
-        // Use tEnd as the new tBegin for the next frame
-        tBegin = tEnd;
-
-        if(!keepRunning)
+        const F32 deltaMs = std::chrono::duration_cast<std::chrono::microseconds>(tEnd - tBegin).count()/1000.f;
+        if(deltaMs >= 1000.f/60)
         {
-            SE_CLogManager::getInstance()->log(kDebug, "Exiting...");
-            break;
+            SE_CLogManager::getInstance()->log(kDebug, deltaMs, " ms");
+
+            elapsedTime += deltaMs;
+
+            gs_RenderManager.render(elapsedTime);
+            keepRunning = gs_GUIManager.doWork();
+
+            // Use tEnd as the new tBegin for the next frame
+            tBegin = tEnd;
         }
     }
 
+    SE_CLogManager::getInstance()->log(kDebug, "Exiting...");
+
     // Shut everything down, in reverse order
+    gs_RenderManager.shutDown();
     gs_GUIManager.shutDown();
     gs_MemoryManager.shutDown();
     gs_LogManager.shutDown();

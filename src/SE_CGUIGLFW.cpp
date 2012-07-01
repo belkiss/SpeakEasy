@@ -57,7 +57,7 @@ bool SE_CGUIGLFW::init()
 ////////////////////////////////////////////////////////////////////////////////
 bool SE_CGUIGLFW::openWindow()
 {
-    m_GLFWWindow = glfwOpenWindow(300, 300, // window dimensions (width, height) in pixels
+    m_GLFWWindow = glfwOpenWindow(640, 480, // window dimensions (width, height) in pixels
                                   GLFW_WINDOWED,
                                   "SpeakEasy",
                                   nullptr);
