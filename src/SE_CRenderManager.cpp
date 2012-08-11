@@ -26,8 +26,17 @@
 
 #include "SE_CRenderManager.h"
 
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include "config.h"
+
+#ifdef USE_GLFW
+#    define GLFW_INCLUDE_GLU
+#    include <GL/glfw3.h>
+#elif defined(USE_SFML2)
+#    include <GL/gl.h>
+#    include <GL/glu.h>
+#endif // USE_GLFW USE_SFML2
+
+
 
 #include "SE_CLogManager.h"
 
