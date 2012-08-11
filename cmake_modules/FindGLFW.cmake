@@ -32,7 +32,7 @@ IF(WIN32)
 ENDIF()
 
 # find the GLFW include directory
-FIND_PATH(GLFW_INCLUDE_DIR  GL/glfw.h GL/glfw3.h
+FIND_PATH(GLFW_INCLUDE_DIR  NAMES GL/glfw.h GL/glfw3.h
                             DOC "Path to GLFW header."
                             PATH_SUFFIXES include
                             PATHS
@@ -97,7 +97,7 @@ IF(GLFW_INCLUDE_DIR)
 #     endif()
 ENDIF()
 
-FIND_LIBRARY(GLFW_LIBRARY   glfw
+FIND_LIBRARY(GLFW_LIBRARY   NAMES glfw glfw3
                             PATHS
                             ~/Library/Frameworks
                             /Library/Frameworks

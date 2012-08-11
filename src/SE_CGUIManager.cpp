@@ -81,5 +81,5 @@ void SE_CGUIManager::shutDown()
 bool SE_CGUIManager::doWork()
 {
     m_pGUISystem->swapBuffers();
-    return !m_pGUISystem->quitPressed() && !m_pGUISystem->windowClosed();
+    return !m_pGUISystem->quitPressed();
 }

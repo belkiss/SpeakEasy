@@ -39,7 +39,6 @@ class SE_CGUIGLFW : public SE_CGUIInterface
 
         bool init();
         bool openWindow();
-        bool windowClosed();
         bool quitPressed();
         void swapBuffers();
         bool close();

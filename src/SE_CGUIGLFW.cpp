@@ -57,7 +57,7 @@ bool SE_CGUIGLFW::init()
 ////////////////////////////////////////////////////////////////////////////////
 bool SE_CGUIGLFW::openWindow()
 {
-    m_GLFWWindow = glfwOpenWindow(640, 480, // window dimensions (width, height) in pixels
+    m_GLFWWindow = glfwCreateWindow(640, 480, // window dimensions (width, height) in pixels
                                   GLFW_WINDOWED,
                                   "SpeakEasy",
                                   nullptr);
@@ -79,7 +79,7 @@ bool SE_CGUIGLFW::openWindow()
 ////////////////////////////////////////////////////////////////////////////////
 void SE_CGUIGLFW::swapBuffers()
 {
-    glfwSwapBuffers();
+    glfwSwapBuffers(m_GLFWWindow);
     glfwPollEvents();
 }
 
@@ -90,14 +90,6 @@ bool SE_CGUIGLFW::close()
 {
     glfwTerminate();
     return true;
-}
-
-
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-bool SE_CGUIGLFW::windowClosed()
-{
-    return !glfwIsWindow(m_GLFWWindow);
 }
 
 
