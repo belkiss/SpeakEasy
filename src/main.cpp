@@ -76,6 +76,9 @@ int main()
     gs_RenderManager.startUp();
 
     SE_CLogManager::getInstance()->log(kDebug, "SpeakEasy subsystems successfully started");
+#ifdef SE_DEBUG
+    SE_CLogManager::getInstance()->log(kDebug, "SE_DEBUG defined");
+#endif
 
     F32 elapsedTime = 0.f;
 

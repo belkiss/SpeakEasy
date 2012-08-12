@@ -57,6 +57,10 @@ bool SE_CGUIGLFW::init()
 ////////////////////////////////////////////////////////////////////////////////
 bool SE_CGUIGLFW::openWindow()
 {
+#ifdef SE_DEBUG
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+#endif // SE_DEBUG
+
     m_GLFWWindow = glfwCreateWindow(640, 480, // window dimensions (width, height) in pixels
                                     GLFW_WINDOWED,
                                     "SpeakEasy",

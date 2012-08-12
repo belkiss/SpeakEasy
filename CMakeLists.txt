@@ -12,6 +12,17 @@ LIST(APPEND INFO_MESSAGE  "Build SpeakEasy")
 # add color on CMake output
 SET(CMAKE_COLOR_MAKEFILE ON)
 
+# set the default build type to Debug if no build type is set.
+IF(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
+    SET(CMAKE_BUILD_TYPE Debug)
+ENDIF()
+
+LIST(APPEND STARS_MESSAGE "********")
+LIST(APPEND INFO_MESSAGE  " (${CMAKE_BUILD_TYPE})")
+
+# Add a define to know when we want to compile a debug build
+SET(CMAKE_CXX_FLAGS_DEBUG "-DSE_DEBUG")
+
 # set the destination of the executable
 SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
