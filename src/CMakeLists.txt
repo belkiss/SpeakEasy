@@ -67,6 +67,9 @@ TARGET_LINK_LIBRARIES(
     ${Executable_name}
     ${OPENGL_LIBRARIES}
     ${OPENGL_glu_LIBRARY}
+    ${X11_Xxf86vm_LIB}
+    ${X11_Xrandr_LIB}
+    rt
 )
 
 IF(USE_GLFW)

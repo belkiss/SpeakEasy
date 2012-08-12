@@ -45,6 +45,7 @@ OPTION(BUILD_TESTS         "Build Tests"         ON)
 OPTION(BUILD_DOCUMENTATION "Build Documentation" ON)
 
 FIND_PACKAGE(OpenGL REQUIRED)
+FIND_PACKAGE(X11    REQUIRED)
 
 # Either GLFW or SFML2 is possible, but one of them is mandatory
 FIND_PACKAGE(GLFW)
