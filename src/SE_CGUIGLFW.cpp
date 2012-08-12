@@ -62,6 +62,9 @@ bool SE_CGUIGLFW::openWindow()
                                   "SpeakEasy",
                                   nullptr);
 
+    // Make the context of the newly created window current
+    glfwMakeContextCurrent(m_GLFWWindow);
+
     // Ensure that we can capture the escape key being pressed below
     glfwSetInputMode(m_GLFWWindow, GLFW_STICKY_KEYS, GL_TRUE);
 
