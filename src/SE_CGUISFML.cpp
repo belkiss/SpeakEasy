@@ -56,7 +56,7 @@ bool SE_CGUISFML::init()
 ////////////////////////////////////////////////////////////////////////////////
 bool SE_CGUISFML::openWindow()
 {
-    m_pSFMLWindow = new sf::Window(sf::VideoMode(300, 300, 32),  // window dim (width, height, color_depth) in px
+    m_pSFMLWindow = new sf::Window(sf::VideoMode(640, 480, 32),  // window dim (width, height, color_depth) in px
                                    "SpeakEasy",
                                    sf::Style::Default,
                                    sf::ContextSettings(32));

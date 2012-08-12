@@ -58,9 +58,9 @@ bool SE_CGUIGLFW::init()
 bool SE_CGUIGLFW::openWindow()
 {
     m_GLFWWindow = glfwCreateWindow(640, 480, // window dimensions (width, height) in pixels
-                                  GLFW_WINDOWED,
-                                  "SpeakEasy",
-                                  nullptr);
+                                    GLFW_WINDOWED,
+                                    "SpeakEasy",
+                                    nullptr);
 
     // Make the context of the newly created window current
     glfwMakeContextCurrent(m_GLFWWindow);
