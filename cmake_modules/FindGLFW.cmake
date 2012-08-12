@@ -56,9 +56,7 @@ FIND_PATH(GLFW_INCLUDE_DIR  NAMES GL/glfw.h GL/glfw3.h
                             $ENV{GLFWDIR}
 )
 
-IF(NOT GLFW_INCLUDE_DIR)
-    MESSAGE(SEND_ERROR "glfw.h not found")
-ELSE()
+IF(GLFW_INCLUDE_DIR)
     IF(EXISTS ${GLFW_INCLUDE_DIR}/GL/glfw.h)
         SET(GLFW_INCLUDE_FILE "glfw.h")
     ELSE()
@@ -66,12 +64,11 @@ ELSE()
             SET(GLFW_INCLUDE_FILE "glfw3.h")
         ENDIF()
     ENDIF()
-ENDIF()
 
-# check the version number
-SET(GLFW_VERSION_OK TRUE)
-# GLFW_FIND_VERSION AND
-IF(GLFW_INCLUDE_DIR)
+    # check the version number
+    SET(GLFW_VERSION_OK TRUE)
+    # GLFW_FIND_VERSION AND
+
     # extract the major and minor version numbers from GL/glfw.h
     FILE(STRINGS "${GLFW_INCLUDE_DIR}/GL/${GLFW_INCLUDE_FILE}" GLFW_H REGEX "^.*API version: .*$")
 
@@ -95,36 +92,36 @@ IF(GLFW_INCLUDE_DIR)
 #             set(GLFW_VERSION_OK FALSE)
 #         endif()
 #     endif()
-ENDIF()
 
-FIND_LIBRARY(GLFW_LIBRARY   NAMES glfw glfw3
-                            PATHS
-                            ~/Library/Frameworks
-                            /Library/Frameworks
-                            /usr/local
-                            /usr/local/X11R6
-                            /usr/X11R6
-                            /usr/X11
-                            /usr/lib/X11
-                            /usr
-                            /opt/local
-                            /opt/csw
-                            /opt/X11
-                            /opt
-                            /sw
-                            $ENV{GLFWDIR}/support/msvc80/Debug
-                            $ENV{GLFWDIR}/support/msvc80/Release
-                            ${VS_DIR}/VC/lib
-                            ${GLFWDIR}
-                            $ENV{GLFWDIR}
-)
+    FIND_LIBRARY(GLFW_LIBRARY   NAMES glfw glfw3
+                                PATHS
+                                ~/Library/Frameworks
+                                /Library/Frameworks
+                                /usr/local
+                                /usr/local/X11R6
+                                /usr/X11R6
+                                /usr/X11
+                                /usr/lib/X11
+                                /usr
+                                /opt/local
+                                /opt/csw
+                                /opt/X11
+                                /opt
+                                /sw
+                                $ENV{GLFWDIR}/support/msvc80/Debug
+                                $ENV{GLFWDIR}/support/msvc80/Release
+                                ${VS_DIR}/VC/lib
+                                ${GLFWDIR}
+                                $ENV{GLFWDIR}
+    )
 
-IF(NOT GLFW_LIBRARY)
-    MESSAGE(SEND_ERROR "libglfw not found")
-ENDIF()
-
-IF(GLFW_INCLUDE_DIR AND GLFW_LIBRARY)
-    SET(GLFW_FOUND TRUE)
+    IF(GLFW_LIBRARY)
+        SET(GLFW_FOUND TRUE)
+    ELSE()
+        MESSAGE("libglfw[3] could not be found")
+    ENDIF()
+ELSE()
+    MESSAGE("glfw.h and glfw3.h could not be found")
 ENDIF()
 
 IF(GLFW_FOUND)
