@@ -8,6 +8,7 @@
 #   GLFW_FOUND, if false, do not try to link to GLFW
 #   GLFW_INCLUDE_DIR, the path where GLFW headers are located(the directory containing the glfw.h file)
 #   GLFW_LIBRARY, libraries to link against to use GLFW
+#   GLFW_IS_STATIC, (on *nix only) true if the found glfw library is static
 #
 # $GLFWDIR is an environment variable that would correspond
 # to the prefix used to configure GLFW.
@@ -65,7 +66,7 @@ IF(GLFW_INCLUDE_DIR)
         ENDIF()
     ENDIF()
 
-    # check the version number
+    # TODO: check the version number
     SET(GLFW_VERSION_OK TRUE)
     # GLFW_FIND_VERSION AND
 
@@ -117,6 +118,9 @@ IF(GLFW_INCLUDE_DIR)
 
     IF(GLFW_LIBRARY)
         SET(GLFW_FOUND TRUE)
+        IF(GLFW_LIBRARY MATCHES ".a$")
+            SET(GLFW_IS_STATIC TRUE)
+        ENDIF()
     ELSE()
         MESSAGE("libglfw[3] could not be found")
     ENDIF()

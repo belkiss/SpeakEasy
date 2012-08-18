@@ -56,7 +56,6 @@ OPTION(BUILD_TESTS         "Build Tests"         ON)
 OPTION(BUILD_DOCUMENTATION "Build Documentation" ON)
 
 FIND_PACKAGE(OpenGL REQUIRED)
-FIND_PACKAGE(X11    REQUIRED)
 
 # Either GLFW or SFML2 is possible, but one of them is mandatory
 FIND_PACKAGE(GLFW)
@@ -71,6 +70,9 @@ IF(GLFW_FOUND)
         LIST(APPEND STARS_MESSAGE "*************")
         LIST(APPEND INFO_MESSAGE  " - Using GLFW")
         SET(USE_GLFW TRUE)
+        IF(GLFW_IS_STATIC)
+            FIND_PACKAGE(X11 REQUIRED)
+        ENDIF()
     ENDIF()
 ELSEIF(SFML_FOUND)
     IF(PREFER_SFML2 OR NOT GLFW_FOUND)

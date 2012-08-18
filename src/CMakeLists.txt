@@ -27,6 +27,12 @@ SET(SpeakEasy_headers
     config.h # generated from the above file
 )
 
+# list dependencies
+SET(SpeakEasy_Libs
+    ${OPENGL_LIBRARIES}
+    ${OPENGL_glu_LIBRARY}
+)
+
 IF(USE_GLFW)
     LIST(APPEND SpeakEasy_src
          SE_CGUIGLFW.cpp
@@ -34,12 +40,25 @@ IF(USE_GLFW)
     LIST(APPEND SpeakEasy_headers
          SE_CGUIGLFW.h
     )
+    LIST(APPEND SpeakEasy_Libs
+         ${GLFW_LIBRARY}
+    )
+    IF(GLFW_IS_STATIC)
+        LIST(APPEND SpeakEasy_Libs
+             ${X11_Xxf86vm_LIB}
+             ${X11_Xrandr_LIB}
+             rt
+        )
+    ENDIF()
 ELSEIF(USE_SFML2)
     LIST(APPEND SpeakEasy_src
          SE_CGUISFML.cpp
     )
     LIST(APPEND SpeakEasy_headers
          SE_CGUISFML.h
+    )
+    LIST(APPEND SpeakEasy_Libs
+        ${SFML_LIBRARIES}
     )
 ENDIF()
 
@@ -65,24 +84,7 @@ ENDIF(WIN32)
 # linker setup
 TARGET_LINK_LIBRARIES(
     ${Executable_name}
-    ${OPENGL_LIBRARIES}
-    ${OPENGL_glu_LIBRARY}
-    ${X11_Xxf86vm_LIB}
-    ${X11_Xrandr_LIB}
-    rt
+    ${SpeakEasy_Libs}
 )
-
-IF(USE_GLFW)
-    TARGET_LINK_LIBRARIES(
-        ${Executable_name}
-        ${GLFW_LIBRARY}
-    )
-ELSEIF(USE_SFML2)
-    TARGET_LINK_LIBRARIES(
-        ${Executable_name}
-        ${SFML_LIBRARIES}
-    )
-ENDIF()
-
 
 INSTALL(TARGETS speakeasy DESTINATION "bin")
