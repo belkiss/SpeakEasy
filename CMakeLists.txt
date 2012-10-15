@@ -56,20 +56,11 @@ OPTION(BUILD_TESTS         "Build Tests"         ON)
 OPTION(BUILD_DOCUMENTATION "Build Documentation" ON)
 
 FIND_PACKAGE(OpenGL REQUIRED)
+FIND_PACKAGE(GLFW   REQUIRED)
 
-# GLFW is mandatory
-FIND_PACKAGE(GLFW REQUIRED)
-
-# Create both options but prefer GLFW
-SET(PREFER_GLFW  TRUE  CACHE BOOL "TRUE to use GLFW (if found)")
-
-IF(GLFW_FOUND)
-    SET(USE_GLFW TRUE)
-    IF(GLFW_IS_STATIC)
-        FIND_PACKAGE(X11 REQUIRED)
-    ENDIF()
+IF(GLFW_IS_STATIC)
+    FIND_PACKAGE(X11 REQUIRED)
 ENDIF()
-
 ################################################################################
 
 ################################################################################
