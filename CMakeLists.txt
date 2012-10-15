@@ -57,35 +57,19 @@ OPTION(BUILD_DOCUMENTATION "Build Documentation" ON)
 
 FIND_PACKAGE(OpenGL REQUIRED)
 
-# Either GLFW or SFML2 is possible, but one of them is mandatory
-FIND_PACKAGE(GLFW)
-FIND_PACKAGE(SFML 2 COMPONENTS window)
+# GLFW is mandatory
+FIND_PACKAGE(GLFW REQUIRED)
 
 # Create both options but prefer GLFW
 SET(PREFER_GLFW  TRUE  CACHE BOOL "TRUE to use GLFW (if found)")
-SET(PREFER_SFML2 FALSE CACHE BOOL "TRUE to use SFML (if found)")
 
 IF(GLFW_FOUND)
-    IF(PREFER_GLFW OR NOT SFML_FOUND)
-        LIST(APPEND STARS_MESSAGE "*************")
-        LIST(APPEND INFO_MESSAGE  " - Using GLFW")
-        SET(USE_GLFW TRUE)
-        IF(GLFW_IS_STATIC)
-            FIND_PACKAGE(X11 REQUIRED)
-        ENDIF()
-    ENDIF()
-ENDIF()
-IF(SFML_FOUND)
-    IF(PREFER_SFML2 OR NOT GLFW_FOUND)
-        LIST(APPEND STARS_MESSAGE "**************")
-        LIST(APPEND INFO_MESSAGE  " - Using SFML2")
-        SET(USE_SFML2 TRUE)
+    SET(USE_GLFW TRUE)
+    IF(GLFW_IS_STATIC)
+        FIND_PACKAGE(X11 REQUIRED)
     ENDIF()
 ENDIF()
 
-IF(NOT USE_GLFW AND NOT USE_SFML2)
-    MESSAGE(FATAL_ERROR "Either GLFW or SFML2 is required to build SpeakEasy")
-ENDIF()
 ################################################################################
 
 ################################################################################

@@ -28,15 +28,8 @@
 
 #include "config.h"
 
-#ifdef USE_GLFW
-#    define GLFW_INCLUDE_GLU
-#    include <GL/glfw3.h>
-#elif defined(USE_SFML2)
-#    include <GL/gl.h>
-#    include <GL/glu.h>
-#endif // USE_GLFW USE_SFML2
-
-
+#define GLFW_INCLUDE_GLU
+#include <GL/glfw3.h>
 
 #include "SE_CLogManager.h"
 

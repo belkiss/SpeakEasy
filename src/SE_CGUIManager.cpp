@@ -27,11 +27,7 @@
 #include "SE_CGUIManager.h"
 
 #include "config.h"
-#ifdef USE_GLFW
-#    include "SE_CGUIGLFW.h"
-#elif defined(USE_SFML2)
-#    include "SE_CGUISFML.h"
-#endif // USE_GLFW USE_SFML2
+#include "SE_CGUIGLFW.h"
 
 #include "SE_CLogManager.h"
 
@@ -48,11 +44,7 @@ SE_CGUIManager::SE_CGUIManager():
 void SE_CGUIManager::startUp()
 {
     SE_CLogManager::getInstance()->log(kInformation, "SE_CGUIManager successfully started");
-#ifdef USE_GLFW
     m_pGUISystem = new SE_CGUIGLFW();
-#elif defined(USE_SFML2)
-    m_pGUISystem = new SE_CGUISFML();
-#endif // USE_GLFW USE_SFML2
 
     if(m_pGUISystem->init())
     {

@@ -2,6 +2,7 @@ INCLUDE_DIRECTORIES(${SpeakEasy_BINARY_DIR}/src)
 
 SET(SpeakEasy_src
     SE_CClock.cpp
+    SE_CGUIGLFW.cpp
     SE_CGUIManager.cpp
     SE_CGUIInterface.cpp
     SE_CLogManager.cpp
@@ -15,6 +16,7 @@ SET(SpeakEasy_src
 # list headers (used for MSVC)
 SET(SpeakEasy_headers
     SE_CClock.h
+    SE_CGUIGLFW.h
     SE_CGUIManager.h
     SE_CGUIInterface.h
     SE_CLogManager.h
@@ -31,34 +33,14 @@ SET(SpeakEasy_headers
 SET(SpeakEasy_Libs
     ${OPENGL_LIBRARIES}
     ${OPENGL_glu_LIBRARY}
+    ${GLFW_LIBRARY}
 )
 
-IF(USE_GLFW)
-    LIST(APPEND SpeakEasy_src
-         SE_CGUIGLFW.cpp
-    )
-    LIST(APPEND SpeakEasy_headers
-         SE_CGUIGLFW.h
-    )
+IF(GLFW_IS_STATIC)
     LIST(APPEND SpeakEasy_Libs
-         ${GLFW_LIBRARY}
-    )
-    IF(GLFW_IS_STATIC)
-        LIST(APPEND SpeakEasy_Libs
-             ${X11_Xxf86vm_LIB}
-             ${X11_Xrandr_LIB}
-             rt
-        )
-    ENDIF()
-ELSEIF(USE_SFML2)
-    LIST(APPEND SpeakEasy_src
-         SE_CGUISFML.cpp
-    )
-    LIST(APPEND SpeakEasy_headers
-         SE_CGUISFML.h
-    )
-    LIST(APPEND SpeakEasy_Libs
-        ${SFML_LIBRARIES}
+         ${X11_Xxf86vm_LIB}
+         ${X11_Xrandr_LIB}
+         rt
     )
 ENDIF()
 
