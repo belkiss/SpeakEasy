@@ -53,6 +53,13 @@ void SE_CRenderManager::shutDown()
 ////////////////////////////////////////////////////////////////////////////////
 void SE_CRenderManager::render(const F32 inElapsedMs)
 {
+    const U32 rotationSpeed = 180; // degrees per second
+    m_rotationAngle += inElapsedMs * rotationSpeed;
+    if(m_rotationAngle > 360.f)
+    {
+        m_rotationAngle = 0.f;
+    }
+
     static const U16 width  = 640;
     static const U16 height = 480;
     glViewport(0, 0, width, height);
@@ -77,7 +84,10 @@ void SE_CRenderManager::render(const F32 inElapsedMs)
 
     // Draw a rotating colorful triangle
     glTranslatef(0.f, 14.f, 0.f);
-    glRotatef(0.3f * (GLfloat) 0.2f + (GLfloat) inElapsedMs * 0.1f, 0.f, 0.f, 1.f);
+    glRotatef(m_rotationAngle, // angle in degrees
+              0.f,  // x
+              0.f,  // y
+              1.f); // z
 
     glBegin(GL_TRIANGLES);
     {

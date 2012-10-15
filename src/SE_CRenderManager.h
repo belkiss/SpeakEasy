@@ -33,13 +33,20 @@
 class SE_CRenderManager : public SE_IBaseManager
 {
     public:
-        SE_CRenderManager(){};
+        SE_CRenderManager()
+        :m_rotationAngle(0.f)
+        {};
         ~SE_CRenderManager(){};
 
         void startUp()  override;
         void shutDown() override;
 
         void render(const F32 inElapsedMs);
+
+    private:
+        /// @brief in degrees
+        F32 m_rotationAngle;
+        char _pad[4];
 };
 
 #endif // SE_CRENDERMANAGER_H

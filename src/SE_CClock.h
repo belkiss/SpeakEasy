@@ -38,52 +38,55 @@
 
 #include "SE_Types.h"
 
+extern F32 const g_IdealFrameTime;
+
+/// @TODO use steady_clock to guarantee the clock to never be readjusted
 class SE_CClock
 {
     public:
-        // Construct a clock
-        explicit SE_CClock(F32 inStartTimeSeconds = 0.f) :
-            m_timeCycles(secondsToCycles(inStartTimeSeconds)),
-            m_timeScale(1.f),  // default to unscaled
-            m_isPaused(false)  // default to running
+        SE_CClock(void) :
+            m_timeScale(1.f),
+            m_delta(0.f),
+            m_isPaused(true)
         {
         }
 
-        // Call this when the game first starts up
-        static void init()
-        {
-        }
+        ~SE_CClock() = default;
 
-        // Return the current time in cycles. NOTE that we do not return
-        // absolute time measurements in floating point seconds, because a
-        // 32-bit float doesn't have enough precision. See calcDeltaSeconds()
-        U64 getTimeCycles() const
+        void start()
         {
-            return m_timeCycles;
-        }
-
-        // Determine the difference between this clock's absolute time and that
-        // of another clock, in seconds. We only return time deltas as floating
-        // point seconds, due to the precision limitations of a 32-bit float
-        F32 calcDeltaSeconds(const SE_CClock &inOther)
-        {
-            U64 dt = m_timeCycles - inOther.m_timeCycles;
-            return cyclesToSeconds(dt);
+            m_isPaused = false;
+            m_previousTimePoint = getNowTimePoint();
         }
 
         // This function should be called once per frame,
         // with the real measured frame time delta in seconds
-        void update(F32 inDtRealSeconds)
+        F32 update()
         {
+            F32 delta = 0.f;
             if(!m_isPaused)
             {
-                U64 dtScaledCycles = secondsToCycles(inDtRealSeconds * m_timeScale);
-
-                m_timeCycles += dtScaledCycles;
+                std::chrono::system_clock::time_point const nowTimePoint = getNowTimePoint();
+                delta = (getDeltaInMs(m_previousTimePoint, nowTimePoint) * m_timeScale);
+                m_previousTimePoint = nowTimePoint;
             }
+            return delta;
         }
 
-        inline void setPaused(bool inPaused)
+        /**
+         * @brief Returns the time delta between begin and end in milliseconds
+         *
+         * @param inBegin older time point
+         * @param inEnd earlier time point
+         * @return F32 delta in ms
+         **/
+        inline static F32 getDeltaInMs(std::chrono::system_clock::time_point const &inBegin,
+                                       std::chrono::system_clock::time_point const &inEnd)
+        {
+            return std::chrono::duration_cast<std::chrono::microseconds>(inEnd - inBegin).count()/1000.f;
+        }
+
+        inline void setPaused(bool const inPaused)
         {
             m_isPaused = inPaused;
         }
@@ -93,7 +96,7 @@ class SE_CClock
             return m_isPaused;
         }
 
-        inline void setTimeScale(F32 inScale)
+        inline void setTimeScale(F32 const inScale)
         {
             m_timeScale = inScale;
         }
@@ -103,75 +106,20 @@ class SE_CClock
             return m_timeScale;
         }
 
-        void singleStep()
-        {
-            if(m_isPaused)
-            {
-                // Add one ideal frame interval; don't forget
-                // to scale it by our current time scale !
-                U64 dtScaledCycles = secondsToCycles((1.f/30.f) * m_timeScale);
-
-                m_timeCycles += dtScaledCycles;
-            }
-        }
-
     public: // static methods
-        /**
-         * @brief Reads the high resolution timer value from the CPU
-         * @note Platform dependent
-         * @todo Specify the core for multi cores
-         *
-         * @return I64 the timer frequency
-        **/
-        static std::chrono::system_clock::time_point readHiResTimer()
+        static std::chrono::system_clock::time_point getNowTimePoint()
         {
             return std::chrono::high_resolution_clock::now();
         }
 
-        /**
-         * @brief Reads the frequency of the high resolution timer from the CPU
-         * @note Platform dependent
-         * @todo Specify the core for multi cores
-         *
-         * @return I64 the timer frequency
-        **/
-        static U64 readHiResTimerFrequency()
-        {
-            return 0;
-        }
-
-        /**
-         * @brief Returns the stored frequency of the high resolution timer
-         *
-         * @return U64 the timer frequency
-        **/
-        static U64 getHiResTimerFrequency()
-        {
-            return ms_cyclesPerSecond;
-        }
-
         static void localtimeToSStream(std::ostringstream &ioStringStream);
 
-    private: // static methods
-        static inline U64 secondsToCycles(F32 inTimeSeconds)
-        {
-            return (U64)(inTimeSeconds * ms_cyclesPerSecond);
-        }
-
-        // WARNING : Dangerous -- only use to convert small durations into seconds
-        static inline F32 cyclesToSeconds(U64 inTimeCycles)
-        {
-            return (F32)inTimeCycles/ms_cyclesPerSecond;
-        }
-
     private:
-        U64  m_timeCycles;
+        std::chrono::system_clock::time_point m_previousTimePoint; // 8 bytes
         F32  m_timeScale;
+        F32  m_delta;
         bool m_isPaused;
-        U8   _pad[3]; // explicit padding
-
-    private: // static members
-        static F32 ms_cyclesPerSecond;
+        char _pad[7];
 };
 
 #endif // SE_CCLOCK_H

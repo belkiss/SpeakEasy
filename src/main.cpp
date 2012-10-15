@@ -40,10 +40,15 @@
 
 #include "SE_CClock.h"
 
+U32 const g_IdealFPS = 60;
+F32 const g_IdealFrameTime = 1000.f/g_IdealFPS;
+
 static SE_CLogManager      gs_LogManager;
 static SE_CMemoryManager   gs_MemoryManager;
 static SE_CGUIManager      gs_GUIManager;
 static SE_CRenderManager   gs_RenderManager;
+
+static SE_CClock           gs_MainClock;
 
 // AudioManager
 // InputManager
@@ -63,43 +68,28 @@ int main()
     (void)nCmdShow;
 #endif
 
-    SE_CClock::init();
-
-    // Prime the pump by reading the current time
-    std::chrono::system_clock::time_point tBegin = SE_CClock::readHiResTimer();
-    std::chrono::system_clock::time_point tEnd   = tBegin;
-
     // Start up engine systems in the correct order
     gs_LogManager.startUp(kDebug);
     gs_MemoryManager.startUp();
     gs_GUIManager.startUp();
     gs_RenderManager.startUp();
 
+    // Start the main clock
+    gs_MainClock.start();
+
     SE_CLogManager::getInstance()->log(kDebug, "SpeakEasy subsystems successfully started");
 #ifdef SE_DEBUG
     SE_CLogManager::getInstance()->log(kDebug, "SE_DEBUG defined");
 #endif
 
-    F32 elapsedTime = 0.f;
-
     bool keepRunning = true;
     while(keepRunning) // main game loop
     {
-        // Read the current time again, and calculate the delta
-        tEnd = SE_CClock::readHiResTimer();
-
-        const F32 deltaMs = std::chrono::duration_cast<std::chrono::microseconds>(tEnd - tBegin).count()/1000.f;
-        if(deltaMs >= 1000.f/60)
+        F32 const deltaSeconds = gs_MainClock.update()/1000;
+        SE_CLogManager::getInstance()->log(kDebug, 1/deltaSeconds, " fps");
         {
-            SE_CLogManager::getInstance()->log(kDebug, deltaMs, " ms");
-
-            elapsedTime += deltaMs;
-
-            gs_RenderManager.render(elapsedTime);
+            gs_RenderManager.render(deltaSeconds);
             keepRunning = gs_GUIManager.doWork();
-
-            // Use tEnd as the new tBegin for the next frame
-            tBegin = tEnd;
         }
     }
 
