@@ -128,23 +128,23 @@ inline std::ostream& WHITE(std::ostream &ioStr)
     return ioStr;
 }
 
-#else
+#else // WIN32
 // colorized output defines
-const std::string COL_BEGIN = "\33[";
-const std::string COL_END   = "\33[m";
+char const * const COL_BEGIN = "\33[";
+char const * const COL_END   = "\33[m";
 
-const std::string RED       = "0;31m";
-const std::string BOLD_RED  = "1;31m";
-const std::string ORANGE    = "0;32m";
-const std::string GREEN     = "1;32m";
-const std::string BROWN     = "0;33m";
-const std::string YELLOW    = "1;33m";
-const std::string BLUE      = "0;34m";
-const std::string BOLD_BLUE = "1;34m";
-const std::string PURPLE    = "0;35m";
-const std::string PINK      = "1;35m";
-const std::string CYAN      = "0;36m";
-const std::string BOLD_CYAN = "1;36m";
-const std::string GREY      = "0;37m";
-const std::string WHITE     = "1;37m";
-#endif
+char const * const RED       = "0;31m";
+char const * const BOLD_RED  = "1;31m";
+char const * const ORANGE    = "0;32m";
+char const * const GREEN     = "1;32m";
+char const * const BROWN     = "0;33m";
+char const * const YELLOW    = "1;33m";
+char const * const BLUE      = "0;34m";
+char const * const BOLD_BLUE = "1;34m";
+char const * const PURPLE    = "0;35m";
+char const * const PINK      = "1;35m";
+char const * const CYAN      = "0;36m";
+char const * const BOLD_CYAN = "1;36m";
+char const * const GREY      = "0;37m";
+char const * const WHITE     = "1;37m";
+#endif // WIN32

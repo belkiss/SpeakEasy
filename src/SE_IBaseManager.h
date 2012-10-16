@@ -33,6 +33,7 @@ class SE_IBaseManager
         SE_IBaseManager();
         virtual ~SE_IBaseManager();
 
+        /// @TODO : make those methods return boolean status
         virtual void startUp()  = 0;
         virtual void shutDown() = 0;
 };

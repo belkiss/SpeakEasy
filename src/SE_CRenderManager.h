@@ -36,7 +36,7 @@ class SE_CRenderManager : public SE_IBaseManager
         SE_CRenderManager()
         :m_rotationAngle(0.f)
         {};
-        ~SE_CRenderManager(){};
+        ~SE_CRenderManager() = default;
 
         void startUp()  override;
         void shutDown() override;

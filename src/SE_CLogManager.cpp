@@ -45,8 +45,6 @@ SE_CLogManager::SE_CLogManager(std::ostream& inOutStream):
 
     // set the static instance to this
     ms_pInstance = this;
-
-    log(kInformation, "SE_CLogManager constructed");
 }
 
 
@@ -54,15 +52,13 @@ SE_CLogManager::SE_CLogManager(std::ostream& inOutStream):
 ////////////////////////////////////////////////////////////////////////////////
 SE_CLogManager::~SE_CLogManager()
 {
-    // Do nothing
-    log(kInformation, "SE_CLogManager destroyed");
     ms_pInstance = nullptr;
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-void SE_CLogManager::startUp(const U8 inLogLevel)
+void SE_CLogManager::startUp(const ELogLevel inLogLevel)
 {
     m_currentLogLevel = inLogLevel;
     log(kInformation, "SE_CLogManager successfully started with logLevel set to", static_cast<U32>(inLogLevel));
@@ -80,7 +76,7 @@ void SE_CLogManager::shutDown()
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-void SE_CLogManager::logLevelToSStream(const U8 inLevel,
+void SE_CLogManager::logLevelToSStream(const ELogLevel inLevel,
                                        std::ostringstream &ioStringStream)
 {
     ioStringStream << COL_BEGIN;

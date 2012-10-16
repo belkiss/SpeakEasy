@@ -27,21 +27,26 @@
 #ifndef SE_CGUIGLFW_H
 #define SE_CGUIGLFW_H
 
-#include <GL/glfw3.h>
-
 #include "SE_CGUIInterface.h"
+
+// ugly forward-declare
+typedef void* GLFWwindow;
 
 class SE_CGUIGLFW : public SE_CGUIInterface
 {
     public:
-        SE_CGUIGLFW();
-        ~SE_CGUIGLFW();
+        SE_CGUIGLFW()  = default;
+        ~SE_CGUIGLFW() = default;
 
-        bool init();
-        bool openWindow();
-        bool quitPressed();
-        void swapBuffers();
-        bool close();
+        bool init()         override;
+        bool openWindow()   override;
+        void swapBuffers()  override;
+        bool windowClosed() const override;
+        bool quitPressed()  const override;
+        bool close()        override;
+
+    private:
+        void logGLFWerror(char const * const inpDescriptionText) const;
 
     private:
         GLFWwindow m_GLFWWindow;

@@ -48,7 +48,7 @@ void SE_CClock::localtimeToSStream(std::ostringstream &ioStringStream)
                    << std::setw(2) << systemTime.wSecond << "."
                    << std::setw(3)
                    << systemTime.wMilliseconds;
-#else
+#else // WIN32
     std::chrono::steady_clock::time_point systemTime = std::chrono::steady_clock::now();
     std::time_t currentTime = std::chrono::system_clock::to_time_t(systemTime);
     std::tm *pCurrentTime = std::localtime(&currentTime);
@@ -64,5 +64,5 @@ void SE_CClock::localtimeToSStream(std::ostringstream &ioStringStream)
                    << std::setw(3)
                    << std::chrono::duration_cast<std::chrono::milliseconds>(systemTime.time_since_epoch()).count() -
                       (1000*std::chrono::duration_cast<std::chrono::seconds>(systemTime.time_since_epoch()).count());
-#endif
+#endif // WIN32
 }

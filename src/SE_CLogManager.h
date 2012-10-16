@@ -38,7 +38,7 @@
 /**
  * @brief Log levels
  **/
-enum ELogLevels
+enum ELogLevel
 {
     /// No category, always displayed
     kNone,
@@ -81,7 +81,7 @@ class SE_CLogManager : public SE_IBaseManager
          *
          * @param inLogLevel The wanted log level
          **/
-        void startUp(const U8 inLogLevel);
+        void startUp(const ELogLevel inLogLevel);
 
         void shutDown() override;
 
@@ -94,13 +94,13 @@ class SE_CLogManager : public SE_IBaseManager
          * @param inLogs The data to output
          **/
         template <typename... Types>
-        void log(const U8 inLevel, const Types&... inLogs);
+        void log(const ELogLevel inLevel, const Types&... inLogs);
 
     private:
         template <typename T, typename... Args>
         void appendLogs(std::ostringstream &outStringStream, const T& inLog, const Args&... inLogs);
 
-#else
+#else // VARIADIC_TEMPLATES_SUPPORTED
     public:
         /**
          * @brief Log something to the output stream
@@ -110,7 +110,7 @@ class SE_CLogManager : public SE_IBaseManager
          * @param inLog The data to output
         **/
         template <typename T>
-        void log(const U8 inLevel, const T &inLog);
+        void log(const ELogLevel inLevel, const T &inLog);
 
         /**
          * @brief Log something to the output stream
@@ -121,11 +121,11 @@ class SE_CLogManager : public SE_IBaseManager
          * @param inLog2 Second data to output
         **/
         template <typename T, typename U>
-        void log(const U8 inLevel, const T &inLog1, const U &inLog2);
-#endif
+        void log(const ELogLevel inLevel, const T &inLog1, const U &inLog2);
+#endif // VARIADIC_TEMPLATES_SUPPORTED
 
     private:
-        void logLevelToSStream(const U8 inLevel, std::ostringstream &ioStringStream);
+        void logLevelToSStream(const ELogLevel inLevel, std::ostringstream &ioStringStream);
 
         // inherited startUp method, leave it empty
         void startUp() override {}
@@ -151,7 +151,7 @@ class SE_CLogManager : public SE_IBaseManager
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 template <typename... Types>
-void SE_CLogManager::log(const U8 inLevel, const Types&... inLogs)
+void SE_CLogManager::log(const ELogLevel inLevel, const Types&... inLogs)
 {
 #ifdef SE_DEBUG
     // kNone is 0

@@ -28,7 +28,7 @@
 // activate debug console output on WIN32 and debug target
 #if defined(WIN32) && ! defined(NDEBUG)
 #    pragma comment(linker, "/SUBSYSTEM:CONSOLE")
-#endif
+#endif // WIN32 && !NDEBUG
 
 #include <cstdlib>
 #include <thread>
@@ -66,7 +66,7 @@ int main()
     int const       nCmdShow  = SW_SHOWDEFAULT; // TODO: remove the apparent usage.
     (void)hInstance;
     (void)nCmdShow;
-#endif
+#endif // WIN32
 
     // Start up engine systems in the correct order
     gs_LogManager.startUp(kDebug);
@@ -80,13 +80,12 @@ int main()
     SE_CLogManager::getInstance()->log(kDebug, "SpeakEasy subsystems successfully started");
 #ifdef SE_DEBUG
     SE_CLogManager::getInstance()->log(kDebug, "SE_DEBUG defined");
-#endif
+#endif // SE_DEBUG
 
     bool keepRunning = true;
     while(keepRunning) // main game loop
     {
         F32 const deltaSeconds = gs_MainClock.update()/1000;
-        SE_CLogManager::getInstance()->log(kDebug, 1/deltaSeconds, " fps");
         {
             gs_RenderManager.render(deltaSeconds);
             keepRunning = gs_GUIManager.doWork();

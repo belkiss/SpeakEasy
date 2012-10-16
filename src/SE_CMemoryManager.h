@@ -32,8 +32,8 @@
 class SE_CMemoryManager : public SE_IBaseManager
 {
     public:
-        SE_CMemoryManager(){};
-        ~SE_CMemoryManager(){};
+        SE_CMemoryManager()  = default;
+        ~SE_CMemoryManager() = default;
 
         void startUp();
         void shutDown();
