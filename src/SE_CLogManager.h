@@ -38,7 +38,7 @@
 /**
  * @brief Log levels
  **/
-enum ELogLevel
+enum ELogLevel : U8
 {
     /// No category, always displayed
     kNone,
@@ -137,7 +137,7 @@ class SE_CLogManager : public SE_IBaseManager
 
     private:
         std::ostream& m_outputStream;
-        U8            m_currentLogLevel;
+        ELogLevel     m_currentLogLevel;
 
         // explicit padding
         U8 _pad[7];
@@ -184,7 +184,7 @@ void SE_CLogManager::appendLogs(std::ostringstream &outStringStream,
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 template <typename T>
-void SE_CLogManager::log(const U8 inLevel, const T &inLog)
+void SE_CLogManager::log(const ELogLevel inLevel, const T &inLog)
 {
     // kNone is 0
     if(!inLevel || inLevel >= m_currentLogLevel)
@@ -202,7 +202,7 @@ void SE_CLogManager::log(const U8 inLevel, const T &inLog)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 template <typename T, typename U>
-void SE_CLogManager::log(const U8 inLevel, const T &inLog1, const U &inLog2)
+void SE_CLogManager::log(const ELogLevel inLevel, const T &inLog1, const U &inLog2)
 {
     // kNone is 0
     if(!inLevel || inLevel >= m_currentLogLevel)
