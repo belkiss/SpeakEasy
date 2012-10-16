@@ -29,7 +29,6 @@ IF(WIN32)
     ELSEIF(MSVC80)
         GET_FILENAME_COMPONENT(VS_DIR [HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\VisualStudio\\8.0\\Setup\\VS;ProductDir] REALPATH CACHE)
     ENDIF()
-    MESSAGE(STATUS "Found MS in " ${VS_DIR})
 ENDIF()
 
 # find the GLFW include directory
@@ -75,6 +74,8 @@ IF(GLFW_INCLUDE_DIR)
 
     STRING(REGEX REPLACE "^.*API version: ([0-9]+).*$" "\\1"          GLFW_VERSION_MAJOR "${GLFW_H}")
     STRING(REGEX REPLACE "^.*API version: [0-9]+\\.([0-9]+).*$" "\\1" GLFW_VERSION_MINOR "${GLFW_H}")
+
+    SET(GLFW_VERSION "${GLFW_VERSION_MAJOR}.${GLFW_VERSION_MINOR}")
 
 #     math(EXPR GLFW_REQUESTED_VERSION "${GLFW_FIND_VERSION_MAJOR} * 10 + ${GLFW_FIND_VERSION_MINOR}")
 #
@@ -128,12 +129,10 @@ ELSE()
     MESSAGE("glfw.h and glfw3.h could not be found")
 ENDIF()
 
-IF(GLFW_FOUND)
-    IF(NOT GLFW_FIND_QUIETLY)
-        MESSAGE(STATUS "Found GLFW version ${GLFW_VERSION_MAJOR}.${GLFW_VERSION_MINOR}")
-    ENDIF()
-ELSE()
-    IF(GLFW_FIND_REQUIRED)
-        MESSAGE(FATAL_ERROR "Could not find GLFW")
-    ENDIF()
-ENDIF()
+# handle the QUIETLY and REQUIRED arguments and set GLFW_FOUND to TRUE if
+# all listed variables are TRUE
+INCLUDE(FindPackageHandleStandardArgs)
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(GLFW
+                                  REQUIRED_VARS GLFW_LIBRARY
+                                  VERSION_VAR   GLFW_VERSION
+)
