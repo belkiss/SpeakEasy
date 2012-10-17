@@ -44,14 +44,8 @@ extern F32 const g_IdealFrameTime;
 class SE_CClock
 {
     public:
-        SE_CClock(void) :
-            m_timeScale(1.f),
-            m_delta(0.f),
-            m_isPaused(true)
-        {
-        }
-
-        ~SE_CClock() = default;
+        SE_CClock();
+        ~SE_CClock(){}
 
         void start()
         {

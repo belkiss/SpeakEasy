@@ -30,8 +30,8 @@
 class SE_IBaseManager
 {
     public:
-        SE_IBaseManager();
-        virtual ~SE_IBaseManager();
+        SE_IBaseManager(){};
+        virtual ~SE_IBaseManager(){};
 
         /// @TODO : make those methods return boolean status
         virtual void startUp()  = 0;

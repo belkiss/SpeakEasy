@@ -67,7 +67,7 @@ class SE_CLogManager : public SE_IBaseManager
          *
          * @param inOutStream The wanted output stream, Defaults to std::clog.
          **/
-        SE_CLogManager(std::ostream& inOutStream = std::clog);
+        explicit SE_CLogManager(std::ostream &inOutStream = std::clog);
 
         /**
          * @brief Destroys the log manager, no need for virtual

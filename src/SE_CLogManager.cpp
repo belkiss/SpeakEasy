@@ -62,7 +62,6 @@ void SE_CLogManager::startUp(const ELogLevel inLogLevel)
 {
     m_currentLogLevel = inLogLevel;
     log(kInformation, "SE_CLogManager successfully started with logLevel set to", static_cast<U32>(inLogLevel));
-
 }
 
 

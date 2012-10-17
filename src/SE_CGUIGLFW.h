@@ -32,11 +32,11 @@
 // ugly forward-declare
 typedef void* GLFWwindow;
 
-class SE_CGUIGLFW : public SE_CGUIInterface
+class SE_CGUIGLFW final : public SE_CGUIInterface
 {
     public:
-        SE_CGUIGLFW()  = default;
-        ~SE_CGUIGLFW() = default;
+        SE_CGUIGLFW(){}
+        ~SE_CGUIGLFW(){}
 
         bool init()         override;
         bool openWindow()   override;

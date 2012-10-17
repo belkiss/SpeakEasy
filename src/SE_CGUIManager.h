@@ -33,7 +33,7 @@ class SE_CGUIManager : public SE_IBaseManager
 {
     public:
         SE_CGUIManager();
-        ~SE_CGUIManager() = default;
+        ~SE_CGUIManager();
 
         void startUp()  override;
         void shutDown() override;
