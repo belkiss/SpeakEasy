@@ -21,7 +21,7 @@ LIST(APPEND STARS_MESSAGE "********")
 LIST(APPEND INFO_MESSAGE  " (${CMAKE_BUILD_TYPE})")
 
 # Add a define to know when we want to compile a debug build
-SET(CMAKE_CXX_FLAGS_DEBUG "-DSE_DEBUG")
+SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DSE_DEBUG")
 
 # set the destination of the executable
 SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
