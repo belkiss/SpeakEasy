@@ -57,8 +57,17 @@ static SE_CClock           gs_MainClock;
 // PhysicsManager
 // SceneManager
 
+void handleCommandLineArguments(int const inArgc,
+                                char const * const * const inpArgv)
+{
+    for(I32 i = 0; i < inArgc; ++i)
+    {
+        SE_CLogManager::getInstance()->log(kDebug, "inpArgv[", i, "] = ", inpArgv[i]);
+    }
+}
 
-int main()
+int main(int const inArgc,
+         char const * const * const inpArgv)
 {
 #ifdef WIN32
     // get the arguments usually set by WinMain
@@ -70,6 +79,10 @@ int main()
 
     // Start up engine systems in the correct order
     gs_LogManager.startUp(kDebug);
+
+    // handle the command line arguments
+    handleCommandLineArguments(inArgc, inpArgv);
+
     gs_MemoryManager.startUp();
     gs_GUIManager.startUp();
     gs_RenderManager.startUp();
