@@ -33,27 +33,27 @@ ENDIF()
 
 # find the GLFW include directory
 FIND_PATH(GLFW_INCLUDE_DIR  NAMES GL/glfw.h GL/glfw3.h
-                            DOC "Path to GLFW header."
-                            PATH_SUFFIXES include
-                            PATHS
-                            ~/Library/Frameworks
-                            /Library/Frameworks
-                            ~/Library/Frameworks/GLFW.framework/Headers
-                            /Library/Frameworks/GLFW.framework.Headers # Tiger
-                            /usr/local/X11R6/
-                            /usr/local/
-                            /usr
-                            /usr/X11R6/
-                            /usr/X11/
-                            /usr/include/X11
-                            /opt/X11/include
-                            /sw          # Fink
-                            /opt/local/  # DarwinPorts
-                            /opt/csw/    # Blastwave
-                            /opt/
-                            ${VS_DIR}/VC/include
-                            ${GLFWDIR}
-                            $ENV{GLFWDIR}
+          DOC "Path to GLFW header."
+          PATH_SUFFIXES include
+          PATHS
+          ~/Library/Frameworks
+          /Library/Frameworks
+          ~/Library/Frameworks/GLFW.framework/Headers
+          /Library/Frameworks/GLFW.framework.Headers # Tiger
+          /usr/local/X11R6/
+          /usr/local/
+          /usr
+          /usr/X11R6/
+          /usr/X11/
+          /usr/include/X11
+          /opt/X11/include
+          /sw          # Fink
+          /opt/local/  # DarwinPorts
+          /opt/csw/    # Blastwave
+          /opt/
+          ${VS_DIR}/VC/include
+          ${GLFWDIR}
+          $ENV{GLFWDIR}
 )
 
 IF(GLFW_INCLUDE_DIR)
@@ -65,10 +65,6 @@ IF(GLFW_INCLUDE_DIR)
         ENDIF()
     ENDIF()
 
-    # TODO: check the version number
-    SET(GLFW_VERSION_OK TRUE)
-    # GLFW_FIND_VERSION AND
-
     # extract the major and minor version numbers from GL/glfw.h
     FILE(STRINGS "${GLFW_INCLUDE_DIR}/GL/${GLFW_INCLUDE_FILE}" GLFW_H REGEX "^.*API version: .*$")
 
@@ -77,44 +73,26 @@ IF(GLFW_INCLUDE_DIR)
 
     SET(GLFW_VERSION "${GLFW_VERSION_MAJOR}.${GLFW_VERSION_MINOR}")
 
-#     math(EXPR GLFW_REQUESTED_VERSION "${GLFW_FIND_VERSION_MAJOR} * 10 + ${GLFW_FIND_VERSION_MINOR}")
-#
-#     # if we could extract them, compare with the requested version number
-#     if (GLFW_VERSION_MAJOR)
-#         # transform version numbers to an integer
-#         math(EXPR GLFW_VERSION "${GLFW_VERSION_MAJOR} * 10 + ${GLFW_VERSION_MINOR}")
-#
-#         # compare them
-#         if(GLFW_VERSION LESS GLFW_REQUESTED_VERSION)
-#             set(GLFW_VERSION_OK FALSE)
-#         endif()
-#     else()
-#         # GLFW version is < 2.0
-#         if (GLFW_REQUESTED_VERSION GREATER 19)
-#             set(GLFW_VERSION_OK FALSE)
-#         endif()
-#     endif()
-
-    FIND_LIBRARY(GLFW_LIBRARY   NAMES glfw glfw3
-                                PATHS
-                                ~/Library/Frameworks
-                                /Library/Frameworks
-                                /usr/local
-                                /usr/local/X11R6
-                                /usr/X11R6
-                                /usr/X11
-                                /usr/lib/X11
-                                /usr
-                                /opt/local
-                                /opt/csw
-                                /opt/X11
-                                /opt
-                                /sw
-                                $ENV{GLFWDIR}/support/msvc80/Debug
-                                $ENV{GLFWDIR}/support/msvc80/Release
-                                ${VS_DIR}/VC/lib
-                                ${GLFWDIR}
-                                $ENV{GLFWDIR}
+    FIND_LIBRARY(GLFW_LIBRARY NAMES glfw glfw3
+                 PATHS
+                 ~/Library/Frameworks
+                 /Library/Frameworks
+                 /usr/local
+                 /usr/local/X11R6
+                 /usr/X11R6
+                 /usr/X11
+                 /usr/lib/X11
+                 /usr
+                 /opt/local
+                 /opt/csw
+                 /opt/X11
+                 /opt
+                 /sw
+                 $ENV{GLFWDIR}/support/msvc80/Debug
+                 $ENV{GLFWDIR}/support/msvc80/Release
+                 ${VS_DIR}/VC/lib
+                 ${GLFWDIR}
+                 $ENV{GLFWDIR}
     )
 
     IF(GLFW_LIBRARY)
