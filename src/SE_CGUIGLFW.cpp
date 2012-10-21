@@ -26,6 +26,7 @@
 
 #include "SE_CGUIGLFW.h"
 #include <GL/glfw3.h>
+#include "config.h"
 #include "SE_CGUIManager.h"
 #include "SE_CLogManager.h"
 
@@ -55,7 +56,7 @@ bool SE_CGUIGLFW::openWindow()
     bool windowOpened = false;
     m_GLFWWindow = glfwCreateWindow(640, 480, // window dimensions (width, height) in pixels
                                     GLFW_WINDOWED,
-                                    "SpeakEasy",
+                                    "SpeakEasy" " - version " GIT_INFORMATIONS,
                                     nullptr);
 
     if(m_GLFWWindow != nullptr)
