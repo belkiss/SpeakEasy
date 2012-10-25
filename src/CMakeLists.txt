@@ -34,6 +34,7 @@ SET(SpeakEasy_Libs
     ${OPENGL_LIBRARIES}
     ${OPENGL_glu_LIBRARY}
     ${GLFW_LIBRARY}
+    ${GLEW_LIBRARY}
 )
 
 IF(GLFW_IS_STATIC)

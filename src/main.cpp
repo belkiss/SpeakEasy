@@ -77,41 +77,48 @@ int main(int const inArgc,
     (void)nCmdShow;
 #endif // WIN32
 
-    // Start up engine systems in the correct order
-    gs_LogManager.startUp(kDebug);
+    // Start up engine systems in the correct order, starting with log manager
+    bool startUpSuccess = gs_LogManager.startUp(kDebug);
 
     // handle the command line arguments
     handleCommandLineArguments(inArgc, inpArgv);
 
-    gs_MemoryManager.startUp();
-    gs_GUIManager.startUp();
-    gs_RenderManager.startUp();
+    startUpSuccess = startUpSuccess && gs_MemoryManager.startUp();
+    startUpSuccess = startUpSuccess && gs_GUIManager.startUp();
+    startUpSuccess = startUpSuccess && gs_RenderManager.startUp();
 
-    // Start the main clock
-    gs_MainClock.start();
+    if(startUpSuccess)
+    {
+        // Start the main clock
+        gs_MainClock.start();
 
-    SE_CLogManager::getInstance()->log(kDebug, "SpeakEasy subsystems successfully started");
+        SE_CLogManager::getInstance()->log(kDebug, "SpeakEasy subsystems successfully started");
 #ifdef SE_DEBUG
-    SE_CLogManager::getInstance()->log(kDebug, "SE_DEBUG defined");
+        SE_CLogManager::getInstance()->log(kDebug, "SE_DEBUG defined");
 #endif // SE_DEBUG
 
-    bool keepRunning = true;
-    while(keepRunning) // main game loop
-    {
-        F32 const deltaSeconds = gs_MainClock.update()/1000;
+        bool keepRunning = true;
+        while(keepRunning) // main game loop
         {
-            gs_RenderManager.render(deltaSeconds);
-            keepRunning = gs_GUIManager.doWork();
+            F32 const deltaSeconds = gs_MainClock.update()/1000;
+            {
+                gs_RenderManager.render(deltaSeconds);
+                keepRunning = gs_GUIManager.doWork();
+            }
         }
+    }
+    else
+    {
+        SE_CLogManager::getInstance()->log(kDebug, "SpeakEasy subsystems failed to start");
     }
 
     SE_CLogManager::getInstance()->log(kDebug, "Exiting...");
 
     // Shut everything down, in reverse order
-    gs_RenderManager.shutDown();
-    gs_GUIManager.shutDown();
-    gs_MemoryManager.shutDown();
-    gs_LogManager.shutDown();
+    bool shutDownSuccess = gs_RenderManager.shutDown();
+    shutDownSuccess = shutDownSuccess && gs_GUIManager.shutDown();
+    shutDownSuccess = shutDownSuccess && gs_MemoryManager.shutDown();
+    shutDownSuccess = shutDownSuccess && gs_LogManager.shutDown();
 
-    return EXIT_SUCCESS;
+    return shutDownSuccess ? EXIT_SUCCESS : EXIT_FAILURE;
 }

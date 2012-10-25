@@ -36,12 +36,28 @@ class SE_CRenderManager : public SE_IBaseManager
         SE_CRenderManager();
         ~SE_CRenderManager(){}
 
-        void startUp()  override;
-        void shutDown() override;
+        bool startUp()  override;
+        bool shutDown() override;
 
         void render(const F32 inElapsedMs);
 
     private:
+        void createVBO();
+        void destroyVBO();
+
+        void createShaders();
+        void destroyShaders();
+
+        void logGLerror(char const * const inpDescriptionText) const;
+
+    private:
+        U32 m_vertexShaderId;
+        U32 m_pixelShaderId;
+        U32 m_programId;
+        U32 m_vertexArrayObjectId;
+        U32 m_vertexBufferObjectId;
+        U32 m_colorBufferId;
+
         /// @brief in degrees
         F32 m_rotationAngle;
         char _pad[4];

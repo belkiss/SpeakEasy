@@ -35,8 +35,8 @@ class SE_CGUIManager : public SE_IBaseManager
         SE_CGUIManager();
         ~SE_CGUIManager();
 
-        void startUp()  override;
-        void shutDown() override;
+        bool startUp()  override;
+        bool shutDown() override;
 
         bool doWork();
 

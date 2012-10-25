@@ -50,10 +50,9 @@ SE_CGUIManager::~SE_CGUIManager()
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-void SE_CGUIManager::startUp()
+bool SE_CGUIManager::startUp()
 {
     bool initSuccessfull = false;
-    SE_CLogManager::getInstance()->log(kInformation, "SE_CGUIManager successfully started");
     m_pGUISystem = new SE_CGUIGLFW();
 
     if(m_pGUISystem->init())
@@ -66,26 +65,31 @@ void SE_CGUIManager::startUp()
         }
     }
 
-    if(!initSuccessfull)
+    if(initSuccessfull)
     {
-        m_pGUISystem->close();
-        delete m_pGUISystem;
-        m_pGUISystem = nullptr;
+        SE_CLogManager::getInstance()->log(kInformation, "SE_CGUIManager successfully started");
     }
+    return initSuccessfull;
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-void SE_CGUIManager::shutDown()
+bool SE_CGUIManager::shutDown()
 {
+    bool shutDownSuccessfull = false;
     if(m_pGUISystem)
     {
-        m_pGUISystem->close();
+        shutDownSuccessfull = m_pGUISystem->close();
         delete m_pGUISystem;
         m_pGUISystem = nullptr;
     }
-    SE_CLogManager::getInstance()->log(kInformation, "SE_CGUIManager successfully shut downed");
+
+    if(shutDownSuccessfull)
+    {
+        SE_CLogManager::getInstance()->log(kInformation, "SE_CGUIManager successfully shut downed");
+    }
+    return shutDownSuccessfull;
 }
 
 

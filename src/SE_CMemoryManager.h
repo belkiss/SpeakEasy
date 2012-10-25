@@ -35,8 +35,8 @@ class SE_CMemoryManager : public SE_IBaseManager
         SE_CMemoryManager(){}
         ~SE_CMemoryManager(){}
 
-        void startUp()  override;
-        void shutDown() override;
+        bool startUp()  override;
+        bool shutDown() override;
 };
 
 #endif // SE_CMEMORYMANAGER_H

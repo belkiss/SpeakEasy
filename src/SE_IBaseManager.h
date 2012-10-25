@@ -33,9 +33,10 @@ class SE_IBaseManager
         SE_IBaseManager(){};
         virtual ~SE_IBaseManager(){};
 
-        /// @TODO : make those methods return boolean status
-        virtual void startUp()  = 0;
-        virtual void shutDown() = 0;
+        virtual bool startUp()  = 0;
+        virtual bool shutDown() = 0;
+
+        // TODO store the status of the startUp to know what to do at shutDown
 };
 
 #endif // SE_IBASEMANAGER_H

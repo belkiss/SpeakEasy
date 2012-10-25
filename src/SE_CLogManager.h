@@ -81,9 +81,9 @@ class SE_CLogManager : public SE_IBaseManager
          *
          * @param inLogLevel The wanted log level
          **/
-        void startUp(const ELogLevel inLogLevel);
+        bool startUp(const ELogLevel inLogLevel);
 
-        void shutDown() override;
+        bool shutDown() override;
 
 #ifdef VARIADIC_TEMPLATES_SUPPORTED
     public:
@@ -128,7 +128,7 @@ class SE_CLogManager : public SE_IBaseManager
         void logLevelToSStream(const ELogLevel inLevel, std::ostringstream &ioStringStream);
 
         // inherited startUp method, leave it empty
-        void startUp() override {}
+        bool startUp() override {return true;}
 
         inline void appendLogs(std::ostringstream &outStringStream);
 

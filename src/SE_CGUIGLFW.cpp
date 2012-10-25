@@ -30,6 +30,9 @@
 #include "SE_CGUIManager.h"
 #include "SE_CLogManager.h"
 
+I32 windowWidth  = 640;
+I32 windowHeight = 480;
+
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 bool SE_CGUIGLFW::init()
@@ -54,18 +57,30 @@ bool SE_CGUIGLFW::init()
 bool SE_CGUIGLFW::openWindow()
 {
     bool windowOpened = false;
-    m_GLFWWindow = glfwCreateWindow(640, 480, // window dimensions (width, height) in pixels
+
+    glfwWindowHint(GLFW_OPENGL_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_OPENGL_VERSION_MINOR, 3);
+
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
+
+#ifdef SE_DEBUG
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+#endif // SE_DEBUG
+
+    // only enable NON-deprecated features
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+
+    glfwWindowHint(GLFW_OPENGL_ROBUSTNESS, GLFW_OPENGL_NO_ROBUSTNESS);
+
+    m_GLFWWindow = glfwCreateWindow(windowWidth, windowHeight,
                                     GLFW_WINDOWED,
-                                    "SpeakEasy" " - version " GIT_INFORMATIONS,
+                                    "SpeakEasy" " - " GIT_INFORMATIONS " - built on " __DATE__ " " __TIME__,
                                     nullptr);
 
     if(m_GLFWWindow != nullptr)
     {
         windowOpened = true;
-
-#ifdef SE_DEBUG
-        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
-#endif // SE_DEBUG
 
         // Make the context of the newly created window current
         glfwMakeContextCurrent(m_GLFWWindow);
@@ -78,6 +93,8 @@ bool SE_CGUIGLFW::openWindow()
 
         // Disable vertical sync
         glfwSwapInterval(0);
+
+        SE_CLogManager::getInstance()->log(kDebug, "OpenGL context version :", glGetString(GL_VERSION));
     }
     else
     {
