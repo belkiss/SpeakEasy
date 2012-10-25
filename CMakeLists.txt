@@ -3,8 +3,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
 PROJECT(SpeakEasy)
 
-LIST(APPEND STARS_MESSAGE "***************")
-LIST(APPEND INFO_MESSAGE  "Build SpeakEasy")
+SET(INFO_MESSAGE "Build SpeakEasy")
 
 # see full compilation lines
 # SET(CMAKE_VERBOSE_MAKEFILE 1)
@@ -17,8 +16,7 @@ IF(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
     SET(CMAKE_BUILD_TYPE Debug)
 ENDIF()
 
-LIST(APPEND STARS_MESSAGE "********")
-LIST(APPEND INFO_MESSAGE  " (${CMAKE_BUILD_TYPE})")
+SET(INFO_MESSAGE "${INFO_MESSAGE} (${CMAKE_BUILD_TYPE})")
 
 # Add a define to know when we want to compile a debug build
 SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DSE_DEBUG")
@@ -95,8 +93,7 @@ IF(BUILD_DOCUMENTATION)
     FIND_PACKAGE(Doxygen)
 
     IF(DOXYGEN_FOUND)
-        LIST(APPEND STARS_MESSAGE "*****************")
-        LIST(APPEND INFO_MESSAGE  " - Doxygen target")
+        SET(INFO_MESSAGE "${INFO_MESSAGE} - Doxygen target")
         CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in
                        ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
         ADD_CUSTOM_TARGET(doc
@@ -162,14 +159,23 @@ INCLUDE(CPack)
 ################################################################################
 # Tests
 IF(BUILD_TESTS)
-    LIST(APPEND STARS_MESSAGE "*************")
-    LIST(APPEND INFO_MESSAGE  " - Unit Tests")
+    SET(INFO_MESSAGE "${INFO_MESSAGE} - Unit Tests")
     ENABLE_TESTING()
     ADD_SUBDIRECTORY(tests)
 ENDIF()
 ################################################################################
 
+################################################################################
+# Status message
+
+# These lines will generate a line of '*' the same length as info_message
+STRING(LENGTH ${INFO_MESSAGE} INFO_MESSAGE_LENGTH)
+STRING(SUBSTRING
+       "***********************************************************************"
+       0 ${INFO_MESSAGE_LENGTH}
+       STARS_MESSAGE)
+
 MESSAGE(STATUS ${STARS_MESSAGE})
 MESSAGE(STATUS ${INFO_MESSAGE})
 MESSAGE(STATUS ${STARS_MESSAGE})
-
+################################################################################
