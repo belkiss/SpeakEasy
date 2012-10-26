@@ -122,6 +122,19 @@ class SE_CLogManager : public SE_IBaseManager
         **/
         template <typename T, typename U>
         void log(const ELogLevel inLevel, const T &inLog1, const U &inLog2);
+
+        template <typename T, typename U, typename V>
+        void log(const ELogLevel inLevel,
+                 const T &inLog1,
+                 const U &inLog2,
+                 const V &inLog3);
+
+        template <typename T, typename U, typename V, typename W>
+        void log(const ELogLevel inLevel,
+                 const T &inLog1,
+                 const U &inLog2,
+                 const V &inLog3,
+                 const W &inLog4);
 #endif // VARIADIC_TEMPLATES_SUPPORTED
 
     private:
@@ -202,13 +215,55 @@ void SE_CLogManager::log(const ELogLevel inLevel, const T &inLog)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 template <typename T, typename U>
-void SE_CLogManager::log(const ELogLevel inLevel, const T &inLog1, const U &inLog2)
+void SE_CLogManager::log(const ELogLevel inLevel,
+                         const T &inLog1,
+                         const U &inLog2)
 {
     // kNone is 0
     if(!inLevel || inLevel >= m_currentLogLevel)
     {
         std::ostringstream displayStream;
         displayStream << inLog1 << " " << inLog2;
+        log(inLevel, displayStream.str());
+    }
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+template <typename T, typename U, typename V>
+void SE_CLogManager::log(const ELogLevel inLevel,
+                         const T &inLog1,
+                         const U &inLog2,
+                         const V &inLog3)
+{
+    // kNone is 0
+    if(!inLevel || inLevel >= m_currentLogLevel)
+    {
+        std::ostringstream displayStream;
+        displayStream << inLog1 << " " << inLog2 << " " << inLog3;
+        log(inLevel, displayStream.str());
+    }
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+template <typename T, typename U, typename V, typename W>
+void SE_CLogManager::log(const ELogLevel inLevel,
+                         const T &inLog1,
+                         const U &inLog2,
+                         const V &inLog3,
+                         const W &inLog4)
+{
+    // kNone is 0
+    if(!inLevel || inLevel >= m_currentLogLevel)
+    {
+        std::ostringstream displayStream;
+        displayStream << inLog1 << " "
+                      << inLog2 << " "
+                      << inLog3 << " "
+                      << inLog4;
         log(inLevel, displayStream.str());
     }
 }
