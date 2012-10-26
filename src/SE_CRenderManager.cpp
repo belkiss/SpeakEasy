@@ -50,6 +50,7 @@ void loadFileToString(char const * const inpFileName,
     std::ifstream fileStream(inpFileName, std::ios::binary);
     if (!fileStream.good())
     {
+        SE_CLogManager::getInstance()->log(kError, "Shader file ", inpFileName, "could not be found");
         assert(false);// File does not exist
     }
 
@@ -99,7 +100,6 @@ bool SE_CRenderManager::startUp()
     if(glewInitStatus == GLEW_OK)
     {
         // HACK unset the GL error GL_INVALID_ENUM caused by glew bug
-        glGetError();
 
         createShaders();
         createVBO();
