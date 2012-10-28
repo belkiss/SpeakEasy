@@ -100,6 +100,7 @@ bool SE_CRenderManager::startUp()
     if(glewInitStatus == GLEW_OK)
     {
         // HACK unset the GL error GL_INVALID_ENUM caused by glew bug
+        glGetError();
 
         createShaders();
         createVBO();
