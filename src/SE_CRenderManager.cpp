@@ -38,8 +38,8 @@
 #include "config.h"
 #include "SE_CLogManager.h"
 
-extern I32 windowWidth;
-extern I32 windowHeight;
+extern I32 WINDOW_WIDTH;
+extern I32 WINDOW_HEIGHT;
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -50,7 +50,7 @@ void loadFileToString(char const * const inpFileName,
     std::ifstream fileStream(inpFileName, std::ios::binary);
     if (!fileStream.good())
     {
-        SE_CLogManager::getInstance()->log(kError, "Shader file ", inpFileName, "could not be found");
+        SE_CLogManager::getInstance()->log(kError, "Shader file", inpFileName, "could not be found");
         assert(false);// File does not exist
     }
 
@@ -82,7 +82,7 @@ bool SE_CRenderManager::startUp()
 {
     bool startUpSuccessfull = false;
 
-    glViewport(0, 0, windowWidth, windowHeight);
+    glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 
     // Clear color buffer to white
     glClearColor(1.f, 1.f, 1.f, 0.f);
@@ -99,6 +99,8 @@ bool SE_CRenderManager::startUp()
     GLenum glewInitStatus = glewInit();
     if(glewInitStatus == GLEW_OK)
     {
+        SE_CLogManager::getInstance()->log(kDebug, "Initializing GLEW", glewGetString(GLEW_VERSION));
+
         // HACK unset the GL error GL_INVALID_ENUM caused by glew bug
         glGetError();
 
@@ -135,9 +137,9 @@ void SE_CRenderManager::render(const F32 /*inElapsedMs*/)
 
     // mode, the type of array data that's going to be drawn
     // first, specifies the first index that we want to draw
-    // count, specifies how many of the enabled indices to draw NOTE this is not
-    // the number of triangles !
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    // count, specifies how many of the enabled indices to draw
+    // NOTE this is *not* the number of triangles !
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
 
@@ -147,9 +149,10 @@ void SE_CRenderManager::createVBO()
 {
     F32 const vertices[] =
     {
-        -0.8f, -0.8f, 0.f, 1.f,
-          0.f,  0.8f, 0.f, 1.f,
-         0.8f, -0.8f, 0.f, 1.f
+        -0.8f,  0.8f, 0.0f, 1.0f,
+         0.8f,  0.8f, 0.0f, 1.0f,
+        -0.8f, -0.8f, 0.0f, 1.0f,
+         0.8f, -0.8f, 0.0f, 1.0f
     };
 
     // generate 1 vertex array object in the GPU's memory
@@ -228,9 +231,10 @@ void SE_CRenderManager::createVBO()
     // Now repeat the same steps but this time for the color data
     F32 const colors[] =
     {
-        1.f, 0.f, 0.f, 1.f,
-        0.f, 1.f, 0.f, 1.f,
-        0.f, 0.f, 1.f, 1.f
+        1.0f, 0.0f, 0.0f, 1.0f,
+        0.0f, 1.0f, 0.0f, 1.0f,
+        0.0f, 0.0f, 1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f, 1.0f
     };
 
     glGenBuffers(1, &m_colorBufferId);

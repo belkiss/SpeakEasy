@@ -62,7 +62,7 @@ IF(WIN32)
         PROJECT_LABEL ${PROJECT_NAME}
         LINK_FLAGS /ENTRY:"mainCRTStartup"
     )
-ENDIF(WIN32)
+ENDIF()
 
 # linker setup
 TARGET_LINK_LIBRARIES(

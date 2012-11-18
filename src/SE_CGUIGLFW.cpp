@@ -30,8 +30,8 @@
 #include "SE_CGUIManager.h"
 #include "SE_CLogManager.h"
 
-I32 windowWidth  = 640;
-I32 windowHeight = 480;
+extern I32 const WINDOW_WIDTH  = 640;
+extern I32 const WINDOW_HEIGHT = 480;
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -73,7 +73,7 @@ bool SE_CGUIGLFW::openWindow()
 
     glfwWindowHint(GLFW_OPENGL_ROBUSTNESS, GLFW_OPENGL_NO_ROBUSTNESS);
 
-    m_GLFWWindow = glfwCreateWindow(windowWidth, windowHeight,
+    m_GLFWWindow = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT,
                                     GLFW_WINDOWED,
                                     "SpeakEasy" " - " GIT_INFORMATIONS " - built on " __DATE__ " " __TIME__,
                                     nullptr);
