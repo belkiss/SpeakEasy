@@ -32,7 +32,8 @@
 bool SE_CMemoryManager::startUp()
 {
     SE_CLogManager::getInstance()->log(kInformation, "SE_CMemoryManager successfully started");
-    return true;
+    m_initSuccess = true;
+    return m_initSuccess;
 }
 
 

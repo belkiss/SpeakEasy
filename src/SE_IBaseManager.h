@@ -30,13 +30,16 @@
 class SE_IBaseManager
 {
     public:
-        SE_IBaseManager(){};
+        SE_IBaseManager();
         virtual ~SE_IBaseManager(){};
 
         virtual bool startUp()  = 0;
         virtual bool shutDown() = 0;
 
         // TODO store the status of the startUp to know what to do at shutDown
+    protected:
+        bool m_initSuccess;
+        char _pad[3]; // 7 on 64 ?
 };
 
 #endif // SE_IBASEMANAGER_H

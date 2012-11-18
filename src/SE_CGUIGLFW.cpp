@@ -38,7 +38,9 @@ extern I32 const WINDOW_HEIGHT = 480;
 bool SE_CGUIGLFW::init()
 {
     bool initSuccess = false;
-    SE_CLogManager::getInstance()->log(kDebug, "Initializing GLFW", glfwGetVersionString());
+    SE_CLogManager::getInstance()->log(
+        kDebug, "Initializing GLFW", glfwGetVersionString()
+    );
     I32 const initStatus = glfwInit();
     if(initStatus == GL_TRUE)
     {

@@ -61,8 +61,13 @@ SE_CLogManager::~SE_CLogManager()
 bool SE_CLogManager::startUp(const ELogLevel inLogLevel)
 {
     m_currentLogLevel = inLogLevel;
-    log(kInformation, "SE_CLogManager successfully started with logLevel set to", static_cast<U32>(inLogLevel));
-    return true;
+    log(
+        kInformation,
+        "SE_CLogManager successfully started with logLevel set to",
+        static_cast<U32>(inLogLevel)
+    );
+    m_initSuccess = true;
+    return m_initSuccess;
 }
 
 

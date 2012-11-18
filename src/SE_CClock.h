@@ -60,8 +60,9 @@ class SE_CClock
             F32 delta = 0.f;
             if(!m_isPaused)
             {
-                std::chrono::system_clock::time_point const nowTimePoint = getNowTimePoint();
-                delta = (getDeltaInMs(m_previousTimePoint, nowTimePoint) * m_timeScale);
+                std::chrono::system_clock::time_point const nowTimePoint =
+                    getNowTimePoint();
+                delta = getDeltaInMs(m_previousTimePoint, nowTimePoint) * m_timeScale;
                 m_previousTimePoint = nowTimePoint;
             }
             return delta;
@@ -74,8 +75,10 @@ class SE_CClock
          * @param inEnd earlier time point
          * @return F32 delta in ms
          **/
-        inline static F32 getDeltaInMs(std::chrono::system_clock::time_point const &inBegin,
-                                       std::chrono::system_clock::time_point const &inEnd)
+        inline static F32 getDeltaInMs(
+            std::chrono::system_clock::time_point const &inBegin,
+            std::chrono::system_clock::time_point const &inEnd
+        )
         {
             return std::chrono::duration_cast<std::chrono::microseconds>(inEnd - inBegin).count()/1000.f;
         }

@@ -57,22 +57,28 @@ static SE_CClock           gs_MainClock;
 // PhysicsManager
 // SceneManager
 
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 void handleCommandLineArguments(int const inArgc,
                                 char const * const * const inpArgv)
 {
     for(I32 i = 0; i < inArgc; ++i)
     {
-        SE_CLogManager::getInstance()->log(kDebug, "inpArgv[", i, "] = ", inpArgv[i]);
+        SE_CLogManager::getInstance()->log(
+            kDebug, "inpArgv[", i, "] = ", inpArgv[i]
+        );
     }
 }
 
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 int main(int const inArgc,
          char const * const * const inpArgv)
 {
 #ifdef WIN32
     // get the arguments usually set by WinMain
     HINSTANCE const hInstance = GetModuleHandle(nullptr);
-    int const       nCmdShow  = SW_SHOWDEFAULT; // TODO: remove the apparent usage.
+    int const       nCmdShow  = SW_SHOWDEFAULT;
     (void)hInstance;
     (void)nCmdShow;
 #endif // WIN32
@@ -92,7 +98,9 @@ int main(int const inArgc,
         // Start the main clock
         gs_MainClock.start();
 
-        SE_CLogManager::getInstance()->log(kDebug, "SpeakEasy subsystems successfully started");
+        SE_CLogManager::getInstance()->log(
+            kDebug, "SpeakEasy subsystems successfully started"
+        );
 #ifdef SE_DEBUG
         SE_CLogManager::getInstance()->log(kDebug, "SE_DEBUG defined");
 #endif // SE_DEBUG
@@ -109,7 +117,9 @@ int main(int const inArgc,
     }
     else
     {
-        SE_CLogManager::getInstance()->log(kDebug, "SpeakEasy subsystems failed to start");
+        SE_CLogManager::getInstance()->log(
+            kDebug, "SpeakEasy subsystems failed to start"
+        );
     }
 
     SE_CLogManager::getInstance()->log(kDebug, "Exiting...");

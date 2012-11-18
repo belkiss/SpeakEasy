@@ -50,7 +50,9 @@ void loadFileToString(char const * const inpFileName,
     std::ifstream fileStream(inpFileName, std::ios::binary);
     if (!fileStream.good())
     {
-        SE_CLogManager::getInstance()->log(kError, "Shader file", inpFileName, "could not be found");
+        SE_CLogManager::getInstance()->log(
+            kError, "Shader file", inpFileName, "could not be found"
+        );
         assert(false);// File does not exist
     }
 
@@ -80,8 +82,6 @@ SE_CRenderManager::SE_CRenderManager():
 ////////////////////////////////////////////////////////////////////////////////
 bool SE_CRenderManager::startUp()
 {
-    bool startUpSuccessfull = false;
-
     glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 
     // Clear color buffer to white
@@ -99,7 +99,9 @@ bool SE_CRenderManager::startUp()
     GLenum glewInitStatus = glewInit();
     if(glewInitStatus == GLEW_OK)
     {
-        SE_CLogManager::getInstance()->log(kDebug, "Initializing GLEW", glewGetString(GLEW_VERSION));
+        SE_CLogManager::getInstance()->log(
+            kDebug, "Initializing GLEW", glewGetString(GLEW_VERSION)
+        );
 
         // HACK unset the GL error GL_INVALID_ENUM caused by glew bug
         glGetError();
@@ -107,14 +109,18 @@ bool SE_CRenderManager::startUp()
         createShaders();
         createVBO();
 
-        startUpSuccessfull = true;
-        SE_CLogManager::getInstance()->log(kInformation, "SE_CRenderManager successfully started");
+        m_initSuccess = true;
+        SE_CLogManager::getInstance()->log(
+            kInformation, "SE_CRenderManager successfully started"
+        );
     }
     else
     {
-        SE_CLogManager::getInstance()->log(kError, "glewInit failed :", glewGetErrorString(glewInitStatus));
+        SE_CLogManager::getInstance()->log(
+            kError, "glewInit failed :", glewGetErrorString(glewInitStatus)
+        );
     }
-    return startUpSuccessfull;
+    return m_initSuccess;
 }
 
 
@@ -122,9 +128,14 @@ bool SE_CRenderManager::startUp()
 ////////////////////////////////////////////////////////////////////////////////
 bool SE_CRenderManager::shutDown()
 {
-    destroyShaders();
-    destroyVBO();
-    SE_CLogManager::getInstance()->log(kInformation, "SE_CRenderManager successfully shut downed");
+    if(m_initSuccess)
+    {
+        destroyShaders();
+        destroyVBO();
+    }
+    SE_CLogManager::getInstance()->log(
+        kInformation, "SE_CRenderManager successfully shut downed"
+    );
     return true;
 }
 
@@ -159,7 +170,8 @@ void SE_CRenderManager::createVBO()
     // A Vertex Array Object (or VAO) is an object that describes how the vertex
     // attributes are stored in a Vertex Buffer Object (or VBO)
     // Vertex attributes can be described by the glVertexAttribPointer function
-    // and its two sister functions glVertexAttribIPointer and glVertexAttribLPointer
+    // and its two sister functions glVertexAttribIPointer and
+    // glVertexAttribLPointer
     glGenVertexArrays(1, &m_vertexArrayObjectId);
     glBindVertexArray(m_vertexArrayObjectId);
 
@@ -197,7 +209,8 @@ void SE_CRenderManager::createVBO()
     // Unlike the size parameter that we used in our call to glBufferData,
     // this one does not represent the size of the data in bytes, but rather
     // the amount of components that make up a vertex. In our case, the size
-    // parameter is set to 4, signifying the X, Y, Z, and W components of our vertices.
+    // parameter is set to 4, signifying the X, Y, Z, and W components of our
+    // vertices.
     //
     // To calculate the size in bytes of each component, OpenGL needs to know
     // the data-type of each component passed to the type parameter, in our case
@@ -345,11 +358,14 @@ void SE_CRenderManager::destroyShaders()
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-void SE_CRenderManager::logGLerror(const char*const inpDescriptionText) const
+void SE_CRenderManager::logGLerror(char const * const inpDescriptionText) const
 {
     GLenum errorStatus = glGetError();
     if(errorStatus != GL_NO_ERROR)
     {
-        SE_CLogManager::getInstance()->log(kError, "gl error detected when", inpDescriptionText, ":", gluErrorString(errorStatus));
+        SE_CLogManager::getInstance()->log(
+            kError, "gl error detected when", inpDescriptionText, ":",
+            gluErrorString(errorStatus)
+        );
     }
 }
