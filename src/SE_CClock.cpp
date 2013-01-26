@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2011-2012  Lambert Clara <lambert.clara@yahoo.fr>
+ * Copyright (C) 2011-2013 Lambert Clara <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -34,7 +34,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 SE_CClock::SE_CClock():
     m_timeScale(1.f),
-    m_delta(0.f),
     m_isPaused(true)
 {
 }
@@ -59,7 +58,7 @@ void SE_CClock::localtimeToSStream(std::ostringstream &ioStringStream)
                    << std::setw(3)
                    << systemTime.wMilliseconds;
 #else // WIN32
-    std::chrono::steady_clock::time_point systemTime = std::chrono::steady_clock::now();
+    std::chrono::system_clock::time_point systemTime = std::chrono::system_clock::now();
     std::time_t currentTime = std::chrono::system_clock::to_time_t(systemTime);
     std::tm *pCurrentTime = std::localtime(&currentTime);
 

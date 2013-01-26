@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2011-2012  Lambert Clara <lambert.clara@yahoo.fr>
+ * Copyright (C) 2011-2013 Lambert Clara <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -114,7 +114,6 @@ class SE_CClock
     private:
         std::chrono::system_clock::time_point m_previousTimePoint; // 8 bytes
         F32  m_timeScale;
-        F32  m_delta;
         bool m_isPaused;
         char _pad[7];
 };

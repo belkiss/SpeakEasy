@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2011-2012  Lambert Clara <lambert.clara@yahoo.fr>
+ * Copyright (C) 2011-2013 Lambert Clara <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -35,12 +35,29 @@ extern I32 const WINDOW_HEIGHT = 480;
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
+SE_CGUIGLFW::SE_CGUIGLFW() :
+    m_pGLFWWindow(nullptr)
+{
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+SE_CGUIGLFW::~SE_CGUIGLFW()
+{
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 bool SE_CGUIGLFW::init()
 {
     bool initSuccess = false;
     SE_CLogManager::getInstance()->log(
         kDebug, "Initializing GLFW", glfwGetVersionString()
     );
+
+    glfwSetErrorCallback(SE_CGUIGLFW::logGLFWerror);
     I32 const initStatus = glfwInit();
     if(initStatus == GL_TRUE)
     {
@@ -48,7 +65,7 @@ bool SE_CGUIGLFW::init()
     }
     else
     {
-        logGLFWerror("glfwInit failed :");
+        SE_CLogManager::getInstance()->log(kError, "glfwInit failed");
     }
     return initSuccess;
 }
@@ -60,10 +77,10 @@ bool SE_CGUIGLFW::openWindow()
 {
     bool windowOpened = false;
 
-    glfwWindowHint(GLFW_OPENGL_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_OPENGL_VERSION_MINOR, 3);
-
     glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 
 #ifdef SE_DEBUG
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
@@ -73,22 +90,26 @@ bool SE_CGUIGLFW::openWindow()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-    glfwWindowHint(GLFW_OPENGL_ROBUSTNESS, GLFW_OPENGL_NO_ROBUSTNESS);
+    glfwWindowHint(GLFW_CONTEXT_ROBUSTNESS, GLFW_NO_ROBUSTNESS);
 
-    m_GLFWWindow = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT,
-                                    GLFW_WINDOWED,
-                                    "SpeakEasy" " - " GIT_INFORMATIONS " - built on " __DATE__ " " __TIME__,
-                                    nullptr);
+    glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+    glfwWindowHint(GLFW_VISIBLE, GL_TRUE);
 
-    if(m_GLFWWindow != nullptr)
+    m_pGLFWWindow = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT,
+                                     "SpeakEasy" " - " GIT_INFORMATIONS " - built on " __DATE__ " " __TIME__,
+                                     nullptr, // windowed
+                                     nullptr  // do not share resources
+                                    );
+
+    if(m_pGLFWWindow != nullptr)
     {
         windowOpened = true;
 
         // Make the context of the newly created window current
-        glfwMakeContextCurrent(m_GLFWWindow);
+        glfwMakeContextCurrent(m_pGLFWWindow);
 
         // Ensure that we can capture the escape key being pressed below
-        glfwSetInputMode(m_GLFWWindow, GLFW_STICKY_KEYS, GL_TRUE);
+        glfwSetInputMode(m_pGLFWWindow, GLFW_STICKY_KEYS, GL_TRUE);
 
         // Enable vertical sync (on cards that supports it)
         //glfwSwapInterval(1);
@@ -101,7 +122,7 @@ bool SE_CGUIGLFW::openWindow()
     else
     {
         glfwTerminate();
-        logGLFWerror("glfwCreateWindow failed :");
+        SE_CLogManager::getInstance()->log(kError, "glfwCreateWindow failed");
     }
 
     return windowOpened;
@@ -112,7 +133,7 @@ bool SE_CGUIGLFW::openWindow()
 ////////////////////////////////////////////////////////////////////////////////
 void SE_CGUIGLFW::swapBuffers()
 {
-    glfwSwapBuffers(m_GLFWWindow);
+    glfwSwapBuffers(m_pGLFWWindow);
     glfwPollEvents();
 }
 
@@ -121,7 +142,7 @@ void SE_CGUIGLFW::swapBuffers()
 ////////////////////////////////////////////////////////////////////////////////
 bool SE_CGUIGLFW::windowClosed() const
 {
-    bool const windowCloseRequested = glfwGetWindowParam(m_GLFWWindow, GLFW_CLOSE_REQUESTED) == GL_TRUE;
+    bool const windowCloseRequested = glfwGetWindowParam(m_pGLFWWindow, GLFW_SHOULD_CLOSE) == GL_TRUE;
     if(windowCloseRequested)
     {
         SE_CLogManager::getInstance()->log(kInformation, "GLFW window has been closed");
@@ -134,10 +155,10 @@ bool SE_CGUIGLFW::windowClosed() const
 ////////////////////////////////////////////////////////////////////////////////
 bool SE_CGUIGLFW::close()
 {
-    if(m_GLFWWindow)
+    if(m_pGLFWWindow)
     {
-        glfwDestroyWindow(m_GLFWWindow);
-        m_GLFWWindow = nullptr;
+        glfwDestroyWindow(m_pGLFWWindow);
+        m_pGLFWWindow = nullptr;
     }
     glfwTerminate();
     return true;
@@ -150,7 +171,7 @@ bool SE_CGUIGLFW::quitPressed() const
 {
     // TODO only quit once escape is released ??
     bool shouldQuit = false;
-    I32 const escapeKeyStatus = glfwGetKey(m_GLFWWindow, GLFW_KEY_ESCAPE);
+    I32 const escapeKeyStatus = glfwGetKey(m_pGLFWWindow, GLFW_KEY_ESCAPE);
     if(escapeKeyStatus == GLFW_PRESS)
     {
         shouldQuit = true;
@@ -162,8 +183,9 @@ bool SE_CGUIGLFW::quitPressed() const
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-void SE_CGUIGLFW::logGLFWerror(char const * const inpDescriptionText) const
+void SE_CGUIGLFW::logGLFWerror(I32 const          inErrorCode,
+                               char const * const inpDescriptionText)
 {
-    I32 const errorCode = glfwGetError();
-    SE_CLogManager::getInstance()->log(kError, inpDescriptionText, glfwErrorString(errorCode));
+    (void)inErrorCode;
+    SE_CLogManager::getInstance()->log(kError, "GLFW error :", inpDescriptionText);
 }

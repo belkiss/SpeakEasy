@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2011-2012  Lambert Clara <lambert.clara@yahoo.fr>
+ * Copyright (C) 2011-2013 Lambert Clara <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -28,15 +28,13 @@
 #define SE_CGUIGLFW_H
 
 #include "SE_CGUIInterface.h"
-
-// ugly forward-declare
-typedef void* GLFWwindow;
+#include "SE_Types.h"
 
 class SE_CGUIGLFW final : public SE_CGUIInterface
 {
     public:
-        SE_CGUIGLFW(){}
-        ~SE_CGUIGLFW(){}
+        SE_CGUIGLFW();
+        ~SE_CGUIGLFW();
 
         bool init()         override;
         bool openWindow()   override;
@@ -45,11 +43,12 @@ class SE_CGUIGLFW final : public SE_CGUIInterface
         bool quitPressed()  const override;
         bool close()        override;
 
-    private:
-        void logGLFWerror(char const * const inpDescriptionText) const;
+    private: // static methods
+        static void logGLFWerror(I32 const          inErrorCode,
+                                 char const * const inpDescriptionText);
 
     private:
-        GLFWwindow m_GLFWWindow;
+        struct GLFWwindow *m_pGLFWWindow;
 };
 
 #endif // SE_CGUIGLFW_H
