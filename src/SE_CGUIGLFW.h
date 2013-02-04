@@ -30,6 +30,9 @@
 #include "SE_CGUIInterface.h"
 #include "SE_Types.h"
 
+extern I32 const WINDOW_WIDTH;
+extern I32 const WINDOW_HEIGHT;
+
 class SE_CGUIGLFW final : public SE_CGUIInterface
 {
     public:
