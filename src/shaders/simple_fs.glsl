@@ -2,9 +2,9 @@
 
 in  vec4 vs_outColor;
 
-out vec4 ps_outColor;
+out vec4 fs_outColor;
 
 void main(void)
 {
-    ps_outColor = vs_outColor;
+    fs_outColor = vs_outColor;
 }

@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2012  Lambert Clara <lambert.clara@yahoo.fr>
+ * Copyright (C) 2012-2013 Lambert Clara <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -52,7 +52,7 @@ class SE_CRenderManager : public SE_IBaseManager
 
     private:
         U32 m_vertexShaderId;
-        U32 m_pixelShaderId;
+        U32 m_fragmentShaderId;
         U32 m_programId;
         U32 m_vertexArrayObjectId;
         U32 m_vertexBufferObjectId;
@@ -60,7 +60,8 @@ class SE_CRenderManager : public SE_IBaseManager
 
         /// @brief in degrees
         F32 m_rotationAngle;
-        char _pad[4];
+
+        U8  _pad[4];
 };
 
 #endif // SE_CRENDERMANAGER_H
