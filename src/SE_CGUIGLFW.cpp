@@ -142,7 +142,7 @@ void SE_CGUIGLFW::swapBuffers()
 ////////////////////////////////////////////////////////////////////////////////
 bool SE_CGUIGLFW::windowClosed() const
 {
-    bool const windowCloseRequested = glfwGetWindowParam(m_pGLFWWindow, GLFW_SHOULD_CLOSE) == GL_TRUE;
+    bool const windowCloseRequested = glfwWindowShouldClose(m_pGLFWWindow) == GL_TRUE;
     if(windowCloseRequested)
     {
         SE_CLogManager::getInstance()->log(kInformation, "GLFW window has been closed");
