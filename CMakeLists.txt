@@ -56,12 +56,30 @@ ENDIF()
 OPTION(BUILD_TESTS         "Build Tests"         ON)
 OPTION(BUILD_DOCUMENTATION "Build Documentation" ON)
 
-FIND_PACKAGE(OpenGL REQUIRED)
-FIND_PACKAGE(GLFW 3 REQUIRED)
-FIND_PACKAGE(GLEW   REQUIRED)
+FIND_PACKAGE(OpenGL  REQUIRED)
+FIND_PACKAGE(GLFW 3  REQUIRED)
+FIND_PACKAGE(GLEW    REQUIRED)
+FIND_PACKAGE(Threads REQUIRED)
 
-IF(GLFW_IS_STATIC)
-    FIND_PACKAGE(X11 REQUIRED)
+IF(UNIX)
+	############################################################################
+	# X11
+	FIND_PACKAGE(X11 REQUIRED)
+	# Check for XRandR (modern resolution switching and gamma control)
+	IF(NOT X11_Xrandr_FOUND)
+		MESSAGE(FATAL_ERROR "The RandR library and headers were not found")
+	ENDIF()
+
+	# Check for Xinput
+	IF(NOT X11_Xinput_FOUND)
+		MESSAGE(FATAL_ERROR "The Xinput library and headers were not found")
+	ENDIF()
+
+	# Check for Xf86VidMode (fallback gamma control)
+	IF(NOT X11_xf86vmode_FOUND)
+		MESSAGE(FATAL_ERROR "The Xf86VidMode library and headers were not found")
+	ENDIF()
+	############################################################################
 ENDIF()
 ################################################################################
 

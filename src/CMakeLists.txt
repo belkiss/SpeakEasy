@@ -37,13 +37,14 @@ SET(SpeakEasy_Libs
     ${OPENGL_glu_LIBRARY}
     ${GLFW_LIBRARY}
     ${GLEW_LIBRARY}
+    ${CMAKE_THREAD_LIBS_INIT}
 )
 
-IF(GLFW_IS_STATIC)
+IF(UNIX)
     LIST(APPEND SpeakEasy_Libs
-         ${X11_Xxf86vm_LIB}
          ${X11_Xrandr_LIB}
-         rt
+         ${X11_Xinput_LIB}
+         ${X11_Xxf86vm_LIB}
     )
 ENDIF()
 
