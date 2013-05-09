@@ -53,9 +53,7 @@ SE_CGUIGLFW::~SE_CGUIGLFW()
 bool SE_CGUIGLFW::init()
 {
     bool initSuccess = false;
-    SE_CLogManager::getInstance()->log(
-        kDebug, "Initializing GLFW", glfwGetVersionString()
-    );
+	seLogDebug("Initializing GLFW", glfwGetVersionString());
 
     glfwSetErrorCallback(SE_CGUIGLFW::logGLFWerror);
     I32 const initStatus = glfwInit();
@@ -65,7 +63,7 @@ bool SE_CGUIGLFW::init()
     }
     else
     {
-        SE_CLogManager::getInstance()->log(kError, "glfwInit failed");
+        seLogError("glfwInit failed");
     }
     return initSuccess;
 }
@@ -117,12 +115,12 @@ bool SE_CGUIGLFW::openWindow()
         // Disable vertical sync
         glfwSwapInterval(0);
 
-        SE_CLogManager::getInstance()->log(kDebug, "OpenGL context version :", glGetString(GL_VERSION));
+        seLogDebug("OpenGL context version :", glGetString(GL_VERSION));
     }
     else
     {
         glfwTerminate();
-        SE_CLogManager::getInstance()->log(kError, "glfwCreateWindow failed");
+		seLogError("glfwCreateWindow failed");
     }
 
     return windowOpened;
@@ -145,7 +143,7 @@ bool SE_CGUIGLFW::windowClosed() const
     bool const windowCloseRequested = glfwWindowShouldClose(m_pGLFWWindow) == GL_TRUE;
     if(windowCloseRequested)
     {
-        SE_CLogManager::getInstance()->log(kInformation, "GLFW window has been closed");
+        seLogInfo("GLFW window has been closed");
     }
     return windowCloseRequested;
 }
@@ -175,7 +173,7 @@ bool SE_CGUIGLFW::quitPressed() const
     if(escapeKeyStatus == GLFW_PRESS)
     {
         shouldQuit = true;
-        SE_CLogManager::getInstance()->log(kInformation, "GLFW window received escape key");
+		seLogInfo("GLFW window received escape key");
     }
     return shouldQuit;
 }
@@ -187,5 +185,5 @@ void SE_CGUIGLFW::logGLFWerror(I32 const          inErrorCode,
                                char const * const inpDescriptionText)
 {
     (void)inErrorCode;
-    SE_CLogManager::getInstance()->log(kError, "GLFW error :", inpDescriptionText);
+	seLogError("GLFW error :", inpDescriptionText);
 }

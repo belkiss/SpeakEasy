@@ -31,7 +31,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 bool SE_CMemoryManager::startUp()
 {
-    SE_CLogManager::getInstance()->log(kInformation, "SE_CMemoryManager successfully started");
+	seLogInfo("SE_CMemoryManager successfully started");
     m_initSuccess = true;
     return m_initSuccess;
 }
@@ -41,6 +41,6 @@ bool SE_CMemoryManager::startUp()
 ////////////////////////////////////////////////////////////////////////////////
 bool SE_CMemoryManager::shutDown()
 {
-    SE_CLogManager::getInstance()->log(kInformation, "SE_CMemoryManager successfully shut downed");
+	seLogInfo("SE_CMemoryManager successfully shut downed");
     return true;
 }

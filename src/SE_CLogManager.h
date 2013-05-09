@@ -35,6 +35,15 @@
 #include "SE_CClock.h"
 #include "SE_Types.h"
 
+////////////////////////////////////////////////////////////////////////////////
+// Useful macros
+//
+#define seLogDebug(...)   SE_CLogManager::getInstance()->log(kDebug,       __VA_ARGS__)
+#define seLogInfo(...)    SE_CLogManager::getInstance()->log(kInformation, __VA_ARGS__)
+#define seLogWarning(...) SE_CLogManager::getInstance()->log(kWarning,     __VA_ARGS__)
+#define seLogError(...)   SE_CLogManager::getInstance()->log(kError,       __VA_ARGS__)
+////////////////////////////////////////////////////////////////////////////////
+
 /**
  * @brief Log levels
  **/

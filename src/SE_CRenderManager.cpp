@@ -48,9 +48,7 @@ void loadFileToString(char const * const inpFileName,
     std::ifstream fileStream(inpFileName, std::ios::binary);
     if (!fileStream.good())
     {
-        SE_CLogManager::getInstance()->log(
-            kError, "Shader file", inpFileName, "could not be found"
-        );
+		seLogError("Shader file", inpFileName, "could not be found");
         assert(false);// File does not exist
     }
 
@@ -100,9 +98,7 @@ bool SE_CRenderManager::startUp()
     GLenum glewInitStatus = glewInit();
     if(glewInitStatus == GLEW_OK)
     {
-        SE_CLogManager::getInstance()->log(
-            kDebug, "Initializing GLEW", glewGetString(GLEW_VERSION)
-        );
+		seLogDebug("Initializing GLEW", glewGetString(GLEW_VERSION));
 
         // HACK unset the GL error GL_INVALID_ENUM caused by glew bug
         glGetError();
@@ -111,15 +107,11 @@ bool SE_CRenderManager::startUp()
         createVBO();
 
         m_initSuccess = true;
-        SE_CLogManager::getInstance()->log(
-            kInformation, "SE_CRenderManager successfully started"
-        );
+        seLogInfo("SE_CRenderManager successfully started");
     }
     else
     {
-        SE_CLogManager::getInstance()->log(
-            kError, "glewInit failed :", glewGetErrorString(glewInitStatus)
-        );
+        seLogError("glewInit failed :", glewGetErrorString(glewInitStatus));
     }
     return m_initSuccess;
 }
@@ -134,9 +126,7 @@ bool SE_CRenderManager::shutDown()
         destroyShaders();
         destroyVBO();
     }
-    SE_CLogManager::getInstance()->log(
-        kInformation, "SE_CRenderManager successfully shut downed"
-    );
+    seLogInfo("SE_CRenderManager successfully shut downed");
     return true;
 }
 
@@ -369,9 +359,7 @@ void SE_CRenderManager::logGLerror(char const * const inpDescriptionText) const
     GLenum errorStatus = glGetError();
     if(errorStatus != GL_NO_ERROR)
     {
-        SE_CLogManager::getInstance()->log(
-            kError, "gl error detected when", inpDescriptionText, ":",
-            gluErrorString(errorStatus)
-        );
+		seLogError("gl error detected when", inpDescriptionText, ":",
+				   gluErrorString(errorStatus));
     }
 }

@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2011-2012  Lambert Clara <lambert.clara@yahoo.fr>
+ * Copyright (C) 2011-2013  Lambert Clara <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -64,11 +64,10 @@ void handleCommandLineArguments(int const inArgc,
 {
     for(I32 i = 0; i < inArgc; ++i)
     {
-        SE_CLogManager::getInstance()->log(
-            kDebug, "inpArgv[", i, "] = ", inpArgv[i]
-        );
+		seLogDebug("inpArgv[", i, "] = ", inpArgv[i]);
     }
 }
+
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -98,11 +97,10 @@ int main(int const inArgc,
         // Start the main clock
         gs_MainClock.start();
 
-        SE_CLogManager::getInstance()->log(
-            kDebug, "SpeakEasy subsystems successfully started"
+		seLogDebug("SpeakEasy subsystems successfully started"
         );
 #ifdef SE_DEBUG
-        SE_CLogManager::getInstance()->log(kDebug, "SE_DEBUG defined");
+		seLogDebug("SE_DEBUG defined");
 #endif // SE_DEBUG
 
         bool keepRunning = true;
@@ -117,18 +115,16 @@ int main(int const inArgc,
     }
     else
     {
-        SE_CLogManager::getInstance()->log(
-            kDebug, "SpeakEasy subsystems failed to start"
-        );
+		seLogDebug("SpeakEasy subsystems failed to start");
     }
 
-    SE_CLogManager::getInstance()->log(kDebug, "Exiting...");
+    seLogDebug("Exiting...");
 
     // Shut everything down, in reverse order
     bool shutDownSuccess = gs_RenderManager.shutDown();
-    shutDownSuccess = shutDownSuccess && gs_GUIManager.shutDown();
-    shutDownSuccess = shutDownSuccess && gs_MemoryManager.shutDown();
-    shutDownSuccess = shutDownSuccess && gs_LogManager.shutDown();
+    shutDownSuccess &= gs_GUIManager.shutDown();
+    shutDownSuccess &= gs_MemoryManager.shutDown();
+    shutDownSuccess &= gs_LogManager.shutDown();
 
     return shutDownSuccess ? EXIT_SUCCESS : EXIT_FAILURE;
 }

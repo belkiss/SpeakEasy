@@ -56,23 +56,17 @@ bool SE_CGUIManager::startUp()
 
     if(m_pGUISystem->init())
     {
-        SE_CLogManager::getInstance()->log(
-            kInformation, "GUI System successfully initialized"
-        );
+		seLogInfo("GUI System successfully initialized");
         if(m_pGUISystem->openWindow())
         {
-            SE_CLogManager::getInstance()->log(
-                kInformation, "GUI System window successfully opened"
-            );
+			seLogInfo("GUI System window successfully opened");
             m_initSuccess = true;
         }
     }
 
     if(m_initSuccess)
     {
-        SE_CLogManager::getInstance()->log(
-            kInformation, "SE_CGUIManager successfully started"
-        );
+		seLogInfo("SE_CGUIManager successfully started");
     }
     return m_initSuccess;
 }
@@ -92,9 +86,7 @@ bool SE_CGUIManager::shutDown()
 
     if(shutDownSuccessfull)
     {
-        SE_CLogManager::getInstance()->log(
-            kInformation, "SE_CGUIManager successfully shut downed"
-        );
+		seLogInfo("SE_CGUIManager successfully shut downed");
     }
     return shutDownSuccessfull;
 }
