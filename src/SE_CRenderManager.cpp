@@ -38,6 +38,8 @@
 #include "config.h"
 #include "SE_CGUIGLFW.h"
 #include "SE_CLogManager.h"
+#include "shaders/simple_fs.h"
+#include "shaders/simple_vs.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -283,28 +285,20 @@ void SE_CRenderManager::destroyVBO()
 ////////////////////////////////////////////////////////////////////////////////
 void SE_CRenderManager::createShaders()
 {
-    std::string vertexShader;
-    loadFileToString(SHADERS_DIR "simple_vs.glsl", vertexShader);
-
-    GLchar const *pTmpVS = vertexShader.c_str();
     m_vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
 
-    // we set 1 as count because we only have one long string in pTmpVS
+    // we set 1 as count because we only have one long string in simple_ps
     //
     // The last parameter length is an array of integers denoting the lengths of
     // the strings in the string parameter. We leave this parameter at nullptr
     // because we use normal null-terminated strings.
-    glShaderSource(m_vertexShaderId, 1, &pTmpVS, nullptr);
+	glShaderSource(m_vertexShaderId, 1, &simple_vs, nullptr);
     glCompileShader(m_vertexShaderId);
 
     // repeat the steps for the fragment shader
-    std::string fragmentShader;
-    loadFileToString(SHADERS_DIR "simple_fs.glsl", fragmentShader);
-
-    GLchar const *pTmpFS = fragmentShader.c_str();
     m_fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
 
-    glShaderSource(m_fragmentShaderId, 1, &pTmpFS, nullptr);
+    glShaderSource(m_fragmentShaderId, 1, &simple_fs, nullptr);
     glCompileShader(m_fragmentShaderId);
 
     // now we need to combine the two shaders in a shader program object

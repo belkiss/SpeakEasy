@@ -1,0 +1,32 @@
+/*
+ * This file is part of SpeakEasy.
+ * Copyright (C) 2013 Lambert Clara <lambert.clara@yahoo.fr>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * \file    glsl_templ.h.in => @SHADER_SRC_NAME@
+ * \brief   Template to convert glsl shader files into headers
+ *
+ * \author  Lambert Clara <lambert.clara@yahoo.fr>
+ * \date    Created : 2013-05-09
+ */
+
+#pragma once
+
+// @EDIT_WARNING@
+
+const char * @SHADER_NAME@ =
+	@SHADER_BINARY_DATA@;
