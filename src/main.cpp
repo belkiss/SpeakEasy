@@ -30,6 +30,7 @@
 #    pragma comment(linker, "/SUBSYSTEM:CONSOLE")
 #endif // WIN32 && !NDEBUG
 
+#include <csignal>
 #include <cstdlib>
 #include <thread>
 
@@ -42,6 +43,8 @@
 
 const U32 g_IdealFPS = 60;
 const F32 g_IdealFrameTime = 1000.f/g_IdealFPS;
+
+static bool gs_EngineRunning = true;
 
 static SE_CLogManager      gs_LogManager;
 static SE_CMemoryManager   gs_MemoryManager;
@@ -71,6 +74,15 @@ void handleCommandLineArguments(I32 const inArgc,
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
+void signalHandler(const I32 inSignalCode)
+{
+	seLogDebug("Caught signal ", inSignalCode);
+	gs_EngineRunning = false;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 I32 main(I32 const inArgc,
          char const * const * const inpArgv)
 {
@@ -81,6 +93,11 @@ I32 main(I32 const inArgc,
     (void)hInstance;
     (void)nCmdShow;
 #endif // WIN32
+
+	// Setup signal catching
+	struct sigaction currentAction;
+	currentAction.sa_handler = signalHandler;
+	sigaction(SIGINT, &currentAction, NULL);
 
     // Start up engine systems in the correct order, starting with log manager
     bool startUpSuccess = gs_LogManager.startUp(kDebug);
@@ -103,13 +120,12 @@ I32 main(I32 const inArgc,
 		seLogDebug("SE_DEBUG defined");
 #endif // SE_DEBUG
 
-        bool keepRunning = true;
-        while(keepRunning) // main game loop
+		while(gs_EngineRunning) // main game loop
         {
             F32 const deltaSeconds = gs_MainClock.update()/1000;
             {
                 gs_RenderManager.render(deltaSeconds);
-                keepRunning = gs_GUIManager.doWork();
+				gs_EngineRunning &= gs_GUIManager.doWork();
             }
         }
     }
