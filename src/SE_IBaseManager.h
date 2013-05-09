@@ -27,6 +27,8 @@
 #ifndef SE_IBASEMANAGER_H
 #define SE_IBASEMANAGER_H
 
+#include "SE_Types.h"
+
 class SE_IBaseManager
 {
     public:
@@ -39,7 +41,7 @@ class SE_IBaseManager
         // TODO store the status of the startUp to know what to do at shutDown
     protected:
         bool m_initSuccess;
-        char _pad[3]; // 7 on 64 ?
+        U8 _pad[7]; // 7 on 64 ?
 };
 
 #endif // SE_IBASEMANAGER_H

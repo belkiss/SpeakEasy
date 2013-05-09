@@ -1,7 +1,7 @@
 #include <iostream>
 #include "SE_Types.h"
 
-int main()
+I32 main()
 {
     static_assert(sizeof(F32) == 4,
                   "sizeof(float32) != 4 on this machine");

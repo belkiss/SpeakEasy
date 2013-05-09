@@ -40,8 +40,8 @@
 
 #include "SE_CClock.h"
 
-U32 const g_IdealFPS = 60;
-F32 const g_IdealFrameTime = 1000.f/g_IdealFPS;
+const U32 g_IdealFPS = 60;
+const F32 g_IdealFrameTime = 1000.f/g_IdealFPS;
 
 static SE_CLogManager      gs_LogManager;
 static SE_CMemoryManager   gs_MemoryManager;
@@ -59,8 +59,8 @@ static SE_CClock           gs_MainClock;
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-void handleCommandLineArguments(int const inArgc,
-                                char const * const * const inpArgv)
+void handleCommandLineArguments(I32 const inArgc,
+								const char * const * const inpArgv)
 {
     for(I32 i = 0; i < inArgc; ++i)
     {
@@ -71,7 +71,7 @@ void handleCommandLineArguments(int const inArgc,
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-int main(int const inArgc,
+I32 main(I32 const inArgc,
          char const * const * const inpArgv)
 {
 #ifdef WIN32

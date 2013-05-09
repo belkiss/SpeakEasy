@@ -115,7 +115,7 @@ class SE_CClock
         std::chrono::system_clock::time_point m_previousTimePoint; // 8 bytes
         F32  m_timeScale;
         bool m_isPaused;
-        char _pad[7];
+        U8 _pad[3];
 };
 
 #endif // SE_CCLOCK_H
