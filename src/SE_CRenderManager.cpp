@@ -68,8 +68,7 @@ SE_CRenderManager::SE_CRenderManager():
     m_programId(0),
     m_vertexArrayObjectId(0),
     m_vertexBufferObjectId(0),
-    m_colorBufferId(0),
-    m_rotationAngle(0.f)
+    m_colorBufferId(0)
 {
 }
 

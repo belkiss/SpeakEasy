@@ -57,11 +57,6 @@ class SE_CRenderManager : public SE_IBaseManager
         U32 m_vertexArrayObjectId;
         U32 m_vertexBufferObjectId;
         U32 m_colorBufferId;
-
-        /// @brief in degrees
-        F32 m_rotationAngle;
-
-        U8  _pad[4];
 };
 
 #endif // SE_CRENDERMANAGER_H
