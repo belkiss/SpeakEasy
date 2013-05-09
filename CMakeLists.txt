@@ -156,6 +156,20 @@ IF(UNIX)
                     -Wshadow
                     -Woverloaded-virtual
                     -Wwrite-strings)
+
+	# And even more if clang is detected
+	IF(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+		ADD_DEFINITIONS(-Wnon-virtual-dtor
+						-Wc++11-compat
+						-Wthread-safety-analysis
+						-Wreturn-type
+						-Wdelete-incomplete
+						-Wformat
+						-Wnon-pod-varargs
+						-Wreorder
+						-Wreturn-stack-address
+						-Wvexing-parse)
+	ENDIF()
 ENDIF()
 ################################################################################
 
