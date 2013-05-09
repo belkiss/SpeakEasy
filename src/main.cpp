@@ -101,6 +101,7 @@ I32 main(I32 const inArgc,
 
     // Start up engine systems in the correct order, starting with log manager
     bool startUpSuccess = gs_LogManager.startUp(kDebug);
+	seLogDebug("SE_DEBUG defined");
 
     // handle the command line arguments
     handleCommandLineArguments(inArgc, inpArgv);
@@ -114,19 +115,27 @@ I32 main(I32 const inArgc,
         // Start the main clock
         gs_MainClock.start();
 
-		seLogDebug("SpeakEasy subsystems successfully started"
-        );
-#ifdef SE_DEBUG
-		seLogDebug("SE_DEBUG defined");
-#endif // SE_DEBUG
+		seLogDebug("SpeakEasy subsystems successfully started");
 
+		U32 framesCount = 0;
+		F32 timeSeconds = 0.f;
 		while(gs_EngineRunning) // main game loop
         {
-            F32 const deltaSeconds = gs_MainClock.update()/1000;
+            F32 const deltaSeconds = gs_MainClock.update();
             {
-                gs_RenderManager.render(deltaSeconds);
+                gs_RenderManager.render();
+				++framesCount;
 				gs_EngineRunning &= gs_GUIManager.doWork();
             }
+
+            // Output FPS to command line
+            timeSeconds += deltaSeconds;
+			if(timeSeconds > 1000)
+			{
+				seLogDebug("FPS:", (1000*framesCount)/timeSeconds);
+				timeSeconds = 0.f;
+				framesCount = 0;
+			}
         }
     }
     else

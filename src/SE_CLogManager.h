@@ -38,7 +38,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Useful macros
 //
-#define seLogDebug(...)   SE_CLogManager::getInstance()->log(kDebug,       __VA_ARGS__)
+#if defined(SE_DEBUG)
+#   define seLogDebug(...)   SE_CLogManager::getInstance()->log(kDebug,       __VA_ARGS__)
+#else
+#   define seLogDebug(...)
+#endif // SE_DEBUG
 #define seLogInfo(...)    SE_CLogManager::getInstance()->log(kInformation, __VA_ARGS__)
 #define seLogWarning(...) SE_CLogManager::getInstance()->log(kWarning,     __VA_ARGS__)
 #define seLogError(...)   SE_CLogManager::getInstance()->log(kError,       __VA_ARGS__)
@@ -175,7 +179,6 @@ class SE_CLogManager : public SE_IBaseManager
 template <typename... Types>
 void SE_CLogManager::log(const ELogLevel inLevel, const Types&... inLogs)
 {
-#ifdef SE_DEBUG
     // kNone is 0
     if(!inLevel || inLevel >= m_currentLogLevel)
     {
@@ -185,7 +188,6 @@ void SE_CLogManager::log(const ELogLevel inLevel, const Types&... inLogs)
         logLevelToSStream(inLevel, displayStream);
         appendLogs(displayStream, inLogs...);
     }
-#endif // SE_DEBUG
 };
 
 
@@ -196,10 +198,8 @@ void SE_CLogManager::appendLogs(std::ostringstream &outStringStream,
                                 const T& inLog,
                                 const Args&... inLogs)
 {
-#ifdef SE_DEBUG
     outStringStream << " " << inLog;
     appendLogs(outStringStream, inLogs...);
-#endif // SE_DEBUG
 }
 
 #else // VARIADIC_TEMPLATES_SUPPORTED

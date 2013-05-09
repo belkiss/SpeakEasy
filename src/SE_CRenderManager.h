@@ -39,7 +39,7 @@ class SE_CRenderManager : public SE_IBaseManager
         bool startUp()  override;
         bool shutDown() override;
 
-        void render(const F32 inElapsedMs);
+        void render();
 
     private:
         void createVBO();
