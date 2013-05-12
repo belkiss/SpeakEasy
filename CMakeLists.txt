@@ -21,9 +21,6 @@ SET(INFO_MESSAGE "${INFO_MESSAGE} (${CMAKE_BUILD_TYPE})")
 # Add a define to know when we want to compile a debug build
 SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DSE_DEBUG")
 
-# Enable c++11
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-
 # set the destination of the executable
 SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
@@ -144,6 +141,8 @@ IF(MSVC) # Visual Studio
 ENDIF()
 
 IF(UNIX)
+	# Enable c++11
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
     # Disable RTTI
     ADD_DEFINITIONS(-fno-rtti)
     # Disable Exceptions
