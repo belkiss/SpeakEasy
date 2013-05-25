@@ -63,22 +63,24 @@ static SE_CClock           gs_MainClock;
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 void handleCommandLineArguments(I32 const inArgc,
-								const char * const * const inpArgv)
+                                const char * const * const inpArgv)
 {
     for(I32 i = 0; i < inArgc; ++i)
     {
-		seLogDebug("inpArgv[", i, "] = ", inpArgv[i]);
+        seLogDebug("inpArgv[", i, "] = ", inpArgv[i]);
     }
 }
 
 
+#ifndef WIN32
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 void signalHandler(const I32 inSignalCode)
 {
-	seLogDebug("Caught signal ", inSignalCode);
-	gs_EngineRunning = false;
+    seLogDebug("Caught signal ", inSignalCode);
+    gs_EngineRunning = false;
 }
+#endif // WIN32
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -92,16 +94,16 @@ I32 main(I32 const inArgc,
     int const       nCmdShow  = SW_SHOWDEFAULT;
     (void)hInstance;
     (void)nCmdShow;
+#else // WIN32
+    // Setup signal catching
+    struct sigaction currentAction;
+    currentAction.sa_handler = signalHandler;
+    sigaction(SIGINT, &currentAction, NULL);
 #endif // WIN32
-
-	// Setup signal catching
-	struct sigaction currentAction;
-	currentAction.sa_handler = signalHandler;
-	sigaction(SIGINT, &currentAction, NULL);
 
     // Start up engine systems in the correct order, starting with log manager
     bool startUpSuccess = gs_LogManager.startUp(kDebug);
-	seLogDebug("SE_DEBUG defined");
+    seLogDebug("SE_DEBUG defined");
 
     // handle the command line arguments
     handleCommandLineArguments(inArgc, inpArgv);
@@ -115,32 +117,32 @@ I32 main(I32 const inArgc,
         // Start the main clock
         gs_MainClock.start();
 
-		seLogDebug("SpeakEasy subsystems successfully started");
+        seLogDebug("SpeakEasy subsystems successfully started");
 
-		U32 framesCount = 0;
-		F32 timeSeconds = 0.f;
-		while(gs_EngineRunning) // main game loop
+        U32 framesCount = 0;
+        F32 timeSeconds = 0.f;
+        while(gs_EngineRunning) // main game loop
         {
             F32 const deltaSeconds = gs_MainClock.update();
             {
                 gs_RenderManager.render();
-				++framesCount;
-				gs_EngineRunning &= gs_GUIManager.doWork();
+                ++framesCount;
+                gs_EngineRunning &= gs_GUIManager.doWork();
             }
 
             // Output FPS to command line
             timeSeconds += deltaSeconds;
-			if(timeSeconds > 1000)
-			{
-				seLogDebug("FPS:", (1000*framesCount)/timeSeconds);
-				timeSeconds = 0.f;
-				framesCount = 0;
-			}
+            if(timeSeconds > 1000)
+            {
+                seLogDebug("FPS:", (1000*framesCount)/timeSeconds);
+                timeSeconds = 0.f;
+                framesCount = 0;
+            }
         }
     }
     else
     {
-		seLogDebug("SpeakEasy subsystems failed to start");
+        seLogDebug("SpeakEasy subsystems failed to start");
     }
 
     seLogDebug("Exiting...");
