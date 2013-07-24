@@ -30,7 +30,7 @@
 class SE_CGUIInterface
 {
     public:
-        SE_CGUIInterface(){}
+        explicit SE_CGUIInterface(){}
         virtual ~SE_CGUIInterface(){}
 
         virtual bool init();

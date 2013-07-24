@@ -32,7 +32,7 @@
 class SE_CGUIManager : public SE_IBaseManager
 {
     public:
-        SE_CGUIManager();
+        explicit SE_CGUIManager();
         ~SE_CGUIManager();
 
         bool startUp()  override;

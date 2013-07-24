@@ -42,7 +42,7 @@ extern F32 const g_IdealFrameTime;
 class SE_CClock
 {
     public:
-        SE_CClock();
+        explicit SE_CClock();
         ~SE_CClock(){}
 
         void start()

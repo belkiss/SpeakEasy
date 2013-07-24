@@ -35,7 +35,7 @@ extern I32 const WINDOW_HEIGHT;
 class SE_CGUIGLFW final : public SE_CGUIInterface
 {
     public:
-        SE_CGUIGLFW();
+        explicit SE_CGUIGLFW();
         ~SE_CGUIGLFW();
 
         bool init()         override;

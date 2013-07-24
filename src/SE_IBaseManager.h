@@ -30,7 +30,7 @@
 class SE_IBaseManager
 {
     public:
-        SE_IBaseManager();
+        explicit SE_IBaseManager();
         virtual ~SE_IBaseManager(){};
 
         virtual bool startUp()  = 0;

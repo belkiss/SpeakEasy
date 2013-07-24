@@ -32,7 +32,7 @@
 class SE_CRenderManager : public SE_IBaseManager
 {
     public:
-        SE_CRenderManager();
+        explicit SE_CRenderManager();
         ~SE_CRenderManager(){}
 
         bool startUp()  override;
