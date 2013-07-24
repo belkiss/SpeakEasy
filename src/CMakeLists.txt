@@ -69,6 +69,11 @@ IF(WIN32)
     )
 ENDIF()
 
+# Force include the header containing the types into all the others
+SET_TARGET_PROPERTIES(
+    ${Executable_name} PROPERTIES
+    COMPILE_FLAGS "-include ${SpeakEasy_SOURCE_DIR}/src/SE_Types.h")
+
 # linker setup
 TARGET_LINK_LIBRARIES(
     ${Executable_name}

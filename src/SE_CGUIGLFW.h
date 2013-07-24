@@ -28,7 +28,6 @@
 #define SE_CGUIGLFW_H
 
 #include "SE_CGUIInterface.h"
-#include "SE_Types.h"
 
 extern I32 const WINDOW_WIDTH;
 extern I32 const WINDOW_HEIGHT;

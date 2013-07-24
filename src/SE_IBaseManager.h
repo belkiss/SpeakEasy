@@ -27,8 +27,6 @@
 #ifndef SE_IBASEMANAGER_H
 #define SE_IBASEMANAGER_H
 
-#include "SE_Types.h"
-
 class SE_IBaseManager
 {
     public:

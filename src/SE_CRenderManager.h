@@ -28,7 +28,6 @@
 #define SE_CRENDERMANAGER_H
 
 #include "SE_IBaseManager.h"
-#include "SE_Types.h"
 
 class SE_CRenderManager : public SE_IBaseManager
 {

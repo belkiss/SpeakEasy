@@ -36,8 +36,6 @@
 #include <windows.h>
 #endif // WIN32
 
-#include "SE_Types.h"
-
 extern F32 const g_IdealFrameTime;
 
 /// @TODO use steady_clock to guarantee the clock to never be readjusted

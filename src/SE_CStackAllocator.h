@@ -27,8 +27,6 @@
 #ifndef SE_CSTACKALLOCATOR_H
 #define SE_CSTACKALLOCATOR_H
 
-#include "SE_Types.h"
-
 class SE_CStackAllocator
 {
     public:

@@ -33,7 +33,6 @@
 #include "config.h"
 #include "SE_IBaseManager.h"
 #include "SE_CClock.h"
-#include "SE_Types.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Useful macros
