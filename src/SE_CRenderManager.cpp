@@ -78,7 +78,7 @@ bool SE_CRenderManager::startUp()
     GLenum glewInitStatus = glewInit();
     if(glewInitStatus == GLEW_OK)
     {
-		seLogDebug("Initializing GLEW", glewGetString(GLEW_VERSION));
+        seLogDebug("Initializing GLEW", glewGetString(GLEW_VERSION));
 
         // HACK unset the GL error GL_INVALID_ENUM caused by glew bug
         glGetError();
@@ -271,7 +271,7 @@ void SE_CRenderManager::createShaders()
     // The last parameter length is an array of integers denoting the lengths of
     // the strings in the string parameter. We leave this parameter at nullptr
     // because we use normal null-terminated strings.
-	glShaderSource(m_vertexShaderId, 1, &simple_vs, nullptr);
+    glShaderSource(m_vertexShaderId, 1, &simple_vs, nullptr);
     glCompileShader(m_vertexShaderId);
 
     // repeat the steps for the fragment shader
@@ -331,7 +331,7 @@ void SE_CRenderManager::logGLerror(char const * const inpDescriptionText) const
     GLenum errorStatus = glGetError();
     if(errorStatus != GL_NO_ERROR)
     {
-		seLogError("gl error detected when", inpDescriptionText, ":",
-				   gluErrorString(errorStatus));
+        seLogError("gl error detected when", inpDescriptionText, ":",
+                   gluErrorString(errorStatus));
     }
 }

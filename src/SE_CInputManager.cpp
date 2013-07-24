@@ -45,7 +45,7 @@ SE_CInputManager::~SE_CInputManager()
 ////////////////////////////////////////////////////////////////////////////////
 void SE_CInputManager::startUp()
 {
-	seLogInfo("SE_CInputManager successfully started");
+    seLogInfo("SE_CInputManager successfully started");
 }
 
 
@@ -53,5 +53,5 @@ void SE_CInputManager::startUp()
 ////////////////////////////////////////////////////////////////////////////////
 void SE_CInputManager::shutDown()
 {
-	seLogInfo("SE_CInputManager successfully shut downed");
+    seLogInfo("SE_CInputManager successfully shut downed");
 }

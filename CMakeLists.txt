@@ -61,24 +61,24 @@ FIND_PACKAGE(GLEW    REQUIRED)
 FIND_PACKAGE(Threads REQUIRED)
 
 IF(UNIX)
-	############################################################################
-	# X11
-	FIND_PACKAGE(X11 REQUIRED)
-	# Check for XRandR (modern resolution switching and gamma control)
-	IF(NOT X11_Xrandr_FOUND)
-		MESSAGE(FATAL_ERROR "The RandR library and headers were not found")
-	ENDIF()
+    ############################################################################
+    # X11
+    FIND_PACKAGE(X11 REQUIRED)
+    # Check for XRandR (modern resolution switching and gamma control)
+    IF(NOT X11_Xrandr_FOUND)
+        MESSAGE(FATAL_ERROR "The RandR library and headers were not found")
+    ENDIF()
 
-	# Check for Xinput
-	IF(NOT X11_Xinput_FOUND)
-		MESSAGE(FATAL_ERROR "The Xinput library and headers were not found")
-	ENDIF()
+    # Check for Xinput
+    IF(NOT X11_Xinput_FOUND)
+        MESSAGE(FATAL_ERROR "The Xinput library and headers were not found")
+    ENDIF()
 
-	# Check for Xf86VidMode (fallback gamma control)
-	IF(NOT X11_xf86vmode_FOUND)
-		MESSAGE(FATAL_ERROR "The Xf86VidMode library and headers were not found")
-	ENDIF()
-	############################################################################
+    # Check for Xf86VidMode (fallback gamma control)
+    IF(NOT X11_xf86vmode_FOUND)
+        MESSAGE(FATAL_ERROR "The Xf86VidMode library and headers were not found")
+    ENDIF()
+    ############################################################################
 ENDIF()
 ################################################################################
 
@@ -143,8 +143,8 @@ IF(MSVC) # Visual Studio
 ENDIF()
 
 IF(UNIX)
-	# Enable c++11
-	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+    # Enable c++11
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
     # Disable RTTI
     ADD_DEFINITIONS(-fno-rtti)
     # Disable Exceptions
@@ -158,19 +158,19 @@ IF(UNIX)
                     -Woverloaded-virtual
                     -Wwrite-strings)
 
-	# And even more if clang is detected
-	IF(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-		ADD_DEFINITIONS(-Wnon-virtual-dtor
-						-Wc++11-compat
-						-Wthread-safety-analysis
-						-Wreturn-type
-						-Wdelete-incomplete
-						-Wformat
-						-Wnon-pod-varargs
-						-Wreorder
-						-Wreturn-stack-address
-						-Wvexing-parse)
-	ENDIF()
+    # And even more if clang is detected
+    IF(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+        ADD_DEFINITIONS(-Wnon-virtual-dtor
+                        -Wc++11-compat
+                        -Wthread-safety-analysis
+                        -Wreturn-type
+                        -Wdelete-incomplete
+                        -Wformat
+                        -Wnon-pod-varargs
+                        -Wreorder
+                        -Wreturn-stack-address
+                        -Wvexing-parse)
+    ENDIF()
 ENDIF()
 ################################################################################
 

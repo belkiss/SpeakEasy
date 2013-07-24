@@ -39,7 +39,7 @@ SE_CLogManager::SE_CLogManager(std::ostream& inOutStream):
     m_outputStream(inOutStream),
     m_currentLogLevel(kNone)
 {
-	(void)_pad;
+    (void)_pad;
 
     // because this class is meant to be used as singleton,
     // m_pInstance MUST be nullptr here

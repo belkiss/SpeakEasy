@@ -53,7 +53,7 @@ SE_CGUIGLFW::~SE_CGUIGLFW()
 bool SE_CGUIGLFW::init()
 {
     bool initSuccess = false;
-	seLogDebug("Initializing GLFW", glfwGetVersionString());
+    seLogDebug("Initializing GLFW", glfwGetVersionString());
 
     glfwSetErrorCallback(SE_CGUIGLFW::logGLFWerror);
     I32 const initStatus = glfwInit();
@@ -120,7 +120,7 @@ bool SE_CGUIGLFW::openWindow()
     else
     {
         glfwTerminate();
-		seLogError("glfwCreateWindow failed");
+        seLogError("glfwCreateWindow failed");
     }
 
     return windowOpened;
@@ -173,7 +173,7 @@ bool SE_CGUIGLFW::quitPressed() const
     if(escapeKeyStatus == GLFW_PRESS)
     {
         shouldQuit = true;
-		seLogInfo("GLFW window received escape key");
+        seLogInfo("GLFW window received escape key");
     }
     return shouldQuit;
 }
@@ -185,5 +185,5 @@ void SE_CGUIGLFW::logGLFWerror(I32 const          inErrorCode,
                                char const * const inpDescriptionText)
 {
     (void)inErrorCode;
-	seLogError("GLFW error :", inpDescriptionText);
+    seLogError("GLFW error :", inpDescriptionText);
 }
