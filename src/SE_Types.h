@@ -35,6 +35,11 @@
 typedef float F32;
 
 /**
+ * @brief 64-bits IEEE-754 floating-point value
+ */
+typedef double F64;
+
+/**
  * @brief unsigned 8-bits integer
  **/
 typedef uint8_t U8;
