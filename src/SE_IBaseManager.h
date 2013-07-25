@@ -31,7 +31,7 @@ class SE_IBaseManager
 {
     public:
         explicit SE_IBaseManager();
-        virtual ~SE_IBaseManager(){};
+        virtual ~SE_IBaseManager(){}
 
         virtual bool startUp()  = 0;
         virtual bool shutDown() = 0;

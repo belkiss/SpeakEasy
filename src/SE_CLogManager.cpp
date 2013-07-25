@@ -35,7 +35,7 @@ SE_CLogManager *SE_CLogManager::ms_pInstance = nullptr;
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-SE_CLogManager::SE_CLogManager(std::ostream& inOutStream):
+SE_CLogManager::SE_CLogManager(std::ostream &inOutStream):
     m_outputStream(inOutStream),
     m_currentLogLevel(kNone)
 {

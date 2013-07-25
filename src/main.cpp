@@ -132,7 +132,7 @@ I32 main(I32 const inArgc,
 
             // Output FPS to command line
             timeSeconds += deltaSeconds;
-            if(timeSeconds > 1000)
+            if(timeSeconds > 1000.0f)
             {
                 seLogDebug("FPS:", (1000*framesCount)/timeSeconds);
                 timeSeconds = 0.f;

@@ -110,7 +110,7 @@ class SE_CLogManager : public SE_IBaseManager
 
     private:
         template <typename T, typename... Args>
-        void appendLogs(std::ostringstream &outStringStream, const T& inLog, const Args&... inLogs);
+        void appendLogs(std::ostringstream &outStringStream, const T &inLog, const Args&... inLogs);
 
 #else // VARIADIC_TEMPLATES_SUPPORTED
     public:
@@ -194,7 +194,7 @@ void SE_CLogManager::log(const ELogLevel inLevel, const Types&... inLogs)
 ////////////////////////////////////////////////////////////////////////////////
 template <typename T, typename... Args>
 void SE_CLogManager::appendLogs(std::ostringstream &outStringStream,
-                                const T& inLog,
+                                const T &inLog,
                                 const Args&... inLogs)
 {
     outStringStream << " " << inLog;
