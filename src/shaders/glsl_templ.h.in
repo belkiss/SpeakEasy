@@ -28,5 +28,5 @@
 
 // @EDIT_WARNING@
 
-const char * @SHADER_NAME@ =
+static const char * @SHADER_NAME@ =
     @SHADER_BINARY_DATA@;
