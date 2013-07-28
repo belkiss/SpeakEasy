@@ -116,6 +116,13 @@ bool SE_CGUIGLFW::openWindow()
         glfwSwapInterval(0);
 
         seLogDebug("OpenGL context version :", glGetString(GL_VERSION));
+
+        glfwSetWindowSizeCallback(m_pGLFWWindow,
+            [](GLFWwindow*, I32 inNewWidth, I32 inNewHeight)
+            {
+                glViewport(0, 0, inNewWidth, inNewHeight);
+            }
+        );
     }
     else
     {
