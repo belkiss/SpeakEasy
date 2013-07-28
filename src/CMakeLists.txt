@@ -2,6 +2,7 @@ INCLUDE_DIRECTORIES(${SpeakEasy_BINARY_DIR}/src)
 INCLUDE_DIRECTORIES(${GLFW_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${GLEW_INCLUDE_DIR})
 
+SET(SHADER_TO_HEADER "shader_to_header")
 ADD_SUBDIRECTORY(shaders)
 
 SET(SpeakEasy_src
@@ -59,6 +60,9 @@ ADD_EXECUTABLE(
     ${SpeakEasy_src}
     ${SpeakEasy_headers}
 )
+
+# Add the shader conversion custom command to the dependencies
+ADD_DEPENDENCIES(${Executable_name} ${SHADER_TO_HEADER})
 
 # Set the program entry point to main (instead of WinMain)
 IF(WIN32)

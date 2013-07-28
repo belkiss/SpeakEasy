@@ -4,33 +4,23 @@ set(SpeakEasy_shaders
 )
 
 foreach(SHADER_FILENAME ${SpeakEasy_shaders})
-    MESSAGE(STATUS "Converting ${SHADER_FILENAME} to header")
 
-    # Read as hex the content of the shader file, and put it into the
-    # SHADER_BINARY_DATA variable
-    file(READ ${SHADER_FILENAME} SHADER_BINARY_DATA HEX)
+    # Get the shader filename without the extension
+    get_filename_component(SHADER_NAME ${SHADER_FILENAME} NAME_WE)
 
-    # Construct the variable name from the shader name
-    string(REGEX REPLACE "\\.glsl" "" SHADER_NAME "${SHADER_FILENAME}")
+    # Construct the header file full path
+    set(SHADER_NAME "${CMAKE_CURRENT_BINARY_DIR}/${SHADER_NAME}.h")
 
-    # Prefix each hex digit by \x
-    string(REGEX REPLACE "(..)" "\\\\x\\1" SHADER_BINARY_DATA "${SHADER_BINARY_DATA}")
+    list(APPEND GENERATED_LIST ${SHADER_NAME})
 
-    # Jump to next line each 72 characters
-    string(REGEX REPLACE
-        "(........................................................................)"
-        "\\1\"\n    \"" SHADER_BINARY_DATA "${SHADER_BINARY_DATA}")
-
-    # Surround the data with double quotes
-    set(SHADER_BINARY_DATA "\"${SHADER_BINARY_DATA}\"")
-
-    # Replace empty double quotes set (if needed)
-    string(REGEX REPLACE "\n    \"\"" "" SHADER_BINARY_DATA "${SHADER_BINARY_DATA}")
-
-    set(SHADER_SRC_NAME "${SHADER_NAME}.h")
-    LIST(APPEND GENERATED_LIST ${SHADER_SRC_NAME})
-
-    configure_file(glsl_templ.h.in ${SHADER_SRC_NAME})
+    add_custom_command(OUTPUT  ${SHADER_NAME}
+                       COMMAND cmake -DSHADER_FILENAME=${SHADER_FILENAME}
+                                     -DOUTPUT_FOLDER=${CMAKE_CURRENT_BINARY_DIR}
+                                     -P shader_to_header.cmake
+                       DEPENDS ${SHADER_FILENAME}
+                       WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 endforeach()
+
+add_custom_target(${SHADER_TO_HEADER} DEPENDS ${GENERATED_LIST})
 
 SET(SpeakEasy_shaders_src ${GENERATED_LIST} PARENT_SCOPE)
