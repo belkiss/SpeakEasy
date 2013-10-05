@@ -1,6 +1,6 @@
 #version 330
 
-in  vec4 vs_outColor;
+smooth in vec4 vs_outColor;
 
 out vec4 fs_outColor;
 
