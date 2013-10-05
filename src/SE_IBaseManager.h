@@ -38,5 +38,5 @@ class SE_IBaseManager
         // TODO store the status of the startUp to know what to do at shutDown
     protected:
         bool m_initSuccess;
-        U8 _pad[7]; // 7 on 64 ?
+        U8 _pad[7];
 };

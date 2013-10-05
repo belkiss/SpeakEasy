@@ -63,11 +63,8 @@ SE_CLogManager::~SE_CLogManager()
 bool SE_CLogManager::startUp(const ELogLevel inLogLevel)
 {
     m_currentLogLevel = inLogLevel;
-    log(
-        kInformation,
-        "SE_CLogManager successfully started with logLevel set to",
-        static_cast<U32>(inLogLevel)
-    );
+    seLogInfo("SE_CLogManager successfully started with logLevel set to ",
+              static_cast<U32>(inLogLevel));
     m_initSuccess = true;
     return m_initSuccess;
 }
@@ -77,7 +74,7 @@ bool SE_CLogManager::startUp(const ELogLevel inLogLevel)
 ////////////////////////////////////////////////////////////////////////////////
 bool SE_CLogManager::shutDown()
 {
-    log(kInformation, "SE_CLogManager successfully shut downed");
+    seLogInfo("SE_CLogManager successfully shut downed");
     return true;
 }
 
@@ -90,36 +87,12 @@ void SE_CLogManager::logLevelToSStream(const ELogLevel inLevel,
     ioStringStream << COL_BEGIN;
     switch(inLevel)
     {
-        case kNone:
-            {
-                ioStringStream << WHITE << "   kNone    ";
-            }
-            break;
-        case kDebug:
-            {
-                ioStringStream << BLUE << "   kDebug   ";
-            }
-            break;
-        case kInformation:
-            {
-                ioStringStream << GREEN << "kInformation";
-            }
-            break;
-        case kWarning:
-            {
-                ioStringStream << YELLOW << "  kWarning  ";
-            }
-            break;
-        case kError:
-            {
-                ioStringStream << RED << "   kError   ";
-            }
-            break;
-        default:
-            {
-                ioStringStream << WHITE << "  Unknown ! ";
-            }
-            break;
+        case kNone:        ioStringStream << WHITE  << "    kNone     "; break;
+        case kDebug:       ioStringStream << BLUE   << "    kDebug    "; break;
+        case kInformation: ioStringStream << GREEN  << " kInformation "; break;
+        case kWarning:     ioStringStream << YELLOW << "   kWarning   "; break;
+        case kError:       ioStringStream << RED    << "    kError    "; break;
+        default:           ioStringStream << WHITE  << "   Unknown !  "; break;
     }
     ioStringStream << COL_END;
 }

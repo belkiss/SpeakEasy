@@ -53,7 +53,7 @@ SE_CGUIGLFW::~SE_CGUIGLFW()
 bool SE_CGUIGLFW::init()
 {
     bool initSuccess = false;
-    seLogDebug("Initializing GLFW", glfwGetVersionString());
+    seLogDebug("Initializing GLFW ", glfwGetVersionString());
 
     glfwSetErrorCallback(SE_CGUIGLFW::logGLFWerror);
     I32 const initStatus = glfwInit();
@@ -94,7 +94,8 @@ bool SE_CGUIGLFW::openWindow()
     glfwWindowHint(GLFW_VISIBLE, GL_TRUE);
 
     m_pGLFWWindow = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT,
-                                     "SpeakEasy" " - " GIT_INFORMATIONS " - built on " __DATE__ " " __TIME__,
+                                     "SpeakEasy" " - " GIT_INFORMATIONS
+                                     " - built on " __DATE__ " " __TIME__,
                                      nullptr, // windowed
                                      nullptr  // do not share resources
                                     );
@@ -115,7 +116,7 @@ bool SE_CGUIGLFW::openWindow()
         // Disable vertical sync
         glfwSwapInterval(0);
 
-        seLogDebug("OpenGL context version :", glGetString(GL_VERSION));
+        seLogDebug("OpenGL context version : ", glGetString(GL_VERSION));
 
         glfwSetWindowSizeCallback(m_pGLFWWindow,
             [](GLFWwindow*, I32 inNewWidth, I32 inNewHeight)
@@ -192,5 +193,5 @@ void SE_CGUIGLFW::logGLFWerror(I32 const          inErrorCode,
                                char const * const inpDescriptionText)
 {
     (void)inErrorCode;
-    seLogError("GLFW error :", inpDescriptionText);
+    seLogError("GLFW error : ", inpDescriptionText);
 }

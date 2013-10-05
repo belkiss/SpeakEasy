@@ -38,12 +38,27 @@
 //
 #if defined(SE_DEBUG)
 #   define seLogDebug(...)   SE_CLogManager::getInstance()->log(kDebug,       __VA_ARGS__)
+#   define seLogInfo(...)    SE_CLogManager::getInstance()->log(kInformation, __VA_ARGS__)
+#   define seLogWarning(...) SE_CLogManager::getInstance()->log(kWarning,     __VA_ARGS__)
+#   define seLogError(...)   SE_CLogManager::getInstance()->log(kError,       __VA_ARGS__)
+#   define seAssert(inCondition, ...) \
+        do \
+        { \
+            if(!inCondition) \
+            { \
+                seLogError(__FILE__":", __LINE__); \
+                seLogError("Assert ! (" #inCondition ") failed"); \
+                seLogError(__VA_ARGS__); \
+            } \
+        } \
+        while(0)
 #else
 #   define seLogDebug(...)
+#   define seLogInfo(...)
+#   define seLogWarning(...)
+#   define seLogError(...)
+#   define seAssert(inCondition) do{sizeof(inCondition);}while(0)
 #endif // SE_DEBUG
-#define seLogInfo(...)    SE_CLogManager::getInstance()->log(kInformation, __VA_ARGS__)
-#define seLogWarning(...) SE_CLogManager::getInstance()->log(kWarning,     __VA_ARGS__)
-#define seLogError(...)   SE_CLogManager::getInstance()->log(kError,       __VA_ARGS__)
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -182,7 +197,6 @@ void SE_CLogManager::log(const ELogLevel inLevel, const Types&... inLogs)
     {
         std::ostringstream displayStream;
         SE_CClock::localtimeToSStream(displayStream);
-        displayStream << " ";
         logLevelToSStream(inLevel, displayStream);
         appendLogs(displayStream, inLogs...);
     }
@@ -196,7 +210,7 @@ void SE_CLogManager::appendLogs(std::ostringstream &outStringStream,
                                 const T &inLog,
                                 const Args&... inLogs)
 {
-    outStringStream << " " << inLog;
+    outStringStream << inLog;
     appendLogs(outStringStream, inLogs...);
 }
 

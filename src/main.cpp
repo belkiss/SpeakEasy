@@ -44,7 +44,7 @@
 const U32 g_IdealFPS = 60;
 const F32 g_IdealFrameTime = 1000.f/g_IdealFPS;
 
-static bool gs_EngineRunning = true;
+bool gs_EngineRunning = true;
 
 static SE_CLogManager      gs_LogManager;
 static SE_CMemoryManager   gs_MemoryManager;
@@ -72,7 +72,7 @@ void handleCommandLineArguments(I32 const inArgc,
 }
 
 
-#ifndef WIN32
+#if !defined(WIN32)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 void signalHandler(const I32 inSignalCode)
@@ -80,7 +80,7 @@ void signalHandler(const I32 inSignalCode)
     seLogDebug("Caught signal ", inSignalCode);
     gs_EngineRunning = false;
 }
-#endif // WIN32
+#endif // !defined(WIN32)
 
 
 ////////////////////////////////////////////////////////////////////////////////
