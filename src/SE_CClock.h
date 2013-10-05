@@ -26,10 +26,8 @@
 
 #pragma once
 
-#include <cassert>
-#include <chrono> // TODO: wrap it with some ifdefs
-#include <ctime>
-#include <sstream>
+#include <chrono>
+#include <iosfwd>
 
 #ifdef WIN32
 #include <windows.h>

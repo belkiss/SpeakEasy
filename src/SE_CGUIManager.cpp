@@ -26,6 +26,8 @@
 
 #include "SE_CGUIManager.h"
 
+#include <cassert>
+
 #include "config.h"
 #include "SE_CGUIGLFW.h"
 
