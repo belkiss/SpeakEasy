@@ -24,8 +24,7 @@
  * @date    Created : 2011-08-19
  */
 
-#ifndef SE_CSTACKALLOCATOR_H
-#define SE_CSTACKALLOCATOR_H
+#pragma once
 
 class SE_CStackAllocator
 {
@@ -83,5 +82,3 @@ class SE_CStackAllocator
         Marker m_bottomMarker;
         Marker m_stackMemory;
 };
-
-#endif  // SE_CSTACKALLOCATOR_H

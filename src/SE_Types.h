@@ -24,8 +24,7 @@
  * @date    Created : 2011-08-19
  */
 
-#ifndef SE_TYPES_H
-#define SE_TYPES_H
+#pragma once
 
 #include <cstdint>
 
@@ -78,5 +77,3 @@ typedef uint64_t U64;
  * @brief signed 64-bits integer
  **/
 typedef int64_t I64;
-
-#endif  // SE_TYPES_H

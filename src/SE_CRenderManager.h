@@ -24,8 +24,7 @@
  * @date    Created : 2012-07-01
  */
 
-#ifndef SE_CRENDERMANAGER_H
-#define SE_CRENDERMANAGER_H
+#pragma once
 
 #include "SE_IBaseManager.h"
 
@@ -57,5 +56,3 @@ class SE_CRenderManager : public SE_IBaseManager
         U32 m_vertexBufferObjectId;
         U32 m_colorBufferId;
 };
-
-#endif // SE_CRENDERMANAGER_H

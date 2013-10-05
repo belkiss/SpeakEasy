@@ -24,8 +24,7 @@
  * @date    Created : 2012-04-23
  */
 
-#ifndef SE_CINPUTMANAGER_H
-#define SE_CINPUTMANAGER_H
+#pragma once
 
 #include "SE_IBaseManager.h"
 
@@ -38,6 +37,3 @@ class SE_CInputManager : public SE_IBaseManager
         void startUp()  override;
         void shutDown() override;
 };
-
-#endif // SE_CINPUTMANAGER_H
-

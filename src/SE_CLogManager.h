@@ -24,8 +24,7 @@
  * @date    Created : 2011-08-21
  */
 
-#ifndef SE_CLOGMANAGER_H
-#define SE_CLOGMANAGER_H
+#pragma once
 
 #include <iostream>
 #include <sstream>
@@ -283,6 +282,3 @@ inline void SE_CLogManager::appendLogs(std::ostringstream &outStringStream)
 {
     m_outputStream << outStringStream.str() << std::endl;
 };
-
-
-#endif // SE_CLOGMANAGER_H

@@ -24,8 +24,7 @@
  * @date    Created : 2011-08-23
  */
 
-#ifndef SE_CGUIINTERFACE_H
-#define SE_CGUIINTERFACE_H
+#pragma once
 
 class SE_CGUIInterface
 {
@@ -40,5 +39,3 @@ class SE_CGUIInterface
         virtual bool quitPressed()  const;
         virtual bool close();
 };
-
-#endif // SE_CGUIINTERFACE_H

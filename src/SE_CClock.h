@@ -24,8 +24,7 @@
  * \date    Created : 2011-08-19
  */
 
-#ifndef SE_CCLOCK_H
-#define SE_CCLOCK_H
+#pragma once
 
 #include <cassert>
 #include <chrono> // TODO: wrap it with some ifdefs
@@ -115,5 +114,3 @@ class SE_CClock
         bool m_isPaused;
         U8 _pad[3];
 };
-
-#endif // SE_CCLOCK_H

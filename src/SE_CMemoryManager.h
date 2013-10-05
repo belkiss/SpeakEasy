@@ -24,8 +24,7 @@
  * @date    Created : 2011-08-22
  */
 
-#ifndef SE_CMEMORYMANAGER_H
-#define SE_CMEMORYMANAGER_H
+#pragma once
 
 #include "SE_IBaseManager.h"
 
@@ -38,5 +37,3 @@ class SE_CMemoryManager : public SE_IBaseManager
         bool startUp()  override;
         bool shutDown() override;
 };
-
-#endif // SE_CMEMORYMANAGER_H

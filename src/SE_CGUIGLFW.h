@@ -24,8 +24,7 @@
  * @date    Created : 2011-08-23
  */
 
-#ifndef SE_CGUIGLFW_H
-#define SE_CGUIGLFW_H
+#pragma once
 
 #include "SE_CGUIInterface.h"
 
@@ -52,5 +51,3 @@ class SE_CGUIGLFW final : public SE_CGUIInterface
     private:
         struct GLFWwindow *m_pGLFWWindow;
 };
-
-#endif // SE_CGUIGLFW_H

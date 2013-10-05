@@ -24,8 +24,7 @@
  * @date    Created : 2011-08-23
  */
 
-#ifndef SE_CGUIMANAGER_H
-#define SE_CGUIMANAGER_H
+#pragma once
 
 #include "SE_IBaseManager.h"
 
@@ -43,5 +42,3 @@ class SE_CGUIManager : public SE_IBaseManager
     private:
         class SE_CGUIInterface *m_pGUISystem;
 };
-
-#endif // SE_CGUIMANAGER_H

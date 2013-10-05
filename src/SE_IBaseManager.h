@@ -24,8 +24,7 @@
  * @date    Created : 2012-06-09
  */
 
-#ifndef SE_IBASEMANAGER_H
-#define SE_IBASEMANAGER_H
+#pragma once
 
 class SE_IBaseManager
 {
@@ -41,5 +40,3 @@ class SE_IBaseManager
         bool m_initSuccess;
         U8 _pad[7]; // 7 on 64 ?
 };
-
-#endif // SE_IBASEMANAGER_H
