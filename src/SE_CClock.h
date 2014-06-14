@@ -38,9 +38,10 @@ extern F32 const g_IdealFrameTime;
 /// @TODO use steady_clock to guarantee the clock to never be readjusted
 class SE_CClock
 {
+    using ChronoClock = std::chrono::high_resolution_clock;
     public:
         explicit SE_CClock();
-        ~SE_CClock(){}
+        ~SE_CClock() = default;
 
         void start()
         {
@@ -55,7 +56,7 @@ class SE_CClock
             F32 delta = 0.f;
             if(!m_isPaused)
             {
-                std::chrono::system_clock::time_point const nowTimePoint =
+                std::chrono::time_point<ChronoClock> const nowTimePoint =
                     getNowTimePoint();
                 delta = getDeltaInMs(m_previousTimePoint, nowTimePoint) * m_timeScale;
                 m_previousTimePoint = nowTimePoint;
@@ -71,8 +72,8 @@ class SE_CClock
          * @return F32 delta in ms
          **/
         inline static F32 getDeltaInMs(
-            std::chrono::system_clock::time_point const &inBegin,
-            std::chrono::system_clock::time_point const &inEnd
+            std::chrono::time_point<ChronoClock> const &inBegin,
+            std::chrono::time_point<ChronoClock> const &inEnd
         )
         {
             return std::chrono::duration_cast<std::chrono::microseconds>(inEnd - inBegin).count()/1000.f;
@@ -99,15 +100,15 @@ class SE_CClock
         }
 
     public: // static methods
-        static std::chrono::system_clock::time_point getNowTimePoint()
+        static std::chrono::time_point<ChronoClock> getNowTimePoint()
         {
-            return std::chrono::high_resolution_clock::now();
+            return ChronoClock::now();
         }
 
         static void localtimeToSStream(std::ostringstream &ioStringStream);
 
     private:
-        std::chrono::system_clock::time_point m_previousTimePoint; // 8 bytes
+        std::chrono::time_point<ChronoClock> m_previousTimePoint; // 8 bytes
         F32  m_timeScale;
         bool m_isPaused;
         U8 _pad[3];
