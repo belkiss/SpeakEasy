@@ -28,6 +28,7 @@
 
 #include <string>
 #include <fstream>
+#include <cmath>
 
 // GLEW *MUST* be included before GLFW
 #include <GL/glew.h>
@@ -48,8 +49,7 @@ SE_CRenderManager::SE_CRenderManager():
     m_fragmentShaderId(0),
     m_programId(0),
     m_vertexArrayObjectId(0),
-    m_vertexBufferObjectId(0),
-    m_colorBufferId(0)
+    m_vertexBufferObjectId(0)
 {
 }
 
@@ -64,7 +64,7 @@ bool SE_CRenderManager::startUp()
     glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 
     // Clear color buffer to white
-    glClearColor(1.f, 1.f, 1.f, 0.f);
+    glClearColor(0xa1 / 255.f, 0xbe / 255.f, 0xd0 / 255.f, 0.f);
 
     // We need to set this to GL_TRUE to overcome a glew bug
     glewExperimental = GL_TRUE;
@@ -78,20 +78,22 @@ bool SE_CRenderManager::startUp()
     GLenum glewInitStatus = glewInit();
     if(glewInitStatus == GLEW_OK)
     {
-        seLogDebug("Initializing GLEW", glewGetString(GLEW_VERSION));
+        seLogDebug("Initializing GLEW ", glewGetString(GLEW_VERSION));
 
         // HACK unset the GL error GL_INVALID_ENUM caused by glew bug
         glGetError();
 
-        createShaders();
-        createVBO();
+        if(createShaders())
+        {
+            createVBO();
+            m_initSuccess = true;
 
-        m_initSuccess = true;
-        seLogInfo("SE_CRenderManager successfully started");
+            seLogInfo("SE_CRenderManager successfully started");
+        }
     }
     else
     {
-        seLogError("glewInit failed :", glewGetErrorString(glewInitStatus));
+        seLogError("glewInit failed : ", glewGetErrorString(glewInitStatus));
     }
     return m_initSuccess;
 }
@@ -117,11 +119,25 @@ void SE_CRenderManager::render()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    F32 offsetX = 0.f;
+    F32 offsetY = 0.f;
+    computePositionOffsets(offsetX, offsetY);
+    adjustVertexData      (offsetX, offsetY);
+
+    glUseProgram(m_programId);
+
+    glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferObjectId);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
     // mode, the type of array data that's going to be drawn
     // first, specifies the first index that we want to draw
     // count, specifies how many of the enabled indices to draw
     // NOTE this is *not* the number of triangles !
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+
+    glDisableVertexAttribArray(0);
+    glUseProgram(0);
 }
 
 
@@ -129,12 +145,14 @@ void SE_CRenderManager::render()
 ////////////////////////////////////////////////////////////////////////////////
 void SE_CRenderManager::createVBO()
 {
-    static F32 const vertices[] =
+    m_vertices =
     {
-        -0.8f,  0.8f, 0.0f, 1.0f,
-         0.8f,  0.8f, 0.0f, 1.0f,
-        -0.8f, -0.8f, 0.0f, 1.0f,
-         0.8f, -0.8f, 0.0f, 1.0f
+         0.0f,  0.5f,   0.0f, 1.0f,
+         0.5f, -0.366f, 0.0f, 1.0f,
+        -0.5f, -0.366f, 0.0f, 1.0f,
+         1.0f,  0.0f,   0.0f, 1.0f,
+         0.0f,  1.0f,   0.0f, 1.0f,
+         0.0f,  0.0f,   1.0f, 1.0f
     };
 
     // generate 1 vertex array object in the GPU's memory
@@ -166,7 +184,13 @@ void SE_CRenderManager::createVBO()
     // The usage (4th parameter) is set to GL_STATIC_DRAW, which signifies to
     // OpenGL that the data uploaded to the memory will not be modified (static)
     // and used for image generation purposes (draw).
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    //
+    // GL_STREAM_DRAW tells OpenGL that you intend to set this data constantly,
+    // generally once per frame.
+    glBufferData(GL_ARRAY_BUFFER,
+                 m_vertices.size() * sizeof(F32),
+                 m_vertices.data(),
+                 GL_STREAM_DRAW);
 
     // tell OpenGL what types of data we just sent to the GPU
     //
@@ -199,11 +223,15 @@ void SE_CRenderManager::createVBO()
     // GL_ARRAY_BUFFER, is a numerical offset in bytes in the block of data
     // supplied in glBufferData to where the significant data starts.
     // In our case we set it to 0.
-    static U32 const positionAttribIndex = 0;
-    glVertexAttribPointer(positionAttribIndex, 4, GL_FLOAT, GL_FALSE, 0, 0);
+    static U32 const vs_inPositionAttribIndex = 0;
+    glVertexAttribPointer(vs_inPositionAttribIndex, 4, GL_FLOAT, GL_FALSE, 0, 0);
     // When we’re done providing vertex attributes, enable the attribute by
     // passing its index
-    glEnableVertexAttribArray(positionAttribIndex);
+    glEnableVertexAttribArray(vs_inPositionAttribIndex);
+
+    static U32 const vs_inColorAttribIndex = 1;
+    glVertexAttribPointer(vs_inColorAttribIndex, 4, GL_FLOAT, GL_FALSE, 0, reinterpret_cast<void*>(4*3*4));
+    glEnableVertexAttribArray(vs_inColorAttribIndex);
 
     // NOTE When you’re done drawing the buffer object, a call to
     // glDisableVertexAttribArray should be made.
@@ -215,22 +243,9 @@ void SE_CRenderManager::createVBO()
     // execution of the entire program; this would normally not be the case if
     // there was more than a single object to draw.
 
-
-    // Now repeat the same steps but this time for the color data
-    static F32 const colors[] =
-    {
-        1.0f, 0.0f, 0.0f, 1.0f,
-        0.0f, 1.0f, 0.0f, 1.0f,
-        0.0f, 0.0f, 1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f, 1.0f
-    };
-
-    glGenBuffers(1, &m_colorBufferId);
-    glBindBuffer(GL_ARRAY_BUFFER, m_colorBufferId);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
-    static U32 const colorAttribIndex = 1;
-    glVertexAttribPointer(colorAttribIndex, 4, GL_FLOAT, GL_FALSE, 0, 0);
-    glEnableVertexAttribArray(colorAttribIndex);
+    // call glBindBuffer with the buffer parameter set to zero to indicate that
+    // no buffers should be tied to the GL_ARRAY_BUFFER target
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     logGLerror("creating VBO");
 }
@@ -250,7 +265,6 @@ void SE_CRenderManager::destroyVBO()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     // the previous line call allowed us to safely delete the buffers
-    glDeleteBuffers(1, &m_colorBufferId);
     glDeleteBuffers(1, &m_vertexBufferObjectId);
 
     glBindVertexArray(0);
@@ -262,41 +276,103 @@ void SE_CRenderManager::destroyVBO()
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-void SE_CRenderManager::createShaders()
+bool SE_CRenderManager::createShader(U32          const inShaderType,
+                                     char const *       inpShaderString,
+                                     U32               &outShaderId)
 {
-    m_vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
+    bool success = false;
 
-    // we set 1 as count because we only have one long string in simple_ps
+    seAssert(outShaderId == 0, "The shaderId passed to createShader must be == 0 !");
+    outShaderId = glCreateShader(inShaderType);
+
+    // we set 1 as count because we only have one long string in inpShaderString
     //
     // The last parameter length is an array of integers denoting the lengths of
     // the strings in the string parameter. We leave this parameter at nullptr
     // because we use normal null-terminated strings.
-    glShaderSource(m_vertexShaderId, 1, &simple_vs, nullptr);
-    glCompileShader(m_vertexShaderId);
+    glShaderSource(outShaderId, 1, &inpShaderString, nullptr);
+    glCompileShader(outShaderId);
 
-    // repeat the steps for the fragment shader
-    m_fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
+    I32 compileStatus;
+    glGetShaderiv(outShaderId, GL_COMPILE_STATUS, &compileStatus);
+    if(compileStatus == GL_TRUE)
+    {
+        success = true;
+    }
+    else
+    {
+        I32 infoLogLength;
+        glGetShaderiv(outShaderId, GL_INFO_LOG_LENGTH, &infoLogLength);
 
-    glShaderSource(m_fragmentShaderId, 1, &simple_fs, nullptr);
-    glCompileShader(m_fragmentShaderId);
+        GLchar *pStrInfoLog = new GLchar[infoLogLength + 1];
+        glGetShaderInfoLog(outShaderId, infoLogLength, nullptr, pStrInfoLog);
 
-    // now we need to combine the two shaders in a shader program object
-    // so, we create such a program with glCreateProgram
-    m_programId = glCreateProgram();
+        seLogError("Error compiling shader :\n", pStrInfoLog);
 
-    // then we attach the shaders to the program
-    glAttachShader(m_programId, m_vertexShaderId);
-    glAttachShader(m_programId, m_fragmentShaderId);
+        delete [] pStrInfoLog;
+    }
 
-    // then link everything together
-    glLinkProgram(m_programId);
+    return success;
+}
 
-    // finally, make the shader program object current
-    // The current program remains active until glUseProgram is called with
-    // another shader program object’s identifier.
-    glUseProgram(m_programId);
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+bool SE_CRenderManager::createShaders()
+{
+    bool success = true;
+
+    success = success && createShader(GL_VERTEX_SHADER,   simple_vs, m_vertexShaderId);
+    success = success && createShader(GL_FRAGMENT_SHADER, simple_fs, m_fragmentShaderId);
+
+    if(success)
+    {
+        // now we need to combine the two shaders in a shader program object
+        // so, we create such a program with glCreateProgram
+        m_programId = glCreateProgram();
+
+        // then we attach the shaders to the program
+        glAttachShader(m_programId, m_vertexShaderId);
+        glAttachShader(m_programId, m_fragmentShaderId);
+
+        // then link everything together
+        glLinkProgram(m_programId);
+
+        I32 linkStatus;
+        glGetProgramiv(m_programId, GL_LINK_STATUS, &linkStatus);
+        if(linkStatus == GL_TRUE)
+        {
+            // finally, make the shader program object current
+            // The current program remains active until glUseProgram is called with
+            // another shader program object’s identifier.
+            glUseProgram(m_programId);
+
+            // now we can safely detach the pixel and vertex shaders
+            glDetachShader(m_programId, m_vertexShaderId);
+            glDetachShader(m_programId, m_fragmentShaderId);
+
+            // and since the shaders are no longer in use by the shader program,
+            // we can safely delete them
+            glDeleteShader(m_fragmentShaderId);
+            glDeleteShader(m_vertexShaderId);
+        }
+        else
+        {
+            I32 infoLogLength;
+            glGetProgramiv(m_programId, GL_INFO_LOG_LENGTH, &infoLogLength);
+
+            GLchar *pStrInfoLog = new GLchar[infoLogLength + 1];
+            glGetProgramInfoLog(m_programId, infoLogLength, nullptr, pStrInfoLog);
+
+            seLogError("Error linking program :\n", pStrInfoLog);
+
+            delete [] pStrInfoLog;
+        }
+    }
 
     logGLerror("creating the shaders");
+
+    return success;
 }
 
 
@@ -307,14 +383,14 @@ void SE_CRenderManager::destroyShaders()
     // tell OpenGL to stop using our shader program
     glUseProgram(0);
 
-    // now we can safely detach the pixel and vertex shaders
-    glDetachShader(m_programId, m_vertexShaderId);
-    glDetachShader(m_programId, m_fragmentShaderId);
+//     // now we can safely detach the pixel and vertex shaders
+//     glDetachShader(m_programId, m_vertexShaderId);
+//     glDetachShader(m_programId, m_fragmentShaderId);
 
-    // and since the shaders are no longer in use by the shader program,
-    // we can safely delete them
-    glDeleteShader(m_fragmentShaderId);
-    glDeleteShader(m_vertexShaderId);
+//     // and since the shaders are no longer in use by the shader program,
+//     // we can safely delete them
+//     glDeleteShader(m_fragmentShaderId);
+//     glDeleteShader(m_vertexShaderId);
 
     // now that the shaders are detached, and the program is no longer in use,
     // we can delete the shader program
@@ -331,7 +407,68 @@ void SE_CRenderManager::logGLerror(char const * const inpDescriptionText) const
     GLenum errorStatus = glGetError();
     if(errorStatus != GL_NO_ERROR)
     {
-        seLogError("gl error detected when", inpDescriptionText, ":",
+        seLogError("gl error detected when ", inpDescriptionText, " : ",
                    gluErrorString(errorStatus));
     }
 }
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+void SE_CRenderManager::computePositionOffsets(F32 &outXOffset, F32 &outYOffset)
+{
+    F32 const loopDuration = 5.0f;
+    F32 const scale = 3.14159f * 2.0f / loopDuration;
+
+    F32 elapsedTime = glfwGetTime();//std::chrono::duration_cast<std::chrono::milliseconds>(SE_CClock::getNowTimePoint()).count() / 1000.0f;
+
+    F32 currentTimeThroughLoop = fmodf(elapsedTime, loopDuration);
+
+    outXOffset = cosf(currentTimeThroughLoop * scale) * 0.5f;
+    outYOffset = sinf(currentTimeThroughLoop * scale) * 0.5f;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+void SE_CRenderManager::adjustVertexData(F32 const inXOffset,
+                                         F32 const inYOffset)
+{
+    std::vector<F32> newData = m_vertices;
+    newData.resize(12);
+
+    for(U32 i = 0; i < newData.size(); i += 4)
+    {
+        newData.at(i)     += inXOffset;
+        newData.at(i + 1) += inYOffset;
+    }
+
+    // As always, bind the buffer we want to work on, in this case, the one
+    // containing the vertex positions)
+    glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferObjectId);
+
+    // The difference between glBufferData and glBufferSubData is that the SubData
+    // function does *not* allocate memory. It only transfers data the already
+    // existing memory.
+    //
+    // Calling glBufferData on a buffer object that has already been allocated
+    // tells OpenGL to *reallocate* this memory, throwing away the previous data
+    // and allocating a fresh block of memory.
+    // Whereas calling glBufferSubData on a buffer object that has not yet had
+    // memory allocated by glBufferData is an error.
+    //
+    // Think of glBufferData as malloc and memcpy, while glBufferSubData is just memcpy.
+    //
+    //
+    // glBufferSubData can update only a portion of the buffer object's memory.
+    // The 2nd parameter is the byte offset into the buffer object to begin copying to
+    // The 3rd parameter is number of bytes to copy.
+    // The 4th paramter is our array of bytes to be copied into that location
+    // of the buffer object.
+    glBufferSubData(GL_ARRAY_BUFFER, 0, newData.size() * sizeof(F32), newData.data());
+
+    // call glBindBuffer with the buffer parameter set to zero to indicate that
+    // no buffers should be tied to the GL_ARRAY_BUFFER target
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+

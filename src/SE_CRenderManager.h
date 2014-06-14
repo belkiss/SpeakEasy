@@ -28,6 +28,8 @@
 
 #include "SE_IBaseManager.h"
 
+#include <vector>
+
 class SE_CRenderManager : public SE_IBaseManager
 {
     public:
@@ -43,10 +45,17 @@ class SE_CRenderManager : public SE_IBaseManager
         void createVBO();
         void destroyVBO();
 
-        void createShaders();
+        bool createShader(U32  const   inShaderType,
+                          char const * inpShaderString,
+                          U32          &outShaderId);
+
+        bool createShaders();
         void destroyShaders();
 
         void logGLerror(char const * const inpDescriptionText) const;
+
+        void computePositionOffsets(F32 &outXOffset, F32 &outYOffset);
+        void adjustVertexData(F32 const inXOffset, F32 const inYOffset);
 
     private:
         U32 m_vertexShaderId;
@@ -55,4 +64,6 @@ class SE_CRenderManager : public SE_IBaseManager
         U32 m_vertexArrayObjectId;
         U32 m_vertexBufferObjectId;
         U32 m_colorBufferId;
+
+        std::vector<F32> m_vertices;
 };
