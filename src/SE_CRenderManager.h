@@ -58,12 +58,11 @@ class SE_CRenderManager : public SE_IBaseManager
         void adjustVertexData(F32 const inXOffset, F32 const inYOffset);
 
     private:
+        std::vector<F32> m_vertices;
         U32 m_vertexShaderId;
         U32 m_fragmentShaderId;
         U32 m_programId;
         U32 m_vertexArrayObjectId;
         U32 m_vertexBufferObjectId;
-        U32 m_colorBufferId;
-
-        std::vector<F32> m_vertices;
+        U8  _pad[4];
 };
