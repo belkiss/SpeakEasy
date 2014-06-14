@@ -78,6 +78,11 @@ IF(UNIX)
     IF(NOT X11_xf86vmode_FOUND)
         MESSAGE(FATAL_ERROR "The Xf86VidMode library and headers were not found")
     ENDIF()
+
+    # Check for Xcursor
+    IF(NOT X11_Xcursor_FOUND)
+        MESSAGE(FATAL_ERROR "The Xcursor libraries and headers were not found")
+    ENDIF()
     ############################################################################
 ENDIF()
 ################################################################################

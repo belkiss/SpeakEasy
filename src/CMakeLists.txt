@@ -48,6 +48,7 @@ IF(UNIX)
          ${X11_Xrandr_LIB}
          ${X11_Xinput_LIB}
          ${X11_Xxf86vm_LIB}
+         ${X11_Xcursor_LIB}
     )
 ENDIF()
 
