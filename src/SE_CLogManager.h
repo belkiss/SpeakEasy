@@ -44,7 +44,7 @@
 #   define seAssert(inCondition, ...) \
         do \
         { \
-            if(!inCondition) \
+            if(!(inCondition)) \
             { \
                 seLogError(__FILE__":", __LINE__); \
                 seLogError("Assert ! (" #inCondition ") failed"); \
