@@ -60,7 +60,7 @@ FIND_PACKAGE(glfw 3  REQUIRED)
 FIND_PACKAGE(GLEW    REQUIRED)
 FIND_PACKAGE(Threads REQUIRED)
 
-IF(UNIX)
+IF(UNIX AND NOT APPLE)
     ############################################################################
     # X11
     FIND_PACKAGE(X11 REQUIRED)

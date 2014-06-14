@@ -43,13 +43,24 @@ SET(SpeakEasy_Libs
     ${CMAKE_THREAD_LIBS_INIT}
 )
 
-IF(UNIX)
+IF(UNIX AND NOT APPLE)
     LIST(APPEND SpeakEasy_Libs
          ${X11_Xrandr_LIB}
          ${X11_Xinput_LIB}
          ${X11_Xxf86vm_LIB}
          ${X11_Xcursor_LIB}
     )
+ELSEIF(APPLE)
+    # Set up library and include paths
+    FIND_LIBRARY(COCOA_FRAMEWORK Cocoa)
+    FIND_LIBRARY(IOKIT_FRAMEWORK IOKit)
+    FIND_LIBRARY(CORE_FOUNDATION_FRAMEWORK CoreFoundation)
+    FIND_LIBRARY(CORE_VIDEO_FRAMEWORK CoreVideo)
+    LIST(APPEND SpeakEasy_Libs ${COCOA_FRAMEWORK}
+                               ${OPENGL_gl_LIBRARY}
+                               ${IOKIT_FRAMEWORK}
+                               ${CORE_FOUNDATION_FRAMEWORK}
+                               ${CORE_VIDEO_FRAMEWORK})
 ENDIF()
 
 # executable declaration
