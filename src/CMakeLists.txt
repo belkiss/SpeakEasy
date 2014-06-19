@@ -34,6 +34,12 @@ SET(SpeakEasy_headers
     config.h # generated from the above file
 )
 
+# list shaders
+SET(SpeakEasy_shaders
+    shaders/simple_fs.glsl
+    shaders/simple_vs.glsl
+)
+
 # list dependencies
 SET(SpeakEasy_Libs
     ${OPENGL_LIBRARIES}
@@ -71,6 +77,7 @@ ADD_EXECUTABLE(
     ${Executable_name} WIN32
     ${SpeakEasy_src}
     ${SpeakEasy_headers}
+    ${SpeakEasy_shaders}
 )
 
 # Add the shader conversion custom command to the dependencies
