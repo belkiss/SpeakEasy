@@ -102,7 +102,7 @@ I32 main(I32 const inArgc,
 #endif // WIN32
 
     // Start up engine systems in the correct order, starting with log manager
-    bool startUpSuccess = gs_LogManager.startUp(kDebug);
+    bool startUpSuccess = gs_LogManager.startUp(ELogLevel::kDebug);
     seLogDebug("SE_DEBUG defined");
 
     // handle the command line arguments

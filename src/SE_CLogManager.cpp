@@ -37,7 +37,7 @@ SE_CLogManager *SE_CLogManager::ms_pInstance = nullptr;
 ////////////////////////////////////////////////////////////////////////////////
 SE_CLogManager::SE_CLogManager(std::ostream &inOutStream):
     m_outputStream(inOutStream),
-    m_currentLogLevel(kNone)
+    m_currentLogLevel(ELogLevel::kNone)
 {
     (void)_pad;
 
@@ -87,11 +87,11 @@ void SE_CLogManager::logLevelToSStream(const ELogLevel inLevel,
     ioStringStream << COL_BEGIN;
     switch(inLevel)
     {
-        case kNone:        ioStringStream << WHITE  << "    kNone     "; break;
-        case kDebug:       ioStringStream << BLUE   << "    kDebug    "; break;
-        case kInformation: ioStringStream << GREEN  << " kInformation "; break;
-        case kWarning:     ioStringStream << YELLOW << "   kWarning   "; break;
-        case kError:       ioStringStream << RED    << "    kError    "; break;
+        case ELogLevel::kNone:        ioStringStream << WHITE  << "    kNone     "; break;
+        case ELogLevel::kDebug:       ioStringStream << BLUE   << "    kDebug    "; break;
+        case ELogLevel::kInformation: ioStringStream << GREEN  << " kInformation "; break;
+        case ELogLevel::kWarning:     ioStringStream << YELLOW << "   kWarning   "; break;
+        case ELogLevel::kError:       ioStringStream << RED    << "    kError    "; break;
 #ifndef __clang__
         // prevent clang to emit a warning when all enum values are covered
         // but a default case is also present

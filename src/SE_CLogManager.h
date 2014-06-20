@@ -37,10 +37,10 @@
 // Useful macros
 //
 #if defined(SE_DEBUG)
-#   define seLogDebug(...)   SE_CLogManager::getInstance()->log(kDebug,       __VA_ARGS__)
-#   define seLogInfo(...)    SE_CLogManager::getInstance()->log(kInformation, __VA_ARGS__)
-#   define seLogWarning(...) SE_CLogManager::getInstance()->log(kWarning,     __VA_ARGS__)
-#   define seLogError(...)   SE_CLogManager::getInstance()->log(kError,       __VA_ARGS__)
+#   define seLogDebug(...)   SE_CLogManager::getInstance()->log(ELogLevel::kDebug,       __VA_ARGS__)
+#   define seLogInfo(...)    SE_CLogManager::getInstance()->log(ELogLevel::kInformation, __VA_ARGS__)
+#   define seLogWarning(...) SE_CLogManager::getInstance()->log(ELogLevel::kWarning,     __VA_ARGS__)
+#   define seLogError(...)   SE_CLogManager::getInstance()->log(ELogLevel::kError,       __VA_ARGS__)
 #   define seAssert(inCondition, ...) \
         do \
         { \
@@ -64,7 +64,7 @@
 /**
  * @brief Log levels
  **/
-enum ELogLevel : U8
+enum class ELogLevel : U8
 {
     /// No category, always displayed
     kNone,
