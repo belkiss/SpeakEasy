@@ -30,27 +30,6 @@ SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 SET(CMAKE_MODULE_PATH "${SpeakEasy_SOURCE_DIR}/cmake_modules")
 
 ################################################################################
-# Check if compiler supports c++11 variadic templates
-INCLUDE(CheckCXXSourceCompiles)
-
-CHECK_CXX_SOURCE_COMPILES("
-    template<typename... Types>
-    void log(const Types&...){}
-    int main() {
-        return 0;
-    }
-    " VARIADIC_TEMPLATES_SUPPORTED)
-
-IF(NOT VARIADIC_TEMPLATES_SUPPORTED)
-    # TODO: use CMakeDetermineCompilerId instead of CMAKE_GENERATOR
-    # to find out the compiler's id
-    MESSAGE(AUTHOR_WARNING
-            "Variadic templates are not supported by ${CMAKE_GENERATOR},"
-            " the code will use regular templates instead")
-ENDIF()
-################################################################################
-
-################################################################################
 # Build options
 OPTION(BUILD_TESTS         "Build Tests"         ON)
 OPTION(BUILD_DOCUMENTATION "Build Documentation" ON)

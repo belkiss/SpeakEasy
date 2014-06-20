@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2011-2012  Lambert Clara <lambert.clara@yahoo.fr>
+ * Copyright (C) 2011-2014  Lambert Clara <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -111,7 +111,6 @@ class SE_CLogManager : public SE_IBaseManager
 
         bool shutDown() override;
 
-#ifdef VARIADIC_TEMPLATES_SUPPORTED
     public:
         /**
          * @brief Log something to the output stream
@@ -125,43 +124,6 @@ class SE_CLogManager : public SE_IBaseManager
     private:
         template <typename T, typename... Args>
         void appendLogs(std::ostringstream &outStringStream, const T &inLog, const Args&... inLogs);
-
-#else // VARIADIC_TEMPLATES_SUPPORTED
-    public:
-        /**
-         * @brief Log something to the output stream
-         * @note We need as many functions as the max number of log data we want
-         *
-         * @param inLevel The level of the log
-         * @param inLog The data to output
-        **/
-        template <typename T>
-        void log(const ELogLevel inLevel, const T &inLog);
-
-        /**
-         * @brief Log something to the output stream
-         * @note We need as many functions as the max number of log data we want
-         *
-         * @param inLevel The level of the log
-         * @param inLog1 First data to output
-         * @param inLog2 Second data to output
-        **/
-        template <typename T, typename U>
-        void log(const ELogLevel inLevel, const T &inLog1, const U &inLog2);
-
-        template <typename T, typename U, typename V>
-        void log(const ELogLevel inLevel,
-                 const T &inLog1,
-                 const U &inLog2,
-                 const V &inLog3);
-
-        template <typename T, typename U, typename V, typename W>
-        void log(const ELogLevel inLevel,
-                 const T &inLog1,
-                 const U &inLog2,
-                 const V &inLog3,
-                 const W &inLog4);
-#endif // VARIADIC_TEMPLATES_SUPPORTED
 
     private:
         void logLevelToSStream(const ELogLevel inLevel, std::ostringstream &ioStringStream);
@@ -186,7 +148,6 @@ class SE_CLogManager : public SE_IBaseManager
 };
 
 
-#ifdef VARIADIC_TEMPLATES_SUPPORTED
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 template <typename... Types>
@@ -214,81 +175,6 @@ void SE_CLogManager::appendLogs(std::ostringstream &outStringStream,
     appendLogs(outStringStream, inLogs...);
 }
 
-#else // VARIADIC_TEMPLATES_SUPPORTED
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-template <typename T>
-void SE_CLogManager::log(const ELogLevel inLevel, const T &inLog)
-{
-    // kNone is 0
-    if(!inLevel || inLevel >= m_currentLogLevel)
-    {
-        std::ostringstream displayStream;
-        SE_CClock::localtimeToSStream(displayStream);
-        displayStream << " ";
-        logLevelToSStream(inLevel, displayStream);
-        displayStream << " " << inLog;
-        m_outputStream << displayStream.str() << std::endl;
-    }
-}
-
-
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-template <typename T, typename U>
-void SE_CLogManager::log(const ELogLevel inLevel,
-                         const T &inLog1,
-                         const U &inLog2)
-{
-    // kNone is 0
-    if(!inLevel || inLevel >= m_currentLogLevel)
-    {
-        std::ostringstream displayStream;
-        displayStream << inLog1 << " " << inLog2;
-        log(inLevel, displayStream.str());
-    }
-}
-
-
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-template <typename T, typename U, typename V>
-void SE_CLogManager::log(const ELogLevel inLevel,
-                         const T &inLog1,
-                         const U &inLog2,
-                         const V &inLog3)
-{
-    // kNone is 0
-    if(!inLevel || inLevel >= m_currentLogLevel)
-    {
-        std::ostringstream displayStream;
-        displayStream << inLog1 << " " << inLog2 << " " << inLog3;
-        log(inLevel, displayStream.str());
-    }
-}
-
-
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-template <typename T, typename U, typename V, typename W>
-void SE_CLogManager::log(const ELogLevel inLevel,
-                         const T &inLog1,
-                         const U &inLog2,
-                         const V &inLog3,
-                         const W &inLog4)
-{
-    // kNone is 0
-    if(!inLevel || inLevel >= m_currentLogLevel)
-    {
-        std::ostringstream displayStream;
-        displayStream << inLog1 << " "
-                      << inLog2 << " "
-                      << inLog3 << " "
-                      << inLog4;
-        log(inLevel, displayStream.str());
-    }
-}
-#endif // VARIADIC_TEMPLATES_SUPPORTED
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
