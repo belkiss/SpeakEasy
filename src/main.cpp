@@ -153,5 +153,10 @@ I32 main(I32 const inArgc,
     shutDownSuccess &= gs_MemoryManager.shutDown();
     shutDownSuccess &= gs_LogManager.shutDown();
 
+    if(shutDownSuccess)
+    {
+        seLogDebug("SpeakEasy subsystems successfully shut downed");
+    }
+
     return shutDownSuccess ? EXIT_SUCCESS : EXIT_FAILURE;
 }
