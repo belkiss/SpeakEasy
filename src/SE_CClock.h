@@ -33,8 +33,6 @@
 #   include <windows.h>
 #endif // WIN32
 
-extern F32 const g_IdealFrameTime;
-
 class SE_CClock
 {
     using ChronoClock = std::chrono::high_resolution_clock;

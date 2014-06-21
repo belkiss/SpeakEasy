@@ -41,9 +41,6 @@
 
 #include "SE_CClock.h"
 
-const U32 g_IdealFPS = 60;
-const F32 g_IdealFrameTime = 1000.f/g_IdealFPS;
-
 bool gs_EngineRunning = true;
 
 static SE_CLogManager      gs_LogManager;
