@@ -51,7 +51,8 @@ bool SE_CRenderManager::startUp()
     // Tell OpenGL what area of the available area we are rendering to
     // NOTE Window coordinates are in a lower-left coordinate system, so the
     // point (0, 0) is the bottom left of the window
-    glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+    // TODO: check if a call to glViewport is really necessary here
+
 
     // Clear color buffer to white
     glClearColor(0xa1 / 255.f, 0xbe / 255.f, 0xd0 / 255.f, 0.f);

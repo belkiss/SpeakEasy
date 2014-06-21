@@ -30,9 +30,6 @@
 #include "SE_CGUIManager.h"
 #include "SE_CLogManager.h"
 
-I32 const WINDOW_WIDTH  = 640;
-I32 const WINDOW_HEIGHT = 480;
-
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 bool SE_CGUIGLFW::init()
@@ -78,6 +75,8 @@ bool SE_CGUIGLFW::openWindow()
     glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
     glfwWindowHint(GLFW_VISIBLE, GL_TRUE);
 
+    I32 const WINDOW_WIDTH  = 640;
+    I32 const WINDOW_HEIGHT = 480;
     m_pGLFWWindow = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT,
                                      "SpeakEasy" " - " GIT_INFORMATIONS
                                      " - built on " __DATE__ " " __TIME__,
@@ -103,10 +102,14 @@ bool SE_CGUIGLFW::openWindow()
 
         seLogDebug("OpenGL context version : ", glGetString(GL_VERSION));
 
+        // Handle window resizing
         glfwSetWindowSizeCallback(m_pGLFWWindow,
-            [](GLFWwindow*, I32 inNewWidth, I32 inNewHeight)
+            [](GLFWwindow* inpWindow, I32, I32)
             {
-                glViewport(0, 0, inNewWidth, inNewHeight);
+                I32 width;
+                I32 height;
+                glfwGetFramebufferSize(inpWindow, &width, &height);
+                glViewport(0, 0, width, height);
             }
         );
     }
