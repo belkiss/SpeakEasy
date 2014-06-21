@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2011-2012  Lambert Clara <lambert.clara@yahoo.fr>
+ * Copyright (C) 2011-2014  Lambert Clara <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -31,8 +31,13 @@
 class SE_CGUIManager : public SE_IBaseManager
 {
     public:
-        explicit SE_CGUIManager();
-        ~SE_CGUIManager();
+        explicit SE_CGUIManager() = default;
+        virtual ~SE_CGUIManager();
+
+        SE_CGUIManager(const SE_CGUIManager&)            = delete;
+        SE_CGUIManager(SE_CGUIManager&&)                 = delete;
+        SE_CGUIManager& operator=(const SE_CGUIManager&) = delete;
+        SE_CGUIManager& operator=(SE_CGUIManager&&)      = delete;
 
         bool startUp()  override;
         bool shutDown() override;
@@ -40,5 +45,5 @@ class SE_CGUIManager : public SE_IBaseManager
         bool doWork();
 
     private:
-        class SE_CGUIInterface *m_pGUISystem;
+        class SE_CGUIInterface *m_pGUISystem{nullptr};
 };

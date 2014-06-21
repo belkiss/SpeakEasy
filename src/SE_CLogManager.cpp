@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2011-2012  Lambert Clara <lambert.clara@yahoo.fr>
+ * Copyright (C) 2011-2014  Lambert Clara <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -36,8 +36,7 @@ SE_CLogManager *SE_CLogManager::ms_pInstance = nullptr;
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 SE_CLogManager::SE_CLogManager(std::ostream &inOutStream):
-    m_outputStream(inOutStream),
-    m_currentLogLevel(ELogLevel::kNone)
+    m_outputStream(inOutStream)
 {
     // because this class is meant to be used as singleton,
     // m_pInstance MUST be nullptr here

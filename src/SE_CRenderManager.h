@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2012-2013 Lambert Clara <lambert.clara@yahoo.fr>
+ * Copyright (C) 2012-2014 Lambert Clara <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -33,8 +33,13 @@
 class SE_CRenderManager : public SE_IBaseManager
 {
     public:
-        explicit SE_CRenderManager();
-        ~SE_CRenderManager(){}
+        explicit SE_CRenderManager() = default;
+        virtual ~SE_CRenderManager() = default;
+    
+        SE_CRenderManager(const SE_CRenderManager&)            = delete;
+        SE_CRenderManager(SE_CRenderManager&&)                 = delete;
+        SE_CRenderManager& operator=(const SE_CRenderManager&) = delete;
+        SE_CRenderManager& operator=(SE_CRenderManager&&)      = delete;
 
         bool startUp()  override;
         bool shutDown() override;
@@ -59,10 +64,10 @@ class SE_CRenderManager : public SE_IBaseManager
 
     private:
         std::vector<F32> m_vertices;
-        U32 m_vertexShaderId;
-        U32 m_fragmentShaderId;
-        U32 m_programId;
-        U32 m_vertexArrayObjectId;
-        U32 m_vertexBufferObjectId;
+        U32 m_vertexShaderId{0};
+        U32 m_fragmentShaderId{0};
+        U32 m_programId{0};
+        U32 m_vertexArrayObjectId{0};
+        U32 m_vertexBufferObjectId{0};
         U32 /*_pad*/:32;
 };

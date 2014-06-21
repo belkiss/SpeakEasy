@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2011-2013 Lambert Clara <lambert.clara@yahoo.fr>
+ * Copyright (C) 2011-2014 Lambert Clara <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -29,15 +29,6 @@
 #include <ctime>
 #include <iomanip>
 #include <sstream>
-
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-SE_CClock::SE_CClock():
-    m_timeScale(1.f),
-    m_isPaused(true)
-{
-}
-
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

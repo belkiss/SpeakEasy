@@ -29,14 +29,18 @@
 class SE_IBaseManager
 {
     public:
-        explicit SE_IBaseManager();
-        virtual ~SE_IBaseManager(){}
+        explicit SE_IBaseManager() = default;
+        virtual ~SE_IBaseManager();
+
+        SE_IBaseManager(const SE_IBaseManager&)            = delete;
+        SE_IBaseManager(SE_IBaseManager&&)                 = delete;
+        SE_IBaseManager& operator=(const SE_IBaseManager&) = delete;
+        SE_IBaseManager& operator=(SE_IBaseManager&&)      = delete;
 
         virtual bool startUp()  = 0;
         virtual bool shutDown() = 0;
 
-        // TODO store the status of the startUp to know what to do at shutDown
     protected:
-        bool m_initSuccess;
+        bool m_initSuccess{false};
         U64 /*pad*/:56;
 };

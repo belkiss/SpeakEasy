@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2011-2012  Lambert Clara <lambert.clara@yahoo.fr>
+ * Copyright (C) 2011-2014  Lambert Clara <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -29,11 +29,16 @@
 class SE_CGUIInterface
 {
     public:
-        explicit SE_CGUIInterface(){}
-        virtual ~SE_CGUIInterface(){}
+        explicit SE_CGUIInterface() = default;
+        virtual ~SE_CGUIInterface();
 
         virtual bool init();
         virtual bool openWindow();
+        SE_CGUIInterface(const SE_CGUIInterface&)            = delete;
+        SE_CGUIInterface(SE_CGUIInterface&&)                 = delete;
+        SE_CGUIInterface& operator=(const SE_CGUIInterface&) = delete;
+        SE_CGUIInterface& operator=(SE_CGUIInterface&&)      = delete;
+
         virtual void swapBuffers() = 0;
         virtual bool windowClosed() const;
         virtual bool quitPressed()  const;

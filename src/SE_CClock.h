@@ -37,9 +37,6 @@ class SE_CClock
 {
     using ChronoClock = std::chrono::high_resolution_clock;
     public:
-        explicit SE_CClock();
-        ~SE_CClock() = default;
-
         void start()
         {
             m_isPaused = false;
@@ -89,7 +86,7 @@ class SE_CClock
 
     private:
         std::chrono::time_point<ChronoClock> m_previousTimePoint; // 8 bytes
-        F32  m_timeScale;
-        bool m_isPaused;
+        F32  m_timeScale{1.f};
+        bool m_isPaused{true};
         U32 /*pad*/:24;
 };

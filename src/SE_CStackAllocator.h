@@ -41,6 +41,11 @@ class SE_CStackAllocator
         /// @brief Destructor, no need for virtual
         ~SE_CStackAllocator();
 
+        SE_CStackAllocator(const SE_CStackAllocator&)            = delete;
+        SE_CStackAllocator(SE_CStackAllocator&&)                 = delete;
+        SE_CStackAllocator& operator=(const SE_CStackAllocator&) = delete;
+        SE_CStackAllocator& operator=(SE_CStackAllocator&&)      = delete;
+
         /// @brief Allocates a new block of the given size from stack top.
         /// @param inSizeInBytes the size in bytes
         /// @return void*, the newly allocated block

@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2012-2013 Lambert Clara <lambert.clara@yahoo.fr>
+ * Copyright (C) 2012-2014 Lambert Clara <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -42,16 +42,6 @@
 #include "shaders/simple_fs.h"
 #include "shaders/simple_vs.h"
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-SE_CRenderManager::SE_CRenderManager():
-    m_vertexShaderId(0),
-    m_fragmentShaderId(0),
-    m_programId(0),
-    m_vertexArrayObjectId(0),
-    m_vertexBufferObjectId(0)
-{
-}
 
 
 ////////////////////////////////////////////////////////////////////////////////

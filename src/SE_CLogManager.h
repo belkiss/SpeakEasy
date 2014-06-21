@@ -91,9 +91,12 @@ class SE_CLogManager : public SE_IBaseManager
         /// @brief Creates a log manager that will output on the given stream
         /// @param inOutStream The wanted output stream, Defaults to std::clog.
         explicit SE_CLogManager(std::ostream &inOutStream = std::clog);
+        virtual ~SE_CLogManager();
 
-        /// @brief Destroys the log manager, no need for virtual
-        ~SE_CLogManager();
+        SE_CLogManager(const SE_CLogManager&)            = delete;
+        SE_CLogManager(SE_CLogManager&&)                 = delete;
+        SE_CLogManager& operator=(const SE_CLogManager&) = delete;
+        SE_CLogManager& operator=(SE_CLogManager&&)      = delete;
 
         /// @brief Starts up the manager at the given log level
         /// @note The inherited method (without the parameter) is private
@@ -126,7 +129,7 @@ class SE_CLogManager : public SE_IBaseManager
 
     private:
         std::ostream& m_outputStream;
-        ELogLevel     m_currentLogLevel;
+        ELogLevel     m_currentLogLevel{ELogLevel::kNone};
 
         // explicit padding
         U64 /*pad*/:56;

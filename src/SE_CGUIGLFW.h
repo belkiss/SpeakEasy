@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2011-2013 Lambert Clara <lambert.clara@yahoo.fr>
+ * Copyright (C) 2011-2014 Lambert Clara <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -34,20 +34,25 @@ extern I32 const WINDOW_HEIGHT;
 class SE_CGUIGLFW final : public SE_CGUIInterface
 {
     public:
-        explicit SE_CGUIGLFW();
-        ~SE_CGUIGLFW();
+        explicit SE_CGUIGLFW() = default;
+        virtual ~SE_CGUIGLFW() = default;
 
-        bool init()         override;
-        bool openWindow()   override;
-        void swapBuffers()  override;
+        SE_CGUIGLFW(const SE_CGUIGLFW&)            = delete;
+        SE_CGUIGLFW(SE_CGUIGLFW&&)                 = delete;
+        SE_CGUIGLFW& operator=(const SE_CGUIGLFW&) = delete;
+        SE_CGUIGLFW& operator=(SE_CGUIGLFW&&)      = delete;
+
+        bool init()               override;
+        bool openWindow()         override;
+        void swapBuffers()        override;
         bool windowClosed() const override;
         bool quitPressed()  const override;
-        bool close()        override;
+        bool close()              override;
 
     private: // static methods
         static void logGLFWerror(I32 const          inErrorCode,
                                  char const * const inpDescriptionText);
 
     private:
-        struct GLFWwindow *m_pGLFWWindow;
+        struct GLFWwindow *m_pGLFWWindow{nullptr};
 };
