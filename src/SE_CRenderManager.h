@@ -64,5 +64,5 @@ class SE_CRenderManager : public SE_IBaseManager
         U32 m_programId;
         U32 m_vertexArrayObjectId;
         U32 m_vertexBufferObjectId;
-        U8  _pad[4];
+        U32 /*_pad*/:32;
 };

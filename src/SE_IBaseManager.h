@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2012  Lambert Clara <lambert.clara@yahoo.fr>
+ * Copyright (C) 2012-2014 Lambert Clara <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -38,5 +38,5 @@ class SE_IBaseManager
         // TODO store the status of the startUp to know what to do at shutDown
     protected:
         bool m_initSuccess;
-        U8 _pad[7];
+        U64 /*pad*/:56;
 };

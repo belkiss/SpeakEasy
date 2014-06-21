@@ -39,8 +39,6 @@ SE_CLogManager::SE_CLogManager(std::ostream &inOutStream):
     m_outputStream(inOutStream),
     m_currentLogLevel(ELogLevel::kNone)
 {
-    (void)_pad;
-
     // because this class is meant to be used as singleton,
     // m_pInstance MUST be nullptr here
     assert(!ms_pInstance);

@@ -129,7 +129,7 @@ class SE_CLogManager : public SE_IBaseManager
         ELogLevel     m_currentLogLevel;
 
         // explicit padding
-        U8 _pad[7];
+        U64 /*pad*/:56;
 
     private: // static members
         static SE_CLogManager *ms_pInstance;

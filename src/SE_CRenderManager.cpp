@@ -51,7 +51,6 @@ SE_CRenderManager::SE_CRenderManager():
     m_vertexArrayObjectId(0),
     m_vertexBufferObjectId(0)
 {
-    (void)_pad;
 }
 
 

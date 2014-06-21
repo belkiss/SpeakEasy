@@ -36,7 +36,6 @@ SE_CClock::SE_CClock():
     m_timeScale(1.f),
     m_isPaused(true)
 {
-    (void)_pad;
 }
 
 
