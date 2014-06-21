@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2011-2013 Lambert Clara <lambert.clara@yahoo.fr>
+ * Copyright (C) 2011-2014 Lambert Clara <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -30,12 +30,11 @@
 #include <iosfwd>
 
 #ifdef WIN32
-#include <windows.h>
+#   include <windows.h>
 #endif // WIN32
 
 extern F32 const g_IdealFrameTime;
 
-/// @TODO use steady_clock to guarantee the clock to never be readjusted
 class SE_CClock
 {
     using ChronoClock = std::chrono::high_resolution_clock;
@@ -64,14 +63,11 @@ class SE_CClock
             return delta;
         }
 
-        /**
-         * @brief Returns the time delta between begin and end in milliseconds
-         *
-         * @param inBegin older time point
-         * @param inEnd earlier time point
-         * @return F32 delta in ms
-         **/
-        inline static F32 getDeltaInMs(
+        /// @brief Returns the time delta between begin and end in milliseconds
+        /// @param inBegin older time point
+        /// @param inEnd earlier time point
+        /// @return F32 delta in ms
+        static F32 getDeltaInMs(
             std::chrono::time_point<ChronoClock> const &inBegin,
             std::chrono::time_point<ChronoClock> const &inEnd
         )
@@ -79,25 +75,11 @@ class SE_CClock
             return std::chrono::duration_cast<std::chrono::microseconds>(inEnd - inBegin).count()/1000.f;
         }
 
-        inline void setPaused(bool const inPaused)
-        {
-            m_isPaused = inPaused;
-        }
+        void setPaused   (bool const inPaused) {m_isPaused = inPaused;}
+        void setTimeScale(F32  const inScale)  {m_timeScale = inScale;}
 
-        inline bool isPaused() const
-        {
-            return m_isPaused;
-        }
-
-        inline void setTimeScale(F32 const inScale)
-        {
-            m_timeScale = inScale;
-        }
-
-        inline F32 getTimeScale() const
-        {
-            return m_timeScale;
-        }
+        bool isPaused()     const {return m_isPaused;}
+        F32  getTimeScale() const {return m_timeScale;}
 
     public: // static methods
         static std::chrono::time_point<ChronoClock> getNowTimePoint()

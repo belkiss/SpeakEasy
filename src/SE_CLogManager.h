@@ -88,36 +88,24 @@ enum class ELogLevel : U8
 class SE_CLogManager : public SE_IBaseManager
 {
     public:
-        /**
-         * @brief Creates a log manager that will output on the given stream
-         *
-         * @param inOutStream The wanted output stream, Defaults to std::clog.
-         **/
+        /// @brief Creates a log manager that will output on the given stream
+        /// @param inOutStream The wanted output stream, Defaults to std::clog.
         explicit SE_CLogManager(std::ostream &inOutStream = std::clog);
 
-        /**
-         * @brief Destroys the log manager, no need for virtual
-         *
-         **/
+        /// @brief Destroys the log manager, no need for virtual
         ~SE_CLogManager();
 
-        /**
-         * @brief Starts up the manager at the given log level
-         * @note The inherited method (without the parameter) is private
-         *
-         * @param inLogLevel The wanted log level
-         **/
+        /// @brief Starts up the manager at the given log level
+        /// @note The inherited method (without the parameter) is private
+        /// @param inLogLevel The wanted log level
         bool startUp(const ELogLevel inLogLevel);
 
         bool shutDown() override;
 
     public:
-        /**
-         * @brief Log something to the output stream
-         *
-         * @param inLevel The level of the log
-         * @param inLogs The data to output
-         **/
+        /// @brief Log something to the output stream
+        /// @param inLevel The level of the log
+        /// @param inLogs The data to output
         template <typename... Types>
         void log(const ELogLevel inLevel, const Types&... inLogs);
 

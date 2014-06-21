@@ -1,6 +1,6 @@
 /*
  * This file is part of SpeakEasy.
- * Copyright (C) 2011-2012  Lambert Clara <lambert.clara@yahoo.fr>
+ * Copyright (C) 2011-2014  Lambert Clara <lambert.clara@yahoo.fr>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -29,52 +29,32 @@
 class SE_CStackAllocator
 {
     public:
-        /**
-         * @brief Stack marker: Represents the current top of the stack.
-         *
-         * You can only roll back to a marker, not to arbitrary locations within
-         * the stack.
-         **/
+        /// @brief Stack marker: Represents the current top of the stack.
+        /// You can only roll back to a marker, not to arbitrary locations within
+        /// the stack.
         typedef U64 Marker;
 
-        /**
-         * @brief Constructs a stack allocator with the given total size.
-         *
-         * @param inStackSizeInBytes the size in bytes
-         **/
+        /// @brief Constructs a stack allocator with the given total size.
+        /// @param inStackSizeInBytes the size in bytes
         explicit SE_CStackAllocator(const U32 inStackSizeInBytes);
 
-        /**
-         * @brief Destructor, no need for virtual
-         *
-         **/
+        /// @brief Destructor, no need for virtual
         ~SE_CStackAllocator();
 
-        /**
-         * @brief Allocates a new block of the given size from stack top.
-         *
-         * @param inSizeInBytes the size in bytes
-         * @return void*, the newly allocated block
-         **/
+        /// @brief Allocates a new block of the given size from stack top.
+        /// @param inSizeInBytes the size in bytes
+        /// @return void*, the newly allocated block
         void* allocate(const U32 inSizeInBytes);
 
-        /**
-         * @brief Returns a marker to the current stack top.
-         *
-         * @return :Marker, the marker at the top
-         **/
+        /// @brief Returns a marker to the current stack top.
+        /// @return :Marker, the marker at the top
         Marker getMarker();
 
-        /**
-         * @brief Rolls the stack back to a previous marker.
-         *
-         * @param inMarker the marker we want
-         **/
+        /// @brief Rolls the stack back to a previous marker.
+        /// @param inMarker the marker we want
         void rewindToMarker(const Marker inMarker);
 
-        /**
-         * @brief Clears the entire stack (rolls the stack back to zero).
-         **/
+        /// @brief Clears the entire stack (rolls the stack back to zero).
         void clear();
 
     private:
