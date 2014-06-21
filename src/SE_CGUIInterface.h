@@ -32,15 +32,15 @@ class SE_CGUIInterface
         explicit SE_CGUIInterface() = default;
         virtual ~SE_CGUIInterface();
 
-        virtual bool init();
-        virtual bool openWindow();
         SE_CGUIInterface(const SE_CGUIInterface&)            = delete;
         SE_CGUIInterface(SE_CGUIInterface&&)                 = delete;
         SE_CGUIInterface& operator=(const SE_CGUIInterface&) = delete;
         SE_CGUIInterface& operator=(SE_CGUIInterface&&)      = delete;
 
+        virtual bool init() = 0;
+        virtual bool openWindow() = 0;
         virtual void swapBuffers() = 0;
-        virtual bool windowClosed() const;
-        virtual bool quitPressed()  const;
-        virtual bool close();
+        virtual bool windowClosed() const = 0;
+        virtual bool quitPressed()  const = 0;
+        virtual bool close() = 0;
 };
