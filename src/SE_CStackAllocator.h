@@ -32,7 +32,7 @@ class SE_CStackAllocator
         /// @brief Stack marker: Represents the current top of the stack.
         /// You can only roll back to a marker, not to arbitrary locations within
         /// the stack.
-        typedef U64 Marker;
+        using Marker = U64;
 
         /// @brief Constructs a stack allocator with the given total size.
         /// @param inStackSizeInBytes the size in bytes

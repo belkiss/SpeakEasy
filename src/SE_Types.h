@@ -28,52 +28,32 @@
 
 #include <cstdint>
 
-/**
- * @brief 32-bits IEEE-754 floating-point value
- **/
-typedef float F32;
+/// @brief 32-bits IEEE-754 floating-point value
+using F32 = float;
 
-/**
- * @brief 64-bits IEEE-754 floating-point value
- */
-typedef double F64;
+/// @brief 64-bits IEEE-754 floating-point value
+using F64 = double;
 
-/**
- * @brief unsigned 8-bits integer
- **/
-typedef uint8_t U8;
+/// @brief unsigned 8-bits integer
+using U8 = uint8_t;
 
-/**
- * @brief signed 8-bits integer
- **/
-typedef int8_t I8;
+/// @brief signed 8-bits integer
+using I8 = int8_t;
 
-/**
- * @brief unsigned 16-bits integer
- **/
-typedef uint16_t U16;
+/// @brief unsigned 16-bits integer
+using U16 = uint16_t;
 
-/**
- * @brief signed 16-bits integer
- **/
-typedef int16_t I16;
+/// @brief signed 16-bits integer
+using I16 = int16_t;
 
-/**
- * @brief unsigned 32-bits integer
- **/
-typedef uint32_t U32;
+/// @brief unsigned 32-bits integer
+using U32 = uint32_t;
 
-/**
- * @brief signed 32-bits integer
- **/
-typedef int32_t I32;
+/// @brief signed 32-bits integer
+using I32 = int32_t;
 
-/**
- * @brief unsigned 64-bits integer
- **/
-typedef uint64_t U64;
+/// @brief unsigned 64-bits integer
+using U64 = uint64_t;
 
-/**
- * @brief signed 64-bits integer
- **/
-typedef int64_t I64;
+/// @brief signed 64-bits integer
+using I64 = int64_t;
