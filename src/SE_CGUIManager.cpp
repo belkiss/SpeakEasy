@@ -26,8 +26,6 @@
 
 #include "SE_CGUIManager.h"
 
-#include <cassert>
-
 #include "config.h"
 #include "SE_CGUIGLFW.h"
 
@@ -38,7 +36,7 @@
 SE_CGUIManager::~SE_CGUIManager()
 {
     // ensure that shutDown was called before destroying the manager
-    assert(!m_pGUISystem);
+    seAssert(!m_pGUISystem, "The GUI System is still allocated!");
 }
 
 
