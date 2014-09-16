@@ -395,11 +395,10 @@ void SE_CRenderManager::destroyShaders()
 ////////////////////////////////////////////////////////////////////////////////
 void SE_CRenderManager::logGLerror(char const * const inpDescriptionText) const
 {
-    GLenum errorStatus = glGetError();
+    const GLenum errorStatus = glGetError();
     if(errorStatus != GL_NO_ERROR)
     {
-        seLogError("gl error detected when ", inpDescriptionText, " : ",
-                   gluErrorString(errorStatus));
+        seLogError("gl error detected when ", inpDescriptionText, ": ", errorStatus);
     }
 }
 
