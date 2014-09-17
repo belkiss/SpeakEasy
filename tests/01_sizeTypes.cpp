@@ -1,35 +1,15 @@
-#include <iostream>
 #include "SE_Types.h"
+#include "gtest/gtest.h"
 
-I32 main()
+TEST(BaseTypes, SizeTest)
 {
-    static_assert(sizeof(F32) == 4,
-                  "sizeof(float32) != 4 on this machine");
-
-    static_assert(sizeof(U8) == 1,
-                  "sizeof(U8) != 1 on this machine");
-
-    static_assert(sizeof(I8) == 1,
-                  "sizeof(I8) != 1 on this machine");
-
-    static_assert(sizeof(U16) == 2,
-                  "sizeof(U16) != 2 on this machine");
-
-    static_assert(sizeof(I16) == 2,
-                  "sizeof(I16) != 2 on this machine");
-
-    static_assert(sizeof(U32) == 4,
-                  "sizeof(U32) != 4 on this machine");
-
-    static_assert(sizeof(I32) == 4,
-                  "sizeof(I32) != 4 on this machine");
-
-    static_assert(sizeof(U64) == 8,
-                  "sizeof(U64) != 8 on this machine");
-
-    static_assert(sizeof(I64) == 8,
-                  "sizeof(I64) != 8 on this machine");
-
-    return EXIT_SUCCESS;
+    ASSERT_EQ(4, sizeof(F32)) << "sizeof(F32) != 4 on this machine";
+    ASSERT_EQ(1, sizeof(U8))  << "sizeof(U8)  != 1 on this machine";
+    ASSERT_EQ(1, sizeof(I8))  << "sizeof(I8)  != 1 on this machine";
+    ASSERT_EQ(2, sizeof(U16)) << "sizeof(U16) != 2 on this machine";
+    ASSERT_EQ(2, sizeof(I16)) << "sizeof(I16) != 2 on this machine";
+    ASSERT_EQ(4, sizeof(U32)) << "sizeof(U32) != 4 on this machine";
+    ASSERT_EQ(4, sizeof(I32)) << "sizeof(I32) != 4 on this machine";
+    ASSERT_EQ(8, sizeof(U64)) << "sizeof(U64) != 8 on this machine";
+    ASSERT_EQ(8, sizeof(I64)) << "sizeof(I64) != 8 on this machine";
 }
-
