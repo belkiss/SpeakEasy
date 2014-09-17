@@ -152,7 +152,7 @@ void SE_CLogManager::log(const ELogLevel inLevel, const Types&... inLogs)
         logLevelToSStream(inLevel, displayStream);
         appendLogs(displayStream, inLogs...);
     }
-};
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -172,4 +172,4 @@ void SE_CLogManager::appendLogs(std::ostringstream &outStringStream,
 inline void SE_CLogManager::appendLogs(std::ostringstream &outStringStream)
 {
     m_outputStream << outStringStream.str() << std::endl;
-};
+}
