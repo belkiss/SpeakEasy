@@ -144,8 +144,8 @@ class SE_CLogManager : public SE_IBaseManager
 template <typename... Types>
 void SE_CLogManager::log(const ELogLevel inLevel, const Types&... inLogs)
 {
-    // kNone is 0
-    if(!inLevel || inLevel >= m_currentLogLevel)
+    // Always display when kNone is used
+    if((inLevel == ELogLevel::kNone) || (inLevel >= m_currentLogLevel))
     {
         std::ostringstream displayStream;
         SE_CClock::localtimeToSStream(displayStream);
