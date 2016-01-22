@@ -55,6 +55,9 @@ IF(UNIX AND NOT APPLE)
          ${X11_Xinput_LIB}
          ${X11_Xxf86vm_LIB}
          ${X11_Xcursor_LIB}
+         ${X11_X11_LIB}
+         ${X11_Xinerama_LIB}
+         ${CMAKE_DL_LIBS}
     )
 ELSEIF(APPLE)
     # Set up library and include paths
