@@ -41,26 +41,12 @@
 
 #include "SE_CClock.h"
 
-bool gs_EngineRunning = true;
-
-static SE_CLogManager      gs_LogManager;
-static SE_CMemoryManager   gs_MemoryManager;
-static SE_CGUIManager      gs_GUIManager;
-static SE_CRenderManager   gs_RenderManager;
-
-static SE_CClock           gs_MainClock;
-
-// AudioManager
-// InputManager
-// ErrorManager
-// ResourceManager
-// PhysicsManager
-// SceneManager
+static bool gs_EngineRunning = true;
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-void handleCommandLineArguments(I32 const inArgc,
-                                const char * const * const inpArgv)
+static void handleCommandLineArguments(I32 const inArgc,
+                                       const char * const * const inpArgv)
 {
     for(I32 i = 0; i < inArgc; ++i)
     {
@@ -72,7 +58,7 @@ void handleCommandLineArguments(I32 const inArgc,
 #if !defined(WIN32)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-void signalHandler(const I32 inSignalCode)
+static void signalHandler(const I32 inSignalCode)
 {
     seLogDebug("Caught signal ", inSignalCode);
     gs_EngineRunning = false;
@@ -98,21 +84,34 @@ I32 main(I32 const inArgc,
     sigaction(SIGINT, &currentAction, NULL);
 #endif // WIN32
 
+    SE_CLogManager      logManager;
+    SE_CMemoryManager   memoryManager;
+    SE_CGUIManager      GUIManager;
+    SE_CRenderManager   renderManager;
+    SE_CClock           mainClock;
+
+    // AudioManager
+    // InputManager
+    // ErrorManager
+    // ResourceManager
+    // PhysicsManager
+    // SceneManager
+
     // Start up engine systems in the correct order, starting with log manager
-    bool startUpSuccess = gs_LogManager.startUp(ELogLevel::kDebug);
+    bool startUpSuccess = logManager.startUp(ELogLevel::kDebug);
     seLogDebug("SE_DEBUG defined");
 
     // handle the command line arguments
     handleCommandLineArguments(inArgc, inpArgv);
 
-    startUpSuccess = startUpSuccess && gs_MemoryManager.startUp();
-    startUpSuccess = startUpSuccess && gs_GUIManager.startUp();
-    startUpSuccess = startUpSuccess && gs_RenderManager.startUp();
+    startUpSuccess = startUpSuccess && memoryManager.startUp();
+    startUpSuccess = startUpSuccess && GUIManager.startUp();
+    startUpSuccess = startUpSuccess && renderManager.startUp();
 
     if(startUpSuccess)
     {
         // Start the main clock
-        gs_MainClock.start();
+        mainClock.start();
 
         seLogDebug("SpeakEasy subsystems successfully started");
 
@@ -120,11 +119,11 @@ I32 main(I32 const inArgc,
         F32 timeSeconds = 0.f;
         while(gs_EngineRunning) // main game loop
         {
-            F32 const deltaSeconds = gs_MainClock.update();
+            F32 const deltaSeconds = mainClock.update();
             {
-                gs_RenderManager.render();
+                renderManager.render();
                 ++framesCount;
-                gs_EngineRunning &= gs_GUIManager.doWork();
+                gs_EngineRunning &= GUIManager.doWork();
             }
 
             // Output FPS to command line
@@ -145,10 +144,10 @@ I32 main(I32 const inArgc,
     seLogDebug("Exiting...");
 
     // Shut everything down, in reverse order
-    bool shutDownSuccess = gs_RenderManager.shutDown();
-    shutDownSuccess &= gs_GUIManager.shutDown();
-    shutDownSuccess &= gs_MemoryManager.shutDown();
-    shutDownSuccess &= gs_LogManager.shutDown();
+    bool shutDownSuccess = renderManager.shutDown();
+    shutDownSuccess &= GUIManager.shutDown();
+    shutDownSuccess &= memoryManager.shutDown();
+    shutDownSuccess &= logManager.shutDown();
 
     if(shutDownSuccess)
     {
