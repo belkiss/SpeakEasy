@@ -14,7 +14,7 @@ foreach(SHADER_FILENAME ${SpeakEasy_shaders})
     list(APPEND GENERATED_LIST ${SHADER_NAME})
 
     add_custom_command(OUTPUT  ${SHADER_NAME}
-                       COMMAND cmake -DSHADER_FILENAME=${SHADER_FILENAME}
+                       COMMAND ${CMAKE_COMMAND} -DSHADER_FILENAME=${SHADER_FILENAME}
                                      -DOUTPUT_FOLDER=${CMAKE_CURRENT_BINARY_DIR}
                                      -P shader_to_header.cmake
                        DEPENDS ${SHADER_FILENAME}
