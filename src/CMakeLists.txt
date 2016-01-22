@@ -1,5 +1,5 @@
 INCLUDE_DIRECTORIES(${SpeakEasy_BINARY_DIR}/src)
-INCLUDE_DIRECTORIES(${GLFW_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${GLFW3_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${GLEW_INCLUDE_DIR})
 
 SET(SHADER_TO_HEADER "shader_to_header")
@@ -44,7 +44,7 @@ SET(SpeakEasy_shaders
 SET(SpeakEasy_Libs
     ${OPENGL_LIBRARIES}
     ${OPENGL_glu_LIBRARY}
-    ${GLFW_LIBRARY}
+    ${GLFW3_LIBRARY}
     ${GLEW_LIBRARY}
     ${CMAKE_THREAD_LIBS_INIT}
 )
@@ -60,13 +60,15 @@ ELSEIF(APPLE)
     # Set up library and include paths
     FIND_LIBRARY(COCOA_FRAMEWORK Cocoa)
     FIND_LIBRARY(IOKIT_FRAMEWORK IOKit)
+    FIND_LIBRARY(CARBON_FRAMEWORK Carbon)
     FIND_LIBRARY(CORE_FOUNDATION_FRAMEWORK CoreFoundation)
     FIND_LIBRARY(CORE_VIDEO_FRAMEWORK CoreVideo)
     LIST(APPEND SpeakEasy_Libs ${COCOA_FRAMEWORK}
                                ${OPENGL_gl_LIBRARY}
                                ${IOKIT_FRAMEWORK}
                                ${CORE_FOUNDATION_FRAMEWORK}
-                               ${CORE_VIDEO_FRAMEWORK})
+                               ${CORE_VIDEO_FRAMEWORK}
+                               ${CARBON_FRAMEWORK})
 ENDIF()
 
 # executable declaration
