@@ -125,31 +125,31 @@ IF(UNIX)
     ADD_DEFINITIONS(-fno-rtti)
     # Disable Exceptions
     ADD_DEFINITIONS(-fno-exceptions)
-    # Enable a LOT of warnings
-    ADD_DEFINITIONS(-Wall
-                    -Wextra
-                    -W
-                    -Wpadded
-                    -Wshadow
-                    -Woverloaded-virtual
-                    -Wwrite-strings
-                    -Wnon-virtual-dtor
-                    -Wunreachable-code)
+    # Warnings as error
+    #ADD_DEFINITIONS(-Werror)
 
-    # And even more if clang is detected
+    # Setup warnings
     IF(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-        ADD_DEFINITIONS(-Wdisabled-macro-expansion
-                        -Wmissing-variable-declarations
-                        -Wglobal-constructors
-                        -Wexit-time-destructors
-                        -Wextra-semi
-                        -Wweak-vtables
-                        -Wcovered-switch-default
-                        -Wthread-safety-analysis
-                        -Wdelete-incomplete
-                        -Wnon-pod-varargs
-                        -Wreturn-stack-address
-                        -Wvexing-parse)
+        # Blacklist mode
+        ADD_DEFINITIONS(
+            -Weverything
+            -Wno-c++98-compat
+            -Wno-c++98-compat-pedantic
+            -Wno-date-time
+        )
+    ELSE()
+        # Whitelist mode
+        ADD_DEFINITIONS(
+            -Wall
+            -Wextra
+            -W
+            -Wpadded
+            -Wshadow
+            -Woverloaded-virtual
+            -Wwrite-strings
+            -Wnon-virtual-dtor
+            -Wunreachable-code
+        )
     ENDIF()
 ENDIF()
 ################################################################################
