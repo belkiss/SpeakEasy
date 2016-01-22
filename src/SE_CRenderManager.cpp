@@ -33,8 +33,7 @@
 // GLEW *MUST* be included before GLFW
 #include <GL/glew.h>
 
-#define GLFW_INCLUDE_GLU
-#include <GLFW/glfw3.h>
+#include "SE_GLFW3_Include.h"
 
 #include "config.h"
 #include "SE_CGUIGLFW.h"

@@ -25,7 +25,7 @@
  */
 
 #include "SE_CGUIGLFW.h"
-#include <GLFW/glfw3.h>
+#include "SE_GLFW3_Include.h"
 #include "config.h"
 #include "SE_CGUIManager.h"
 #include "SE_CLogManager.h"
