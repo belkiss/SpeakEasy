@@ -409,7 +409,7 @@ void SE_CRenderManager::computePositionOffsets(F32 &outXOffset, F32 &outYOffset)
     F32 const loopDuration = 5.0f;
     F32 const scale = 3.14159f * 2.0f / loopDuration;
 
-    F32 elapsedTime = glfwGetTime();//std::chrono::duration_cast<std::chrono::milliseconds>(SE_CClock::getNowTimePoint()).count() / 1000.0f;
+    F32 elapsedTime = static_cast<F32>(glfwGetTime());//std::chrono::duration_cast<std::chrono::milliseconds>(SE_CClock::getNowTimePoint()).count() / 1000.0f;
 
     F32 currentTimeThroughLoop = fmodf(elapsedTime, loopDuration);
 
