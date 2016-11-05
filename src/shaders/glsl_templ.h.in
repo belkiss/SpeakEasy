@@ -17,7 +17,7 @@
  */
 
 /**
- * \file    glsl_templ.h.in => @SHADER_SRC_NAME@
+ * \file    glsl_templ.h.in => @HEADER_FILENAME@
  * \brief   Template to convert glsl shader files into headers
  *
  * \author  Lambert Clara <lambert.clara@yahoo.fr>
