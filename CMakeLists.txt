@@ -35,36 +35,8 @@ OPTION(BUILD_TESTS         "Build Tests"         ON)
 OPTION(BUILD_DOCUMENTATION "Build Documentation" ON)
 
 FIND_PACKAGE(OpenGL  REQUIRED)
-FIND_PACKAGE(glfw3   REQUIRED)
 FIND_PACKAGE(GLEW    REQUIRED)
 FIND_PACKAGE(Threads REQUIRED)
-
-IF(UNIX AND NOT APPLE)
-    ############################################################################
-    # X11
-    FIND_PACKAGE(X11 REQUIRED)
-    # Check for XRandR (modern resolution switching and gamma control)
-    IF(NOT X11_Xrandr_FOUND)
-        MESSAGE(FATAL_ERROR "The RandR library and headers were not found")
-    ENDIF()
-
-    # Check for Xinput
-    IF(NOT X11_Xinput_FOUND)
-        MESSAGE(FATAL_ERROR "The Xinput library and headers were not found")
-    ENDIF()
-
-    # Check for Xf86VidMode (fallback gamma control)
-    IF(NOT X11_xf86vmode_FOUND)
-        MESSAGE(FATAL_ERROR "The Xf86VidMode library and headers were not found")
-    ENDIF()
-
-    # Check for Xcursor
-    IF(NOT X11_Xcursor_FOUND)
-        MESSAGE(FATAL_ERROR "The Xcursor libraries and headers were not found")
-    ENDIF()
-    ############################################################################
-ENDIF()
-################################################################################
 
 ################################################################################
 # Try to determine informations about the version we try to build
@@ -103,6 +75,12 @@ IF(BUILD_DOCUMENTATION)
                           COMMENT "Generating documentation with Doxygen" VERBATIM)
     ENDIF()
 ENDIF()
+################################################################################
+
+################################################################################
+# Add the third parties
+# @note: the folder is intentionally added before our compiler settings
+ADD_SUBDIRECTORY(extern)
 ################################################################################
 
 ################################################################################
