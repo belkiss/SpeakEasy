@@ -26,9 +26,6 @@ SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DSE_DEBUG")
 # set the destination of the executable
 SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
-# tell cmake to check for custom modules
-SET(CMAKE_MODULE_PATH "${SpeakEasy_SOURCE_DIR}/cmake_modules")
-
 ################################################################################
 # Build options
 OPTION(BUILD_TESTS         "Build Tests"         ON)
