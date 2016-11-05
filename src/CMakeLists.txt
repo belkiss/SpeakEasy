@@ -1,5 +1,4 @@
 INCLUDE_DIRECTORIES(${SpeakEasy_BINARY_DIR}/src)
-INCLUDE_DIRECTORIES(${GLEW_INCLUDE_DIR})
 
 SET(SHADER_TO_HEADER "shader_to_header")
 ADD_SUBDIRECTORY(shaders)
@@ -44,7 +43,7 @@ SET(SpeakEasy_Libs
     ${OPENGL_LIBRARIES}
     ${OPENGL_glu_LIBRARY}
     glfw
-    ${GLEW_LIBRARY}
+    libglew_static
 )
 
 # executable declaration

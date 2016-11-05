@@ -35,7 +35,6 @@ OPTION(BUILD_TESTS         "Build Tests"         ON)
 OPTION(BUILD_DOCUMENTATION "Build Documentation" ON)
 
 FIND_PACKAGE(OpenGL  REQUIRED)
-FIND_PACKAGE(GLEW    REQUIRED)
 FIND_PACKAGE(Threads REQUIRED)
 
 ################################################################################

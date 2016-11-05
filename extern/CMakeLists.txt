@@ -8,3 +8,10 @@ SET(GLFW_INSTALL        OFF CACHE BOOL "")
 ADD_SUBDIRECTORY(glfw)
 ################################################################################
 
+################################################################################
+# GLEW
+SET(glew-cmake_BUILD_SHARED         OFF CACHE BOOL "")
+SET(glew-cmake_BUILD_MULTI_CONTEXT  OFF CACHE BOOL "")
+
+ADD_SUBDIRECTORY(glew)
+################################################################################
