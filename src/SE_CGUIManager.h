@@ -32,7 +32,7 @@ class SE_CGUIManager : public SE_IBaseManager
 {
     public:
         SE_CGUIManager() = default;
-        virtual ~SE_CGUIManager();
+        ~SE_CGUIManager() override;
 
         SE_CGUIManager(const SE_CGUIManager&)            = delete;
         SE_CGUIManager(SE_CGUIManager&&)                 = delete;

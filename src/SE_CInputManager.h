@@ -32,7 +32,7 @@ class SE_CInputManager : public SE_IBaseManager
 {
     public:
         SE_CInputManager();
-        ~SE_CInputManager();
+        ~SE_CInputManager() override;
 
         void startUp()  override;
         void shutDown() override;

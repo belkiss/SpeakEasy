@@ -91,7 +91,7 @@ class SE_CLogManager : public SE_IBaseManager
         /// @brief Creates a log manager that will output on the given stream
         /// @param inOutStream The wanted output stream, Defaults to std::clog.
         explicit SE_CLogManager(std::ostream &inOutStream = std::clog);
-        virtual ~SE_CLogManager();
+        ~SE_CLogManager() override;
 
         SE_CLogManager(const SE_CLogManager&)            = delete;
         SE_CLogManager(SE_CLogManager&&)                 = delete;

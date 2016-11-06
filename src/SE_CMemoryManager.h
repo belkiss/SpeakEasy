@@ -32,7 +32,7 @@ class SE_CMemoryManager : public SE_IBaseManager
 {
     public:
         SE_CMemoryManager() = default;
-        ~SE_CMemoryManager(){}
+        ~SE_CMemoryManager() override {}
 
         bool startUp()  override;
         bool shutDown() override;

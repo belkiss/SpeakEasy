@@ -32,7 +32,7 @@ class SE_CGUIGLFW final : public SE_CGUIInterface
 {
     public:
         SE_CGUIGLFW() = default;
-        virtual ~SE_CGUIGLFW() = default;
+        ~SE_CGUIGLFW() override = default;
 
         SE_CGUIGLFW(const SE_CGUIGLFW&)            = delete;
         SE_CGUIGLFW(SE_CGUIGLFW&&)                 = delete;
