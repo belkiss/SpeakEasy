@@ -33,9 +33,9 @@
 class SE_CRenderManager : public SE_IBaseManager
 {
     public:
-        explicit SE_CRenderManager() = default;
+        SE_CRenderManager() = default;
         virtual ~SE_CRenderManager() = default;
-    
+
         SE_CRenderManager(const SE_CRenderManager&)            = delete;
         SE_CRenderManager(SE_CRenderManager&&)                 = delete;
         SE_CRenderManager& operator=(const SE_CRenderManager&) = delete;

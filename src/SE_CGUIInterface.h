@@ -29,7 +29,7 @@
 class SE_CGUIInterface
 {
     public:
-        explicit SE_CGUIInterface() = default;
+        SE_CGUIInterface() = default;
         virtual ~SE_CGUIInterface();
 
         SE_CGUIInterface(const SE_CGUIInterface&)            = delete;

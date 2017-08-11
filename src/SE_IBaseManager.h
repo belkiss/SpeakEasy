@@ -29,7 +29,7 @@
 class SE_IBaseManager
 {
     public:
-        explicit SE_IBaseManager() = default;
+        SE_IBaseManager() = default;
         virtual ~SE_IBaseManager();
 
         SE_IBaseManager(const SE_IBaseManager&)            = delete;

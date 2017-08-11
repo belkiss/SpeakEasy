@@ -31,7 +31,7 @@
 class SE_CGUIGLFW final : public SE_CGUIInterface
 {
     public:
-        explicit SE_CGUIGLFW() = default;
+        SE_CGUIGLFW() = default;
         virtual ~SE_CGUIGLFW() = default;
 
         SE_CGUIGLFW(const SE_CGUIGLFW&)            = delete;
