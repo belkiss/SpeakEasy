@@ -81,7 +81,7 @@ I32 main(I32 const inArgc,
     // Setup signal catching
     struct sigaction currentAction;
     currentAction.sa_handler = signalHandler;
-    sigaction(SIGINT, &currentAction, NULL);
+    sigaction(SIGINT, &currentAction, nullptr);
 #endif // WIN32
 
     SE_CLogManager      logManager;

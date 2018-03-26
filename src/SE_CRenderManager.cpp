@@ -118,7 +118,7 @@ void SE_CRenderManager::render()
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferObjectId);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
 
     // mode, the type of array data that's going to be drawn
     // first, specifies the first index that we want to draw
@@ -178,7 +178,7 @@ void SE_CRenderManager::createVBO()
     // GL_STREAM_DRAW tells OpenGL that you intend to set this data constantly,
     // generally once per frame.
     glBufferData(GL_ARRAY_BUFFER,
-                 m_vertices.size() * sizeof(F32),
+                 static_cast<GLsizeiptr>(m_vertices.size() * sizeof(F32)),
                  m_vertices.data(),
                  GL_STREAM_DRAW);
 
@@ -214,7 +214,7 @@ void SE_CRenderManager::createVBO()
     // supplied in glBufferData to where the significant data starts.
     // In our case we set it to 0.
     static U32 const vs_inPositionAttribIndex = 0;
-    glVertexAttribPointer(vs_inPositionAttribIndex, 4, GL_FLOAT, GL_FALSE, 0, 0);
+    glVertexAttribPointer(vs_inPositionAttribIndex, 4, GL_FLOAT, GL_FALSE, 0, nullptr );
     // When we’re done providing vertex attributes, enable the attribute by
     // passing its index
     glEnableVertexAttribArray(vs_inPositionAttribIndex);
@@ -454,7 +454,12 @@ void SE_CRenderManager::adjustVertexData(F32 const inXOffset,
     // The 3rd parameter is number of bytes to copy.
     // The 4th paramter is our array of bytes to be copied into that location
     // of the buffer object.
-    glBufferSubData(GL_ARRAY_BUFFER, 0, newData.size() * sizeof(F32), newData.data());
+    glBufferSubData(
+        GL_ARRAY_BUFFER,
+        0,
+        static_cast<GLsizeiptr>(newData.size() * sizeof(F32)),
+        newData.data()
+    );
 
     // call glBindBuffer with the buffer parameter set to zero to indicate that
     // no buffers should be tied to the GL_ARRAY_BUFFER target
