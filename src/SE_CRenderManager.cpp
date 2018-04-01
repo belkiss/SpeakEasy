@@ -31,8 +31,7 @@
 #include <cmath>
 
 // GLEW *MUST* be included before GLFW
-#include <GL/glew.h>
-
+#include "SE_GLEW_Include.h"
 #include "SE_GLFW3_Include.h"
 
 #include "config.h"
