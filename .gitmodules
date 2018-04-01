@@ -3,4 +3,4 @@
 	url = https://github.com/belkiss/glfw.git
 [submodule "extern/glew"]
 	path = extern/glew
-	url = https://github.com/belkiss/glew-cmake.git
+	url = https://github.com/belkiss/glew.git

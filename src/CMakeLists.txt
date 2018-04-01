@@ -43,7 +43,7 @@ SET(SpeakEasy_Libs
     ${OPENGL_LIBRARIES}
     ${OPENGL_glu_LIBRARY}
     glfw
-    libglew_static
+    glew_s
 )
 
 # executable declaration
