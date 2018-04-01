@@ -84,11 +84,11 @@ void SE_CLogManager::logLevelToSStream(const ELogLevel inLevel,
     ioStringStream << COL_BEGIN;
     switch(inLevel)
     {
-        case ELogLevel::kNone:        ioStringStream << WHITE  << "    kNone     "; break;
-        case ELogLevel::kDebug:       ioStringStream << BLUE   << "    kDebug    "; break;
-        case ELogLevel::kInformation: ioStringStream << GREEN  << " kInformation "; break;
-        case ELogLevel::kWarning:     ioStringStream << YELLOW << "   kWarning   "; break;
-        case ELogLevel::kError:       ioStringStream << RED    << "    kError    "; break;
+        case ELogLevel::None:        ioStringStream << WHITE  << "  NONE   "; break;
+        case ELogLevel::Debug:       ioStringStream << BLUE   << "  DEBUG  "; break;
+        case ELogLevel::Information: ioStringStream << GREEN  << "  INFO   "; break;
+        case ELogLevel::Warning:     ioStringStream << YELLOW << " WARNING "; break;
+        case ELogLevel::Error:       ioStringStream << RED    << "  ERROR  "; break;
 #ifndef __clang__
         // prevent clang to emit a warning when all enum values are covered
         // but a default case is also present

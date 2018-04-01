@@ -37,16 +37,15 @@
 // Useful macros
 //
 #if defined(SE_DEBUG)
-#   define seLogDebug(...)   SE_CLogManager::getInstance()->log(ELogLevel::kDebug,       __VA_ARGS__)
-#   define seLogInfo(...)    SE_CLogManager::getInstance()->log(ELogLevel::kInformation, __VA_ARGS__)
-#   define seLogWarning(...) SE_CLogManager::getInstance()->log(ELogLevel::kWarning,     __VA_ARGS__)
-#   define seLogError(...)   SE_CLogManager::getInstance()->log(ELogLevel::kError,       __VA_ARGS__)
+#   define seLogDebug(...)   SE_CLogManager::getInstance()->log(ELogLevel::Debug,       __FILE__, __LINE__, __VA_ARGS__)
+#   define seLogInfo(...)    SE_CLogManager::getInstance()->log(ELogLevel::Information, __FILE__, __LINE__, __VA_ARGS__)
+#   define seLogWarning(...) SE_CLogManager::getInstance()->log(ELogLevel::Warning,     __FILE__, __LINE__, __VA_ARGS__)
+#   define seLogError(...)   SE_CLogManager::getInstance()->log(ELogLevel::Error,       __FILE__, __LINE__, __VA_ARGS__)
 #   define seAssert(inCondition, ...) \
         do \
         { \
             if(!(inCondition)) \
             { \
-                seLogError(__FILE__":", __LINE__); \
                 seLogError("Assert ! (" #inCondition ") failed"); \
                 seLogError(__VA_ARGS__); \
             } \
@@ -57,7 +56,7 @@
 #   define seLogInfo(...)
 #   define seLogWarning(...)
 #   define seLogError(...)
-#   define seAssert(inCondition) do{sizeof(inCondition);}while(0)
+#   define seAssert(inCondition, ...) do{sizeof(inCondition);}while(0)
 #endif // SE_DEBUG
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -66,20 +65,11 @@
  **/
 enum class ELogLevel : U8
 {
-    /// No category, always displayed
-    kNone,
-
-    /// Used for printing information helpful in debugging
-    kDebug,
-
-    /// Useful information to print. For example hardware infos or something started/stopped.
-    kInformation,
-
-    /// Warnings that something isn't as expected and can cause oddities
-    kWarning,
-
-    /// Something did go wrong.
-    kError
+    None,        /// No category, always displayed
+    Debug,       /// Used for printing information helpful in debugging
+    Information, /// Useful information to print. For example hardware infos or something started/stopped.
+    Warning,     /// Warnings that something isn't as expected and can cause oddities
+    Error        /// Something did go wrong.
 };
 
 /**
@@ -110,7 +100,7 @@ class SE_CLogManager : public SE_IBaseManager
         /// @param inLevel The level of the log
         /// @param inLogs The data to output
         template <typename... Types>
-        void log(const ELogLevel inLevel, const Types&... inLogs);
+        void log(const ELogLevel inLevel, const char* inFile, const int inLine, const Types&... inLogs);
 
     private:
         template <typename T, typename... Args>
@@ -129,7 +119,7 @@ class SE_CLogManager : public SE_IBaseManager
 
     private:
         std::ostream& m_outputStream;
-        ELogLevel     m_currentLogLevel{ELogLevel::kNone};
+        ELogLevel     m_currentLogLevel{ELogLevel::None};
 
         // explicit padding
         U64 /*pad*/:56;
@@ -142,14 +132,20 @@ class SE_CLogManager : public SE_IBaseManager
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 template <typename... Types>
-void SE_CLogManager::log(const ELogLevel inLevel, const Types&... inLogs)
+void SE_CLogManager::log(
+    const ELogLevel inLevel,
+    const char* inFile,
+    const int inLine,
+    const Types&... inLogs
+)
 {
-    // Always display when kNone is used
-    if((inLevel == ELogLevel::kNone) || (inLevel >= m_currentLogLevel))
+    // Always display None is used
+    if((inLevel == ELogLevel::None) || (inLevel >= m_currentLogLevel))
     {
         std::ostringstream displayStream;
         SE_CClock::localtimeToSStream(displayStream);
         logLevelToSStream(inLevel, displayStream);
+        displayStream << inFile << "(" << inLine << ") ";
         appendLogs(displayStream, inLogs...);
     }
 }

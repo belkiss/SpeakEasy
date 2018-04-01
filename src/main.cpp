@@ -98,7 +98,7 @@ I32 main(I32 const inArgc,
     // SceneManager
 
     // Start up engine systems in the correct order, starting with log manager
-    bool startUpSuccess = logManager.startUp(ELogLevel::kDebug);
+    bool startUpSuccess = logManager.startUp(ELogLevel::Debug);
     seLogDebug("SE_DEBUG defined");
 
     // handle the command line arguments
