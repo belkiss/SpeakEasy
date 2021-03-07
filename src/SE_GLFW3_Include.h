@@ -2,23 +2,23 @@
 
 #define GLFW_INCLUDE_GLU
 
-#if __clang__
+#if defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdocumentation"
 #pragma clang diagnostic ignored "-Wdocumentation-unknown-command"
-#endif
-
-#if __GNUC__
+#elif defined(__GNUC__) || defined(__GNUG__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpadded"
 #endif
 
-#include <GLFW/glfw3.h>
-
-#if __GNUC__
-#pragma GCC diagnostic pop
+#if defined(_WIN32)
+#include <Windows.h>
 #endif
 
-#if __clang__
+#include <GLFW/glfw3.h>
+
+#if defined(__clang__)
 #pragma clang diagnostic pop
+#elif defined(__GNUC__) || defined(__GNUG__)
+#pragma GCC diagnostic pop
 #endif

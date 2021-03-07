@@ -87,7 +87,15 @@ SET(CMAKE_CXX_STANDARD 17)
 SET(CMAKE_CXX_STANDARD_REQUIRED ON)
 SET(CMAKE_CXX_EXTENSIONS OFF)
 
-# Enable max compiler debugging output
+# Language capabilities
+IF(UNIX)
+    # Disable RTTI
+    ADD_DEFINITIONS(-fno-rtti)
+    # Disable Exceptions
+    ADD_DEFINITIONS(-fno-exceptions)
+ENDIF()
+
+# Compiler warnings
 IF(MSVC) # Visual Studio
     SET(CMAKE_CXX_WARNING_LEVEL 4)
     # Force it, because most of the time the above line is not enough
@@ -97,13 +105,12 @@ IF(MSVC) # Visual Studio
     ELSE()
         SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
     ENDIF()
+
+    # Warnings as error
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /WX")
 ENDIF()
 
 IF(UNIX)
-    # Disable RTTI
-    ADD_DEFINITIONS(-fno-rtti)
-    # Disable Exceptions
-    ADD_DEFINITIONS(-fno-exceptions)
     # Warnings as error
     ADD_DEFINITIONS(-Werror)
 
