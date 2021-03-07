@@ -80,6 +80,13 @@ ADD_SUBDIRECTORY(extern)
 ################################################################################
 
 ################################################################################
+# Compilers configuration
+
+# Enable c++17
+SET(CMAKE_CXX_STANDARD 17)
+SET(CMAKE_CXX_STANDARD_REQUIRED ON)
+SET(CMAKE_CXX_EXTENSIONS OFF)
+
 # Enable max compiler debugging output
 IF(MSVC) # Visual Studio
     SET(CMAKE_CXX_WARNING_LEVEL 4)
@@ -93,8 +100,6 @@ IF(MSVC) # Visual Studio
 ENDIF()
 
 IF(UNIX)
-    # Enable c++11
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
     # Disable RTTI
     ADD_DEFINITIONS(-fno-rtti)
     # Disable Exceptions
