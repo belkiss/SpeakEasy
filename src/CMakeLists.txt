@@ -69,12 +69,12 @@ IF(WIN32)
     )
 ENDIF()
 
-# Force include the header containing the types into all the others
-IF(MSVC) # Visual Studio
-    ADD_DEFINITIONS("/FI ${SpeakEasy_SOURCE_DIR}/src/SE_Types.h")
-ELSE()
-    ADD_DEFINITIONS("-include ${SpeakEasy_SOURCE_DIR}/src/SE_Types.h")
-ENDIF()
+# pch setup
+TARGET_PRECOMPILE_HEADERS(
+    ${Executable_name}
+    PRIVATE
+    "${SpeakEasy_SOURCE_DIR}/src/SE_Types.h"
+)
 
 # linker setup
 TARGET_LINK_LIBRARIES(
