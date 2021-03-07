@@ -70,9 +70,15 @@ IF(WIN32)
 ENDIF()
 
 # Force include the header containing the types into all the others
+IF(MSVC) # Visual Studio
+SET_TARGET_PROPERTIES(
+    ${Executable_name} PROPERTIES
+    COMPILE_FLAGS "/FI ${SpeakEasy_SOURCE_DIR}/src/SE_Types.h")
+ELSE()
 SET_TARGET_PROPERTIES(
     ${Executable_name} PROPERTIES
     COMPILE_FLAGS "-include ${SpeakEasy_SOURCE_DIR}/src/SE_Types.h")
+ENDIF()
 
 # linker setup
 TARGET_LINK_LIBRARIES(
