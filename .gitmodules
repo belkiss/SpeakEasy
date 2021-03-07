@@ -1,6 +1,6 @@
 [submodule "extern/glfw"]
-	path = extern/glfw
+	path = extern/glfw/src
 	url = https://github.com/belkiss/glfw.git
 [submodule "extern/glew"]
-	path = extern/glew
+	path = extern/glew/src
 	url = https://github.com/belkiss/glew.git
