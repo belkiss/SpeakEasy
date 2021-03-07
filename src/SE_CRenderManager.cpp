@@ -391,7 +391,7 @@ void SE_CRenderManager::destroyShaders()
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-void SE_CRenderManager::logGLerror(char const * const inpDescriptionText) const
+void SE_CRenderManager::logGLerror([[maybe_unused]] char const * const inpDescriptionText) const
 {
     const GLenum errorStatus = glGetError();
     if(errorStatus != GL_NO_ERROR)

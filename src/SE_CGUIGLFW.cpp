@@ -177,9 +177,8 @@ bool SE_CGUIGLFW::quitPressed() const
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-void SE_CGUIGLFW::logGLFWerror(I32 const          inErrorCode,
-                               char const * const inpDescriptionText)
+void SE_CGUIGLFW::logGLFWerror([[maybe_unused]] I32 const          inErrorCode,
+                               [[maybe_unused]] char const * const inpDescriptionText)
 {
-    (void)inErrorCode;
     seLogError("GLFW error : ", inpDescriptionText);
 }

@@ -46,7 +46,7 @@ static bool gs_EngineRunning = true;
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 static void handleCommandLineArguments(I32 const inArgc,
-                                       const char * const * const inpArgv)
+                                       [[maybe_unused]] const char * const * const inpArgv)
 {
     for(I32 i = 0; i < inArgc; ++i)
     {
@@ -58,7 +58,7 @@ static void handleCommandLineArguments(I32 const inArgc,
 #if !defined(WIN32)
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-static void signalHandler(const I32 inSignalCode)
+static void signalHandler([[maybe_unused]] const I32 inSignalCode)
 {
     seLogDebug("Caught signal ", inSignalCode);
     gs_EngineRunning = false;
@@ -73,10 +73,8 @@ I32 main(I32 const inArgc,
 {
 #ifdef WIN32
     // get the arguments usually set by WinMain
-    HINSTANCE const hInstance = GetModuleHandle(nullptr);
-    int const       nCmdShow  = SW_SHOWDEFAULT;
-    (void)hInstance;
-    (void)nCmdShow;
+    [[maybe_unused]] HINSTANCE const hInstance = GetModuleHandle(nullptr);
+    [[maybe_unused]] int const       nCmdShow  = SW_SHOWDEFAULT;
 #else // WIN32
     // Setup signal catching
     struct sigaction currentAction;
