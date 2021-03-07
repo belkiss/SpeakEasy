@@ -8,12 +8,16 @@
 #pragma clang diagnostic ignored "-Wdocumentation-unknown-command"
 #endif
 
+#if __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpadded"
+#endif
 
-# include <GLFW/glfw3.h>
+#include <GLFW/glfw3.h>
 
+#if __GNUC__
 #pragma GCC diagnostic pop
+#endif
 
 #if __clang__
 #pragma clang diagnostic pop
