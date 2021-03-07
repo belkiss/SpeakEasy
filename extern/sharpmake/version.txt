@@ -1,0 +1,1 @@
+https://github.com/ubisoft/Sharpmake/releases/tag/0.15.1

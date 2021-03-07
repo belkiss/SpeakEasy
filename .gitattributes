@@ -1,2 +1,5 @@
 *.cpp text eol=lf
 *.h   text eol=lf
+
+# files and directories tracked with git-lfs
+extern/sharpmake/bin/** filter=lfs diff=lfs merge=lfs -text
