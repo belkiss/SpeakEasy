@@ -46,6 +46,11 @@ SET(SpeakEasy_Libs
     glew_s
 )
 
+# Apple considers the whole OpenGL API deprecated
+IF (APPLE)
+    ADD_DEFINITIONS (-DGL_SILENCE_DEPRECATION)
+ENDIF()
+
 # executable declaration
 SET(Executable_name speakeasy)
 # WIN32 allows to set the SUBSYSTEM:WINDOW flag in visual studio

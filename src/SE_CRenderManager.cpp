@@ -293,7 +293,7 @@ bool SE_CRenderManager::createShader(U32          const inShaderType,
         I32 infoLogLength;
         glGetShaderiv(outShaderId, GL_INFO_LOG_LENGTH, &infoLogLength);
 
-        GLchar *pStrInfoLog = new GLchar[infoLogLength + 1];
+        GLchar *pStrInfoLog = new GLchar[static_cast<U32>(infoLogLength) + 1];
         glGetShaderInfoLog(outShaderId, infoLogLength, nullptr, pStrInfoLog);
 
         seLogError("Error compiling shader :\n", pStrInfoLog);
@@ -350,7 +350,7 @@ bool SE_CRenderManager::createShaders()
             I32 infoLogLength;
             glGetProgramiv(m_programId, GL_INFO_LOG_LENGTH, &infoLogLength);
 
-            GLchar *pStrInfoLog = new GLchar[infoLogLength + 1];
+            GLchar *pStrInfoLog = new GLchar[static_cast<U32>(infoLogLength) + 1];
             glGetProgramInfoLog(m_programId, infoLogLength, nullptr, pStrInfoLog);
 
             seLogError("Error linking program :\n", pStrInfoLog);

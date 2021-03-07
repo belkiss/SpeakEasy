@@ -105,7 +105,7 @@ IF(UNIX)
     # Disable Exceptions
     ADD_DEFINITIONS(-fno-exceptions)
     # Warnings as error
-    #ADD_DEFINITIONS(-Werror)
+    ADD_DEFINITIONS(-Werror)
 
     # Setup warnings
     IF(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
