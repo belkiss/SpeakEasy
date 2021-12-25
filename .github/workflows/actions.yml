@@ -2,14 +2,16 @@
 
 name: build
 on:
-  pull_request:
   push:
+  pull_request:
   workflow_dispatch:
+  schedule:
+    # Run at 02:17 every day
+    - cron: '17 2 * * *'
 
 jobs:
   build:
     runs-on: ${{ matrix.os }}
-    continue-on-error : true
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
