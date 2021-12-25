@@ -56,7 +56,7 @@
 #   define seLogInfo(...)
 #   define seLogWarning(...)
 #   define seLogError(...)
-#   define seAssert(inCondition, ...) do{sizeof(inCondition);}while(0)
+#   define seAssert(inCondition, ...) do{(void)sizeof((inCondition));}while(0)
 #endif // SE_DEBUG
 ////////////////////////////////////////////////////////////////////////////////
 
