@@ -6,10 +6,6 @@ on:
   push:
   workflow_dispatch:
 
-env:
-  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-  BUILD_TYPE: Release
-
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -17,6 +13,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
+        configuration: [Debug, Release]
 
     steps:
       - name: Checkout the repo
@@ -35,7 +32,7 @@ jobs:
         # We'll use this as our working directory for all subsequent commands
         run: cmake -E make_directory ${{github.workspace}}/build
 
-      - name: Configure CMake
+      - name: Configure CMake - ${{ matrix.configuration }}
         # Use a bash shell so we can use the same syntax for environment variable
         # access regardless of the host operating system
         shell: bash
@@ -43,13 +40,13 @@ jobs:
         # Note the current convention is to use the -S and -B options here to specify source
         # and build directories, but this is only available with CMake 3.13 and higher.
         # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
-        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.configuration }}
 
-      - name: Build
+      - name: Build in ${{ matrix.configuration }}
         shell: bash
         working-directory: ${{github.workspace}}/build
         # Execute the build.  You can specify a specific target with "--target <NAME>"
-        run: cmake --build . --parallel --config $BUILD_TYPE
+        run: cmake --build . --parallel --config ${{ matrix.configuration }}
 
       - name: Test
         shell: bash
